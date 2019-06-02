@@ -1,0 +1,24 @@
+# See https://docs.travis-ci.com/user/deployment/pages/
+# for more information on pages deployment.
+
+language: node_js
+
+node_js:
+ - "7"
+
+install:
+ - npm install -g firebase-tools
+ - wget -O /tmp/hugo.deb https://github.com/gohugoio/hugo/releases/download/v0.32/hugo_0.32_Linux-64bit.deb
+ - sudo dpkg -i /tmp/hugo.deb
+
+# Build the website
+script:
+  - hugo
+
+branches:
+  only:
+    - master
+
+# Deploy to Firebase Hosting
+after_success:
+ - firebase deploy --project sqlcommenter --token "$FIREBASE_TOKEN"

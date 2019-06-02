@@ -1,0 +1,49 @@
+---
+title: "Locally"
+date: 2019-05-31T14:20:21-07:00
+draft: false
+weight: 1
+logo: /images/locally-logo.png
+tags: ["python", "django", "local"]
+---
+
+- [Introduction](#introduction)
+- [Requirements](#requirements)
+- [Addition to your code](#addition-to-your-code)
+- [References](#references)
+
+
+### Introduction
+
+This guide will help you add [sqlcommenter](/introduction) to your Django applications running locally.
+
+Please see the reference for the fields added in the SQL comments [sqlcommenter-django.Fields](/python/django#fields)
+
+### Requirements
+
+Steps|Resource
+---|---
+Django|https://docs.djangoproject.com/en/stable/intro/
+sqlcommenter-django|https://pypi.org/projects/sqlcommenter-django
+Django 2.X|https://docs.djangoproject.com/en/stable/faq/install
+Python 3.X|https://www.python.org/downloads/
+
+### Addition to your code
+
+Firstly, please install [sqlcommenter-django](/python/django#installation).
+
+For any Django deployment, we can just edit our settings.py file and update the `MIDDLEWARE` section as per:
+
+```python
+MIDDLEWARE = [
+  'sqlcommenter.django.middleware.SqlCommenter',
+  ...
+]
+```
+
+### References
+
+Resource|URL
+---|---
+Django quickstart|https://docs.djangoproject.com/en/stable/intro/
+Installing Django middleware|[/python/django#installation](/python/django#installation)
