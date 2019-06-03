@@ -32,10 +32,7 @@ The middleware uses Django's `connection.execute_wrapper`.
 
 ### Requirements
 
-Since the middleware uses Django's [`connection.execute_wrapper`](https://docs.djangoproject.com/en/stable/topics/db/instrumentation/#connection-execute-wrapper) and because of that we require:
-
-* [Django 2.X](https://docs.djangoproject.com/en/stable/faq/install)
-* [Python 3.X](https://www.python.org/downloads/)
+The middleware uses Django's [`connection.execute_wrapper`](https://docs.djangoproject.com/en/stable/topics/db/instrumentation/#connection-execute-wrapper) and therefore requires [Django 2.0](https://docs.djangoproject.com/en/stable/faq/install) or later (which [support various versions](https://docs.djangoproject.com/en/stable/faq/install/#what-python-version-can-i-use-with-django) of [Python 3](https://www.python.org/downloads/)).
 
 #### Installation
 This middleware can be installed by any of the following:
