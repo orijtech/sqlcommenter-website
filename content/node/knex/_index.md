@@ -31,10 +31,10 @@ Besides plain knex.js wrapping, we also provide a wrapper for the following fram
 
 ### Requirements
 
-Since the middleware uses Knex.js's [`connection.execute_wrapper`](https://docs.knexproject.com/en/stable/topics/db/instrumentation/#connection-execute-wrapper) and because of that we require:
-
-* [Knex.js 2.X](https://docs.knexproject.com/en/stable/faq/install)
-* [Node.js](https://nodejs.org/)
+Name|Resource
+---|---
+Knex.js|https://knexjs.org/
+Node.js|https://nodejs.org/
 
 #### Installation
 Add to your package.json the dependency
@@ -161,6 +161,7 @@ db_version='11.3',route='%5E%2Fpolls%2F%3Aparam' */
 
 Resource|URL
 ---|---
+Knex.js project|https://knexjs.org/
 sqlcommenter on Yarn|`<FILL_ME_IN>`
 sqlcommenter on npm|`<FILL_ME_IN>`
 express.js|https://expressjs.com/
