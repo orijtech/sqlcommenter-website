@@ -17,9 +17,9 @@ tags: ["python", "django"]
 - [Installation](#installation)
     - [pip install](#pip-install)
     - [Source](#source)
-- [Expected fields](#expected-fields)
+- [Fields](#fields)
     - [Sample log entry](#sample-log-entry)
-    - [Fields](#fields)
+    - [Expected fields](#expected-fields)
 - [References](#references)
 
 #### Introduction
@@ -62,9 +62,15 @@ Please edit your `settings.py` file to include `sqlcommenter.django.middleware.S
 ```
 
 
-#### Expected log entries
+### Fields
 
-##### Sample log entry
+In the database server logs, the comment's fields are:
+
+* comma separated key-value pairs e.g. `db_type='postgresql'`
+* values are SQL escaped i.e. `key='value'`
+* URL-quoted except for the equals(`=`) sign e.g `route='%5Epolls/%24'`. so should be URL-unquoted
+
+#### Sample log entry
 
 After making a request into the middleware-enabled polls web-app.
 
@@ -72,19 +78,12 @@ After making a request into the middleware-enabled polls web-app.
 2019-05-28 11:54:50.780 PDT [64128] LOG:  statement: INSERT INTO "polls_question"
 ("question_text", "pub_date") VALUES
 ('Wassup?', '2019-05-28T18:54:50.767481+00:00'::timestamptz) RETURNING
-"polls_question"."id" /* controller='index', db_driver='django.db.backends.postgresql',
-db_name='quickstart_py', db_type='postgresql', framework='django%3A2.2.1',
+"polls_question"."id" /* controller='index',db_driver='django.db.backends.postgresql',
+db_name='quickstart_py',db_type='postgresql',framework='django%3A2.2.1',
 route='%5Epolls/%24' */
 ```
 
-
-##### Fields
-
-In the database server logs, the comment's fields are:
-
-* comma separated key-value pairs e.g. `db_type='postgresql'`
-* values are SQL escaped i.e. `key='value'`
-* URL-quoted except for the equals(`=`) sign e.g `route='%5Epolls/%24'`. so should be URL-unquoted
+#### Expected fields
 
 Field|Format|Description|Example
 ---|---|---|---

@@ -201,10 +201,10 @@ dbapi_level='2.0', dbapi_threadsafety=2, driver_paramstyle='pyformat', libpq_ver
 {{</highlight>}}
 
 {{<highlight shell>}}
-2019-06-01 19:01:44.962 PDT [25539] LOG:  statement: SELECT * FROM polls_question
-/* db_driver='psycopg2%%3A2.8.2%%20%%28dt%%20dec%%20pq3%%20ext%%20lo64%%29', db_type='postgres',
-dbapi_level='2.0', dbapi_threadsafety=2, driver_paramstyle='pyformat', libpq_version=100001,
-span_id='e4ca8ee9c66aee55', trace_id='9481ae1fe6dd699984cee1e1e830a0fe' */
+2019-06-04 10:38:39.170 PDT [35555] LOG:  statement: SELECT * FROM polls_question
+/* db_driver='psycopg2%%3A2.8.2%%20%%28dt%%20dec%%20pq3%%20ext%%20lo64%%29',db_type='postgres',
+dbapi_level='2.0',dbapi_threadsafety=2,driver_paramstyle='pyformat',libpq_version=100001,
+span_id='a247e1cdad219d6b',trace_id='de134af00138e4aadc6b386018cace5d' */
 {{</highlight>}}
 {{</tabs>}}
 
@@ -215,7 +215,7 @@ Resource|URL
 ---|---
 psycopg2 project|http://initd.org/psycopg/docs/index.html
 sqlcommenter-psycopg2 on PyPi|https://pypi.org/project/sqlcommenter-psycopg2
-sqlcommenter-psycopg2 on Github|https://github.com/sqlcommenter-psycopg2
+sqlcommenter-psycopg2 on Github|https://github.com/orijtech/sqlcommenter
 OpenCensus|https://opencensus.io/
 OpenCensus SpanID|https://opencensus.io/tracing/span/spanid
 OpenCensus TraceID|https://opencensus.io/tracing/span/traceid
