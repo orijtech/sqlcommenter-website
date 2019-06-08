@@ -22,7 +22,7 @@ Hook name|Purpose
 [`before_execute`](#before_execute)|Hook to augment your statements NOT including OpenCensus `trace_id` and `span_id` information
 [`before_execute_with_opencensus`](#before_execute_with_opencensus)|Hook to augment your statements with OpenCensus `trace_id` and `span_id` information
 
-We provide 2 flavours of hooks because:
+We provide 2 flavors of hooks because:
 {{% notice warning%}}
 Since OpenCensus [`trace_id`](https://opencensus.io/tracing/span/traceid) and [`span_id`](https://opencensus.io/tracing/span/spanid/) are highly ephemeral, including them in SQL comments will likely break any form of statement-based caching that doesn't strip out comments.
 {{% /notice %}}
