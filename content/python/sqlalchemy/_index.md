@@ -12,6 +12,7 @@ weight: 3
 - [before\_execute\_with\_opencensus](#before_execute_with_opencensus)
 - [Fields](#fields)
 - [End to end example](#end-to-end-example)
+- [With flask](#with-flask)
 - [References](#references)
 
 ### Introduction
@@ -183,6 +184,10 @@ span_id='07ac7d9f6ed8d66e',trace_id='e6e5a8d1a855d7e68aa9b1ab5bf1f027' */
 {{</highlight>}}
 {{</tabs>}}
 
+### With flask
+When coupled with the web framework [flask](http://flask.pocoo.org), we still provide middleware to correlate
+your web applications with your SQL statements from sqlalchemy. Please see this end-to-end guide below:
+{{<card-vendor href="/python/flask#with-sqlalchemy" src="/images/flask-logo.png">}}
 
 ### References
 

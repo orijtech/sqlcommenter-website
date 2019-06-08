@@ -18,6 +18,7 @@ logo: '/images/psycopg2-logo.png'
 - [End to end examples](#end-to-end-examples)
     - [Source code](#source-code)
     - [Results](#results)
+- [With flask](#with-flask)
 - [References](#references)
 
 #### Introduction
@@ -208,6 +209,10 @@ span_id='a247e1cdad219d6b',trace_id='de134af00138e4aadc6b386018cace5d' */
 {{</highlight>}}
 {{</tabs>}}
 
+### With flask
+When coupled with the web framework [flask](http://flask.pocoo.org), we still provide middleware to correlate
+your web applications with your SQL statements from psycopg2. Please see this end-to-end guide below:
+{{<card-vendor href="/python/flask#with-psycopg2" src="/images/flask-logo.png">}}
 
 ### References
 
