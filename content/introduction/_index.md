@@ -29,8 +29,8 @@ This log was extracted from a live web application
 ("question_text", "pub_date") VALUES
 ('What is this?', '2019-05-28T18:54:50.767481+00:00'::timestamptz) RETURNING
 "polls_question"."id" /* controller='index',db_driver='django.db.backends.postgresql',
-db_name='quickstart_py',db_type='postgresql',framework='django%3A2.2.1',
-route='%5Epolls/%24',span_id='cfb60c868a47adf9',trace_id='23d4bad1efad0bff3ebdc7b717d739e7' */
+framework='django%3A2.2.1',route='%5Epolls/%24',
+span_id='cfb60c868a47adf9',trace_id='23d4bad1efad0bff3ebdc7b717d739e7' */
 ```
 
 ### Interpretation
@@ -38,8 +38,8 @@ route='%5Epolls/%24',span_id='cfb60c868a47adf9',trace_id='23d4bad1efad0bff3ebdc7
 On examining the SQL statement from above in [Sample](#sample) and examining the comment in `/* ... */`
 ```sql
 /* controller='index',db_driver='django.db.backends.postgresql',
-db_name='quickstart_py',db_type='postgresql',framework='django%3A2.2.1',
-route='%5Epolls/%24',span_id='cfb60c868a47adf9',trace_id='23d4bad1efad0bff3ebdc7b717d739e7' */
+framework='django%3A2.2.1',route='%5Epolls/%24',
+span_id='cfb60c868a47adf9',trace_id='23d4bad1efad0bff3ebdc7b717d739e7' */
 ```
 
 we can now correlate and pinpoint the fields in the above slow SQL query to our source code in our web application:
@@ -48,7 +48,6 @@ Original field|Interpretation
 ---|----
 `controller='index'`|Controller name `^/polls/$` 
 `db_driver='django.db.backends.postgresql'`|Database driver `django.db.backends.postgresql`
-`db_name='quickstart_py'`|Database name `quickstart_py`
 `framework='django%3A2.2.1'`|Framework version of `django 2.2.1`
 `route='%5Epolls/%24'`|Route of `^/polls/$` 
 `span_id='cfb60c868a47adf9'`|[OpenCensus SpanID](https://opencensus.io/tracing/span/spanid/) of `cfb60c868a47adf9`
