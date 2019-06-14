@@ -88,21 +88,15 @@ gem install rails -v 6.0.0.rc1
 rails _6.0.0.rc1_ new sqlcommenter_rails_demo --api
 ```
 
-([git commit](https://github.com/orijtech/sqlcommenter_rails_demo/commit/efaaf8cce1a7fb00abba18ee3a402dc08803cdef))
-
 Then, we add and implement a basic `Post` model and controller:
 
 ```shell
 bin/rails g model Post title:text
 ```
 
-([git commit](https://github.com/orijtech/sqlcommenter_rails_demo/commit/c3c74758835e8a88d66e72fb0c209952546e20f9))
-
 ```shell
 bin/rails g controller Posts index create
 ```
-
-([git commit](https://github.com/orijtech/sqlcommenter_rails_demo/commit/dcdfc63f6152ee287363b84a86e7b5ec3cee4c6d))
 
 Implement the controller:
 
@@ -130,8 +124,6 @@ Rails.application.routes.draw do
 end
 ```
 
-([git commit](https://github.com/orijtech/sqlcommenter_rails_demo/commit/af133c35be263f19a523b3c9e4ad0e2a79ea10e9))
-
 Then, we add `sqlcommenter_rails` and OpenCensus:
 
 ```ruby
@@ -144,8 +136,6 @@ gem 'sqlcommenter_rails'
 # config/application.rb
 require "opencensus/trace/integrations/rails"
 ```
-
-([git commit](https://github.com/orijtech/sqlcommenter_rails_demo/commit/cef88d8e0125767939bb598704d0b5dd85f44bfe))
 
 Finally, we run `bundle` to install the newly added gems:
 
