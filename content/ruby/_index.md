@@ -9,4 +9,4 @@ weight: 4
 
 sqlcommenter support is available for the following [Ruby](https://ruby.org/) ORMs/frameworks:
 
-{{<card-vendor href="/ruby/activerecord" src="/images/activerecord_marginalia-logo.png">}}
+{{<card-vendor href="/ruby/rails" src="/images/activerecord_marginalia-logo.png">}}
