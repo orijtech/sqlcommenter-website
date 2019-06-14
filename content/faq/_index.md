@@ -43,7 +43,7 @@ If you are using a supported ORM/framework, it shouldn't be a hassle at all to u
 {{<card-vendor href="/python/psycopg2" src="/images/psycopg2-logo.png">}}
 {{<card-vendor href="/python/sqlalchemy" src="/images/sqlalchemy-logo.png">}}
 {{<card-vendor href="/python/flask" src="/images/flask-logo.png">}}
-{{<card-vendor href="/rubyonrails/activerecord" src="/images/activerecord_marginalia-logo.png">}}
+{{<card-vendor href="/ruby/rails" src="/images/activerecord_marginalia-logo.png">}}
 {{<card-vendor href="/java/hibernate" src="/images/hibernate-logo.svg">}}
 {{<card-vendor href="/java/spring" src="/images/spring-logo.png">}}
 {{<card-vendor href="/node/knex" src="/images/knex-logo.png">}}

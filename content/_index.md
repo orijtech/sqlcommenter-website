@@ -79,7 +79,7 @@ We support a variety of languages and frameworks such as:
 {{<card-vendor href="/node/express" src="/images/express_js-logo.png">}}
 {{<card-vendor href="/java/spring" src="/images/spring-logo.png">}}
 {{<card-vendor href="/python/flask" src="/images/flask-logo.png">}}
-{{<card-vendor href="/ruby/activerecord" src="/images/activerecord_marginalia-logo.png">}}
+{{<card-vendor href="/ruby/rails" src="/images/activerecord_marginalia-logo.png">}}
 
 #### Databases
 

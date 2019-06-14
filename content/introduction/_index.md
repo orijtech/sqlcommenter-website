@@ -20,7 +20,7 @@ information about the code that caused its execution. This helps in easily corre
     - [Databases](#databases)
 - [Source code](#source-code)
 
-### Value 
+### Value
 sqlcommenter provides instrumentation/wrappers to augment SQL from frameworks and ORMs. The augmented SQL provides key='value' comments
 that help correlate usercode with ORM generated SQL statements and they can be examined in your database server logs. It provides deeper
 observability insights into the state of your applications all the way to your database server.
@@ -77,7 +77,7 @@ We support a variety of languages and frameworks such as:
 {{<card-vendor href="/node/express" src="/images/express_js-logo.png">}}
 {{<card-vendor href="/java/spring" src="/images/spring-logo.png">}}
 {{<card-vendor href="/python/flask" src="/images/flask-logo.png">}}
-{{<card-vendor href="/ruby/activerecord" src="/images/activerecord_marginalia-logo.png">}}
+{{<card-vendor href="/ruby/rails" src="/images/activerecord_marginalia-logo.png">}}
 
 #### Databases
 
