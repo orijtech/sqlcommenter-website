@@ -7,13 +7,18 @@ weight: 1
 
 ![](/images/sqlcommenter_logo.png)
 
+{{<title>}} is a suite of middlewares/plugins that enable your ORMs to augment SQL statements before execution, with comments containing
+information about the code that caused its execution. This helps in easily correlating slow performance with source code and giving insights into backend database performance. In short it provides some observability into the state of your client-side applications and their impact on the database's server-side.
+
 - [Value](#value)
 - [Sample](#sample)
 - [Interpretation](#interpretation)
+- [Getting started](#getting-started)
 - [Support](#support)
     - [Languages](#languages)
     - [Frameworks](#frameworks)
     - [Databases](#databases)
+- [Source code](#source-code)
 
 ### Value 
 sqlcommenter provides instrumentation/wrappers to augment SQL from frameworks and ORMs. The augmented SQL provides key='value' comments
@@ -83,3 +88,229 @@ We have tested the instrumentation on the following databases:
 {{<card-vendor href="/databases/mariadb" src="/images/mariadb-logo.png">}}
 {{<card-vendor href="https://sqlite.org/cli.html" src="/images/sqlite-logo.png">}}
 {{<card-vendor href="https://cloud.google.com/sql/" src="/images/cloudsql-logo.png">}}
+
+### Source code
+To get started, please download the [sqlcommenter-mono.zip](https://storage.googleapis.com/orijtech/sqlcommenter-mono.zip) file and on unzipping it, it should have the following directory structure
+containing the various ORM instrumentation that you can then install.
+
+{{<highlight shell>}}
+.
+├── README.md
+├── java
+│   └── sqlcommenter-java
+│       ├── README.md
+│       ├── build.gradle
+│       ├── gradle
+│       │   └── wrapper
+│       │       └── gradle-wrapper.properties
+│       ├── gradlew
+│       ├── gradlew.bat
+│       ├── settings.gradle
+│       ├── src
+│       │   ├── main
+│       │   │   └── java
+│       │   │       └── io
+│       │   │           └── orijtech
+│       │   │               └── integrations
+│       │   │                   └── sqlcommenter
+│       │   │                       ├── interceptors
+│       │   │                       │   └── SpringSQLCommenterInterceptor.java
+│       │   │                       ├── schibernate
+│       │   │                       │   └── SCHibernate.java
+│       │   │                       └── threadlocalstorage
+│       │   │                           └── State.java
+│       │   └── test
+│       │       └── java
+│       │           └── io
+│       │               └── orijtech
+│       │                   └── integrations
+│       │                       └── sqlcommenter
+│       │                           ├── schibernate
+│       │                           │   └── SCHibernateTest.java
+│       │                           └── threadlocal
+│       │                               ├── StateTest.java
+│       │                               └── ThreadLocalStorageTest.java
+│       └── travis_script
+├── nodejs
+│   └── sqlcommenter-nodejs
+│       ├── README.md
+│       ├── package-lock.json
+│       ├── package.json
+│       └── packages
+│           ├── knex
+│           │   ├── index.js
+│           │   ├── package-lock.json
+│           │   ├── package.json
+│           │   └── test
+│           │       ├── comment.test.js
+│           │       └── express.test.js
+│           └── sequelize
+│               ├── index.js
+│               ├── package-lock.json
+│               ├── package.json
+│               └── test
+│                   ├── comment.test.js
+│                   └── express.test.js
+├── package_it.sh
+├── python
+│   └── sqlcommenter-python
+│       ├── README.md
+│       ├── runtests.py
+│       ├── setup.cfg
+│       ├── setup.py
+│       ├── sqlcommenter
+│       │   └── __init__.py
+│       ├── sqlcommenter-django
+│       │   ├── README.md
+│       │   ├── setup.cfg
+│       │   ├── setup.py
+│       │   └── sqlcommenter
+│       │       ├── __init__.py
+│       │       └── django
+│       │           ├── __init__.py
+│       │           └── middleware
+│       │               └── __init__.py
+│       ├── sqlcommenter-psycopg2
+│       │   ├── README.md
+│       │   ├── setup.cfg
+│       │   ├── setup.py
+│       │   └── sqlcommenter
+│       │       ├── __init__.py
+│       │       └── psycopg2
+│       │           ├── __init__.py
+│       │           └── extension
+│       │               └── __init__.py
+│       ├── sqlcommenter-sqlalchemy
+│       │   ├── README.md
+│       │   ├── setup.cfg
+│       │   ├── setup.py
+│       │   └── sqlcommenter
+│       │       ├── __init__.py
+│       │       └── sqlalchemy
+│       │           ├── __init__.py
+│       │           └── executor
+│       │               └── __init__.py
+│       ├── tests
+│       │   ├── __init__.py
+│       │   ├── django
+│       │   │   ├── __init__.py
+│       │   │   ├── models.py
+│       │   │   ├── settings.py
+│       │   │   └── tests.py
+│       │   └── tests.py
+│       └── tox.ini
+└── ruby
+    ├── sqlcommenter_rails
+    │   ├── Gemfile
+    │   ├── README.md
+    │   ├── Rakefile
+    │   ├── bin
+    │   │   ├── console
+    │   │   ├── rails
+    │   │   └── setup
+    │   ├── config.ru
+    │   ├── lib
+    │   │   ├── sqlcommenter_rails
+    │   │   │   ├── marginalia_components.rb
+    │   │   │   └── version.rb
+    │   │   └── sqlcommenter_rails.rb
+    │   ├── rubocop.gemfile
+    │   ├── shared.gemfile
+    │   ├── spec
+    │   │   ├── gemfiles
+    │   │   │   ├── rails_5_2.gemfile
+    │   │   │   ├── rails_6_0.gemfile
+    │   │   │   └── rubocop.gemfile
+    │   │   ├── internal
+    │   │   │   ├── Rakefile
+    │   │   │   ├── app
+    │   │   │   │   └── controllers
+    │   │   │   │       └── internal_app_controller.rb
+    │   │   │   ├── config
+    │   │   │   │   ├── application.rb
+    │   │   │   │   ├── boot.rb
+    │   │   │   │   ├── database.yml
+    │   │   │   │   ├── environment.rb
+    │   │   │   │   └── routes.rb
+    │   │   │   ├── db
+    │   │   │   │   └── schema.rb
+    │   │   │   ├── log
+    │   │   │   └── public
+    │   │   │       └── favicon.ico
+    │   │   ├── spec_helper.rb
+    │   │   └── sqlcommenter_rails
+    │   │       ├── integration_spec.rb
+    │   │       └── marginalia_comment_components_spec.rb
+    │   └── sqlcommenter_rails.gemspec
+    └── sqlcommenter_rails_demo
+        ├── Dockerfile
+        ├── Gemfile
+        ├── Gemfile.lock
+        ├── README.md
+        ├── Rakefile
+        ├── app
+        │   ├── controllers
+        │   │   ├── application_controller.rb
+        │   │   ├── concerns
+        │   │   └── posts_controller.rb
+        │   └── models
+        │       ├── application_record.rb
+        │       ├── concerns
+        │       └── post.rb
+        ├── bin
+        │   ├── bundle
+        │   ├── rails
+        │   ├── rake
+        │   ├── setup
+        │   └── spring
+        ├── config
+        │   ├── application.rb
+        │   ├── boot.rb
+        │   ├── cable.yml
+        │   ├── credentials.yml.enc
+        │   ├── database.yml
+        │   ├── environment.rb
+        │   ├── environments
+        │   │   ├── development.rb
+        │   │   ├── production.rb
+        │   │   └── test.rb
+        │   ├── initializers
+        │   │   ├── application_controller_renderer.rb
+        │   │   ├── backtrace_silencers.rb
+        │   │   ├── cors.rb
+        │   │   ├── filter_parameter_logging.rb
+        │   │   ├── inflections.rb
+        │   │   ├── mime_types.rb
+        │   │   └── wrap_parameters.rb
+        │   ├── locales
+        │   │   └── en.yml
+        │   ├── puma.rb
+        │   ├── routes.rb
+        │   ├── spring.rb
+        │   └── storage.yml
+        ├── config.ru
+        ├── db
+        │   ├── migrate
+        │   │   └── 20190608153219_create_posts.rb
+        │   ├── schema.rb
+        │   └── seeds.rb
+        ├── docker-compose.yml
+        ├── lib
+        │   └── tasks
+        ├── log
+        ├── public
+        │   └── robots.txt
+        ├── storage
+        ├── test
+        │   ├── controllers
+        │   │   └── posts_controller_test.rb
+        │   ├── fixtures
+        │   │   ├── files
+        │   │   └── posts.yml
+        │   ├── integration
+        │   ├── models
+        │   │   └── post_test.rb
+        │   └── test_helper.rb
+        ├── tmp
+        └── vendor
+{{</highlight>}}
