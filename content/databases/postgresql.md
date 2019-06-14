@@ -40,8 +40,8 @@ produces such output
 2019-05-31 16:27:31.190 PDT [19183] LOG:  statement: SET TIME ZONE 'UTC'
 2019-05-31 16:27:31.195 PDT [19183] LOG:  statement: INSERT INTO "polls_question"
 ("question_text", "pub_date") VALUES ('Wassup?', '2019-05-31T23:27:31.175952+00:00'::timestamptz)
-RETURNING "polls_question"."id" /* controller='index', db_driver='django.db.backends.postgresql',
-db_name='quickstart_py', db_type='postgresql', framework='django%3A2.2.1', route='%5Epolls/%24' */
+RETURNING "polls_question"."id" /* controller='index',db_driver='django.db.backends.postgresql',
+framework='django%3A2.2.1', route='%5Epolls/%24' */
 ```
 
 ### References

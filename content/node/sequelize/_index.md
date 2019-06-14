@@ -77,7 +77,7 @@ app.use(wrapSequelizeAsMiddleware(sequelize));
 
 In the database server logs, the comment's fields are:
 
-* comma separated key-value pairs e.g. `db_type='postgresql'`
+* comma separated key-value pairs e.g. `route='%5E%2Fpolls%2F'`
 * values are SQL escaped i.e. `key='value'`
 * URL-quoted except for the equals(`=`) sign e.g `route='%5Epolls/%24'`. so should be URL-unquoted
 
@@ -85,8 +85,6 @@ Field|Format|Description|Example
 ---|---|---|---
 `client_timezone`|`<string>`|URL quoted name of the timezone used when converting a date from the database into a JavaScript date|`'+00:00'`
 `db_driver`|`<sequelize>`|URL quoted name and version of the database driver|`db_driver='sequelize'`
-`db_name`|`<name of database>`|URL quoted name and version of the database driver|`db_name='quickstart_nodejs'`
-`db_type`|`<the type of database>`|URL quoted name of the type of database|`db_type='postgresql'`
 `route`|`<the route used>`|The URL-quoted route used to match the express.js controller|`route='%5E%2Fpolls%2F`
 
 ### End to end example
@@ -147,8 +145,7 @@ Application listening on 3000
 On making a request to that server at `http://localhost:3000/polls/1000`, the PostgreSQL logs show:
 ```shell
 2019-06-03 15:09:35.575 PDT [32665] LOG:  statement: SELECT * from polls_question
-/* client_timezone='%2B00%3A00',db_driver='sequelize',db_name='quickstart_nodejs',
-db_type='postgres',db_version='11.3.0',route='%5E%2Fpolls%2F%3Aparam' */
+/* client_timezone='%2B00%3A00',db_driver='sequelize',db_version='11.3.0',route='%5E%2Fpolls%2F%3Aparam' */
 ```
 
 

@@ -66,7 +66,7 @@ Please edit your `settings.py` file to include `sqlcommenter.django.middleware.S
 
 In the database server logs, the comment's fields are:
 
-* comma separated key-value pairs e.g. `db_type='postgresql'`
+* comma separated key-value pairs e.g. `controller='index'`
 * values are SQL escaped i.e. `key='value'`
 * URL-quoted except for the equals(`=`) sign e.g `route='%5Epolls/%24'`. so should be URL-unquoted
 
@@ -77,10 +77,9 @@ After making a request into the middleware-enabled polls web-app.
 ```shell
 2019-05-28 11:54:50.780 PDT [64128] LOG:  statement: INSERT INTO "polls_question"
 ("question_text", "pub_date") VALUES
-('Wassup?', '2019-05-28T18:54:50.767481+00:00'::timestamptz) RETURNING
-"polls_question"."id" /* controller='index',db_driver='django.db.backends.postgresql',
-db_name='quickstart_py',db_type='postgresql',framework='django%3A2.2.1',
-route='%5Epolls/%24' */
+('Wassup?', '2019-05-28T18:54:50.767481+00:00'::timestamptz) RETURNING "polls_question"."id"
+/* controller='index',db_driver='django.db.backends.postgresql',
+framework='django%3A2.2.1',route='%5Epolls/%24' */
 ```
 
 #### Expected fields
@@ -89,8 +88,6 @@ Field|Format|Description|Example
 ---|---|---|---
 `controller`|`<string>`|The name of the view from `django.conf.urls.url` as described in your urls.py file e.g. as per `url(r'^$', views.index, name='index')`|controller='index'
 `db_driver`|`<database_driver>:<version>`|URL quoted name and version of the database driver|`db_driver='django.db.backends.postgresql'`
-`db_name`|`<name of database>`|URL quoted name and version of the database driver|`db_name='quickstart_py'`
-`db_type`|`<the type of database>`|URL quoted name of the type of database|`db_type='postgresql'`
 `framework`|`'django%3A<django_version>'`|the URL quoted combination of the word "django" as the key and the version of Django being used|framework='django%3A2.2.1'
 `route`|`<the route used>`|The URL-quoted route used for the controller|`route='%5Epolls/%24'`
 

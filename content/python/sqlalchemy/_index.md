@@ -72,7 +72,7 @@ Please ensure that you set `retval=True` when listening for events
 and this will produce such output on for example a Postgresql database logs:
 ```shell
 2019-06-04 10:27:14.919 PDT [35412] LOG:  statement: SELECT * FROM polls_question
-/* db_driver='psycopg2',db_type='postgresql%3A11.3',framework='sqlalchemy%3A1.3.4',
+/* db_driver='psycopg2',framework='sqlalchemy%3A1.3.4',
 span_id='07ac7d9f6ed8d66e',trace_id='e6e5a8d1a855d7e68aa9b1ab5bf1f027' */
 ```
 
@@ -95,7 +95,6 @@ Please ensure that you set `retval=True` when listening for events
 
 Field|Description
 ---|---
-`db_type`|The type and version of the database engine e.g. `'postgresql%3A11.3'`
 `db_driver`|The underlying database driver e.g. `'psycopg2'`
 `framework`|The version of SQLAlchemy in the form `'sqlalchemy:<sqlalchemy_version>'`
 `span_id`|The SpanID of the OpenCensus trace -- optionally defined with [`before_cursor_execute_with_opencensus`](#before_cursor_execute_with_opencensus)
@@ -174,12 +173,12 @@ Examining our Postgresql server logs
 {{<tabs "Without OpenCensus" "With OpenCensus">}}
 {{<highlight shell>}}
 2019-06-04 10:28:30.730 PDT [35416] LOG:  statement: SELECT * FROM polls_question
-/* db_driver='psycopg2',db_type='postgresql%3A11.3',framework='sqlalchemy%3A1.3.4' */
+/* db_driver='psycopg2',framework='sqlalchemy%3A1.3.4' */
 {{</highlight>}}
 
 {{<highlight shell>}}
 2019-06-04 10:27:14.919 PDT [35412] LOG:  statement: SELECT * FROM polls_question
-/* db_driver='psycopg2',db_type='postgresql%3A11.3',framework='sqlalchemy%3A1.3.4',
+/* db_driver='psycopg2',framework='sqlalchemy%3A1.3.4',
 span_id='07ac7d9f6ed8d66e',trace_id='e6e5a8d1a855d7e68aa9b1ab5bf1f027' */
 {{</highlight>}}
 {{</tabs>}}

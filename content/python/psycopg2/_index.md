@@ -92,7 +92,6 @@ conn = psycopg2.connect(..., cursor_factory=CommenterCursorWithOpenCensus)
 
 Field|Description
 ---|---
-`db_type`|The type of database engine e.g. `'postgresql'`, `'mssql'`, `'mysql'`, `'sqlite'`
 `db_driver`|The underlying database driver e.g. `'psycopg2'`
 `dbapi_threadsafety`|The threadsafety API assignment e.g. 2
 `driver_paramstyle`|The Python DB API style of parameters e.g. `pyformat`
@@ -197,13 +196,13 @@ Examining our Postgresql server logs
 {{<tabs "Without OpenCensus" "With OpenCensus">}}
 {{<highlight shell>}}
 2019-06-01 19:06:49.616 PDT [25573] LOG:  statement: SELECT * FROM polls_question
-/* db_driver='psycopg2%%3A2.8.2%%20%%28dt%%20dec%%20pq3%%20ext%%20lo64%%29', db_type='postgres',
+/* db_driver='psycopg2%%3A2.8.2%%20%%28dt%%20dec%%20pq3%%20ext%%20lo64%%29',
 dbapi_level='2.0', dbapi_threadsafety=2, driver_paramstyle='pyformat', libpq_version=100001 */
 {{</highlight>}}
 
 {{<highlight shell>}}
 2019-06-04 10:38:39.170 PDT [35555] LOG:  statement: SELECT * FROM polls_question
-/* db_driver='psycopg2%%3A2.8.2%%20%%28dt%%20dec%%20pq3%%20ext%%20lo64%%29',db_type='postgres',
+/* db_driver='psycopg2%%3A2.8.2%%20%%28dt%%20dec%%20pq3%%20ext%%20lo64%%29',
 dbapi_level='2.0',dbapi_threadsafety=2,driver_paramstyle='pyformat',libpq_version=100001,
 span_id='a247e1cdad219d6b',trace_id='de134af00138e4aadc6b386018cace5d' */
 {{</highlight>}}
