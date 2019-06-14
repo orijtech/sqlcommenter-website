@@ -176,9 +176,13 @@ The demo application has 2 endpoints: `GET /posts` and `POST /posts`.
 curl localhost:3000/posts
 ```
 
-<blockquote>
-Post Load (0.1ms)  SELECT "posts".* FROM "posts" /*action='index',application='SqlcommenterRailsDemo',controller='posts',db_driver='ActiveRecord::ConnectionAdapters::SQLite3Adapter',framework='rails_v6.0.0.rc1',route='/posts',span_id='a52cad0a8d1425ab',span_names='/posts',trace_id='828f28f7fb3df3dd07ee6478b2016b2a'*/
-</blockquote>
+```
+Post Load (0.1ms)  SELECT "posts".* FROM "posts" /*
+action='index',application='SqlcommenterRailsDemo',controller='posts',
+db_driver='ActiveRecord::ConnectionAdapters::SQLite3Adapter',
+framework='rails_v6.0.0.rc1',route='/posts',span_id='a52cad0a8d1425ab',
+span_names='/posts',trace_id='828f28f7fb3df3dd07ee6478b2016b2a'*/
+```
 
 ##### POST /posts
 
@@ -186,9 +190,13 @@ Post Load (0.1ms)  SELECT "posts".* FROM "posts" /*action='index',application='S
 curl -X POST localhost:3000/posts -d 'title=my-post'
 ```
 
-<blockquote>
-Post Create (0.2ms)  INSERT INTO "posts" ("title", "created_at", "updated_at") VALUES (?, ?, ?) /*action='create',application='SqlcommenterRailsDemo',controller='posts',db_driver='ActiveRecord::ConnectionAdapters::SQLite3Adapter',framework='rails_v6.0.0.rc1',route='/posts',span_id='6ddace73a9debf63',span_names='/posts',trace_id='ff19308b1f17fedc5864e929bed1f44e'*/  [["title", "my-post"], ["created_at", "2019-06-08 15:47:59.089692"], ["updated_at", "2019-06-08 15:47:59.089692"]]
-</blockquote>
+```
+Post Create (0.2ms)  INSERT INTO "posts" ("title", "created_at", "updated_at")
+VALUES (?, ?, ?) /*action='create',application='SqlcommenterRailsDemo',
+controller='posts',db_driver='ActiveRecord::ConnectionAdapters::SQLite3Adapter',
+framework='rails_v6.0.0.rc1',route='/posts',span_id='6ddace73a9debf63',
+span_names='/posts',trace_id='ff19308b1f17fedc5864e929bed1f44e'*/
+```
 
 ### References
 
