@@ -59,12 +59,7 @@ cd python-sql-commenter/sqlcommenter-psycopg2 && python3 setup.py install
 {{</highlight>}}
 
 #### Usage
-Then in your source code
-
-```python
-from sqlcommenter.psycopg2.extension import * # or continue reading below for specific options
-```
-
+We'll perform the following imports in our source code:
 
 ### CommenterCursor
 

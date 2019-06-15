@@ -46,11 +46,7 @@ cd python-sql-commenter/django && python3 setup.py install
 {{</highlight>}}
 {{</tabs>}}
 
-and then in your source code
-
-```python
-from sqlcommenter.sqlalchemy.executor import * # or continue reading below for specific options
-```
+and then we shall perform the following imports in our source code:
 
 
 ### before\_execute
