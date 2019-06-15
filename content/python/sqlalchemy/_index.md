@@ -8,22 +8,21 @@ weight: 3
 
 - [Introduction](#introduction)
 - [Requirements](#requirements)
-- [before\_execute](#before_execute)
-- [before\_execute\_with\_opencensus](#before_execute_with_opencensus)
+- [BeforeExecuteFactory](#BeforeExecuteFactory)
 - [Fields](#fields)
 - [End to end example](#end-to-end-example)
 - [With flask](#with-flask)
 - [References](#references)
 
 ### Introduction
-sqlcommenter-sqlalchemy provides two different hooks
+sqlcommenter-sqlalchemy provides a factory to create `before_cursor_execute`, called `BeforeExecuteFactory`
 
-Hook name|Purpose
----|---
-[`before_execute`](#before_execute)|Hook to augment your statements NOT including OpenCensus `trace_id` and `span_id` information
-[`before_execute_with_opencensus`](#before_execute_with_opencensus)|Hook to augment your statements with OpenCensus `trace_id` and `span_id` information
+We provide a `BeforeExecuteFactory` that takes options such as
+```python
+CommenterCursorFactory(with_opencensus=<True or False>)
+```
 
-We provide 2 flavors of hooks because:
+We provide options such as `with_opencensus` because
 {{% notice warning%}}
 Since OpenCensus [`trace_id`](https://opencensus.io/tracing/span/traceid) and [`span_id`](https://opencensus.io/tracing/span/spanid/) are highly ephemeral, including them in SQL comments will likely break any form of statement-based caching that doesn't strip out comments.
 {{% /notice %}}
@@ -49,16 +48,16 @@ cd python-sql-commenter/django && python3 setup.py install
 and then we shall perform the following imports in our source code:
 
 
-### before\_execute
+### BeforeExecuteFactory
 
-`before_execute` is a hook that when added for the `'before_cursor_execute'` to your engine will grab information about your application and augment it as a comment to your SQL statement.
+`BeforeExecuteFactory` is a factory that creates a `before_cursor_execute` hook to your engine to grab information about your application and augment it as a comment to your SQL statement.
 
 ```python
 from sqlalchemy import create_engine, event
-from sqlcommenter.sqlalchemy.executor import before_cursor_execute
+from sqlcommenter.sqlalchemy.executor import BeforeExecuteFactory
 
 engine = create_engine(...) # Create the engine with your dialect of SQL
-event.listen(engine, 'before_cursor_execute', before_cursor_execute, retval=True)
+event.listen(engine, 'before_cursor_execute', BeforeExecuteFactory(), retval=True)
 engine.execute(...) # comment will be appended to SQL before execution
 ```
 
@@ -72,14 +71,14 @@ and this will produce such output on for example a Postgresql database logs:
 span_id='07ac7d9f6ed8d66e',trace_id='e6e5a8d1a855d7e68aa9b1ab5bf1f027' */
 ```
 
-### before\_execute\_with\_opencensus
+#### <a name="with-opencensus"></a> with_openCensus=True
+
+To enable the comment cursor to also attach information about the current OpenCensus span (if any exists), pass in option `with_opencensus=True` when invoking `BeforeExecuteFactory`, so
+
 
 ```python
-from sqlalchemy import create_engine, event
-from sqlcommenter.sqlalchemy.executor import before_cursor_execute_with_opencensus
-
-engine = create_engine(...) # Create the engine with your dialect of SQL
-event.listen(engine, 'before_cursor_execute', before_cursor_execute, retval=True)
+engine = create_engine("postgresql://:$postgres$@127.0.0.1:5432/quickstart_py")
+event.listen(engine, 'before_cursor_execute', BeforeExecuteFactory(with_opencensus=True), retval=True)
 engine.execute(...) # comment will be appended to SQL before execution
 ```
 
@@ -93,8 +92,8 @@ Field|Description
 ---|---
 `db_driver`|The underlying database driver e.g. `'psycopg2'`
 `framework`|The version of SQLAlchemy in the form `'sqlalchemy:<sqlalchemy_version>'`
-`span_id`|The SpanID of the OpenCensus trace -- optionally defined with [`before_cursor_execute_with_opencensus`](#before_cursor_execute_with_opencensus)
-`trace_id`|The TraceID of the OpenCensus trace -- optionally defined with [`before_cursor_execute_with_opencensus`](#before_cursor_execute_with_opencensus)
+`span_id`|The SpanID of the OpenCensus trace -- optionally defined with [`with_opencensus=True`](#with-opencensus)
+`trace_id`|The TraceID of the OpenCensus trace -- optionally defined with [`with_opencensus=True`](#with-opencensus)
 
 ### End to end examples
 
@@ -105,12 +104,12 @@ Field|Description
 #!/usr/bin/env python3
 
 from sqlalchemy import create_engine, event
-from sqlcommenter.sqlalchemy.executor import before_cursor_execute
+from sqlcommenter.sqlalchemy.executor import BeforeExecuteFactory
 
 def main():
     engine = create_engine("postgresql://:$postgres$@127.0.0.1:5432/quickstart_py")
 
-    event.listen(engine, 'before_cursor_execute', before_cursor_execute, retval=True)
+    event.listen(engine, 'before_cursor_execute', BeforeExecuteFactory(), retval=True)
     result_proxy = engine.execute("SELECT * FROM polls_question")
 
     for row in result_proxy:
@@ -124,9 +123,10 @@ if __name__ == '__main__':
 {{<highlight python>}}
 #!/usr/bin/env python3
 
+from opencensus.trace.samplers import AlwaysOnSampler
 from opencensus.trace.tracer import Tracer
 from sqlalchemy import create_engine, event
-from sqlcommenter.sqlalchemy.executor import before_cursor_execute_with_opencensus
+from sqlcommenter.sqlalchemy.executor import BeforeExecuteFactory
 
 class noopOpenCensusTraceExporter(object):
     def emit(self, *args, **kwargs):
@@ -137,9 +137,9 @@ class noopOpenCensusTraceExporter(object):
 
 def main():
     engine = create_engine("postgresql://:$postgres$@127.0.0.1:5432/quickstart_py")
+    event.listen(engine, 'before_cursor_execute', BeforeExecuteFactory(with_opencensus=True), retval=True)
 
-    event.listen(engine, 'before_cursor_execute', before_cursor_execute_with_opencensus, retval=True)
-    tracer = Tracer(exporter=noopOpenCensusTraceExporter)
+    tracer = Tracer(exporter=noopOpenCensusTraceExporter, sampler=AlwaysOnSampler())
     with tracer.span(name='Psycopg2.Integration') as span:
         result_proxy = engine.execute("SELECT * FROM polls_question")
 

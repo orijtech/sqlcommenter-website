@@ -13,7 +13,7 @@ logo: '/images/psycopg2-logo.png'
     - [Source install](#source-install)
     - [Usage](#usage)
 - [CommenterCursor](#commentercursor)
-- [CommenterCursorWithOpenCensus](#commentercursorwithopencensus)
+    - [with_opencensus=True](#with-opencensus)
 - [Expected fields](#expected-fields)
 - [End to end examples](#end-to-end-examples)
     - [Source code](#source-code)
@@ -25,14 +25,12 @@ logo: '/images/psycopg2-logo.png'
 
 This package is in the form of a [psycopg2 cursor factory](http://initd.org/psycopg/docs/advanced.html#connection-and-cursor-factories) whose purpose is to augment a SQL statement right before execution, with information about the [driver and user code]() to help correlate user code with executed SQL statements.
 
-We provide two different hooks
+We provide a `CommenterCursorFactory` that takes options such as
+```python
+CommenterCursorFactory(with_opencensus=<True or False>)
+```
 
-Hook name|Purpose
----|---
-[`CommenterCursor`](#commentercursor)|Hook to augment your statements NOT including OpenCensus `trace_id` and `span_id` information
-[`CommenterCursorWithOpenCensus`](#commentercursorwithopencensus)|Hook to augment your statements with OpenCensus `trace_id` and `span_id` information
-
-We provide 2 flavors of hooks because:
+We provide options such as `with_opencensus` because
 {{% notice warning%}}
 Since OpenCensus [`trace_id`](https://opencensus.io/tracing/span/traceid) and [`span_id`](https://opencensus.io/tracing/span/spanid/) are highly ephemeral, including them in SQL comments will likely break any form of statement-based caching that doesn't strip out comments.
 {{% /notice %}}
@@ -61,26 +59,23 @@ cd python-sql-commenter/sqlcommenter-psycopg2 && python3 setup.py install
 #### Usage
 We'll perform the following imports in our source code:
 
-### CommenterCursor
+### CommenterCursorFactory
 
-`CommenterCursor` is a `cursor_factory` that when used to create a psycopg2.Connection engine will grab information about your application and augment it as a comment to your SQL statement.
+`CommenterCursorFactory` is a factory for a `cursor_factory` that when used to create a psycopg2.Connection engine will grab information about your application and augment it as a comment to your SQL statement.
 
 ```python
 import psycopg2
-from sqlcommenter.psycopg2.extension import CommenterCursor
+from sqlcommenter.psycopg2.extension import CommenterCursorFactory
 
-conn = psycopg2.connect(..., cursor_factory=CommenterCursor)
+conn = psycopg2.connect(..., cursor_factory=CommenterCursorFactory())
 ```
 
-### CommenterCursorWithOpenCensus
+#### <a name="with-opencensus"></a> with_openCensus=True
 
-`CommenterCursorWithOpenCensus` is a `cursor_factory` that when used to create a psycopg2.Connection engine will grab information about your application and augment it as a comment to your SQL statement, also capturing any OpenCensus Trace information if present.
+To enable the comment cursor to also attach information about the current OpenCensus span (if any exists), pass in option `with_opencensus=True` when invoking `CommenterCursorFactory`, so
 
 ```python
-import psycopg2
-from sqlcommenter.psycopg2.extension import CommenterCursorWithOpenCensus
-
-conn = psycopg2.connect(..., cursor_factory=CommenterCursorWithOpenCensus)
+conn = psycopg2.connect(..., cursor_factory=CommenterCursorFactory(with_opencensus=True))
 ```
 
 ### Expected fields
@@ -91,8 +86,8 @@ Field|Description
 `dbapi_threadsafety`|The threadsafety API assignment e.g. 2
 `driver_paramstyle`|The Python DB API style of parameters e.g. `pyformat`
 `libpq_version`|The underlying version of [libpq]() that was used by psycopg2
-`span_id`|The SpanID of the OpenCensus trace -- optionally defined with [`CommenterCursorWithOpenCensus`](#CommenterCursorWithOpenCensus)
-`trace_id`|The TraceID of the OpenCensus trace -- optionally defined with [`CommenterCursorWithOpenCensus`](#CommenterCursorWithOpenCensus)
+`span_id`|The SpanID of the OpenCensus trace -- optionally defined with [`with_opencensus=True`](#with-opencensus)
+`trace_id`|The TraceID of the OpenCensus trace -- optionally defined with [`with_opencensus=True`](#with-opencensus)
 
 ### End to end examples
 
@@ -103,7 +98,7 @@ Field|Description
 #!/usr/bin/env python3
 
 import psycopg2
-from sqlcommenter.psycopg2.extension import CommenterCursor
+from sqlcommenter.psycopg2.extension import CommenterCursorFactory
 
 def main():
     conn = None
@@ -112,7 +107,7 @@ def main():
     try:
         conn = psycopg2.connect(user='', password='$postgres$',
                 host='127.0.0.1', port='5432', database='quickstart_py',
-                cursor_factory=CommenterCursor)
+                cursor_factory=CommenterCursorFactory())
 
         cursor = conn.cursor()
         cursor.execute("SELECT * FROM polls_question")
@@ -135,7 +130,9 @@ if __name__ == '__main__':
 #!/usr/bin/env python3
 
 import psycopg2
-from sqlcommenter.psycopg2.extension import CommenterCursorWithOpenCensus
+from sqlcommenter.psycopg2.extension import CommenterCursorFactory
+
+from opencensus.trace.samplers import AlwaysOnSampler
 from opencensus.trace.tracer import Tracer
 
 class noopOpenCensusTraceExporter(object):
@@ -152,9 +149,9 @@ def main():
     try:
         conn = psycopg2.connect(user='', password='$postgres$',
                 host='127.0.0.1', port='5432', database='quickstart_py',
-                cursor_factory=CommenterCursorWithOpenCensus)
+                cursor_factory=CommenterCursorFactory(with_opencensus=True))
 
-        tracer = Tracer(exporter=noopOpenCensusTraceExporter)
+        tracer = Tracer(exporter=noopOpenCensusTraceExporter, sampler=AlwaysOnSampler())
         with tracer.span(name='Psycopg2.Integration') as span:
             cursor = conn.cursor()
             cursor.execute("SELECT * FROM polls_question")
@@ -192,7 +189,7 @@ Examining our Postgresql server logs
 {{<highlight shell>}}
 2019-06-01 19:06:49.616 PDT [25573] LOG:  statement: SELECT * FROM polls_question
 /* db_driver='psycopg2%%3A2.8.2%%20%%28dt%%20dec%%20pq3%%20ext%%20lo64%%29',
-dbapi_level='2.0', dbapi_threadsafety=2, driver_paramstyle='pyformat', libpq_version=100001 */
+dbapi_level='2.0',dbapi_threadsafety=2,driver_paramstyle='pyformat',libpq_version=100001 */
 {{</highlight>}}
 
 {{<highlight shell>}}
