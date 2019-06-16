@@ -8,6 +8,7 @@ weight: 2
 ![](/images/spring-logo.png)
 
 - [Introduction](#introduction)
+- [Requirements](#requirements)
 - [Dependency management](#dependency-management)
     - [Manually](#manually)
     - [Package management](#package-management)
@@ -25,16 +26,18 @@ later those properties will be picked up by the actual ORMs and augment your SQL
 
 {{<card-vendor href="/java/hibernate" src="/images/hibernate-logo.svg">}}
 
-### Installation
+### Requirements
+
+- Java 8+
+- Successfully installed [sqlcommenter-java](/java/#install)
+
+### Dependency management
 
 We can add the integration to our applications in the following ways:
 
 #### Manually
 
-```shell
-git clone https://github.com/orijtech/sqlcommenter-java && cd sqlcommenter-java
-./gradlew install
-```
+Please read [installing sqlcommenter-java from source](/java/#install-from-source)
 
 #### Package management
 

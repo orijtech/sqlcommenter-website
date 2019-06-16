@@ -8,6 +8,7 @@ weight: 1
 ![](/images/hibernate-logo.svg)
 
 - [Introduction](#introduction)
+- [Requirements](#requirements)
 - [Using the integration](#using-the-integration)
     - [Imports](#imports)
     - [Maven imports](#imports#0)
@@ -28,6 +29,11 @@ setup. It is best used when coupled with other frameworks such as:
 <!-- {{<card-vendor href="/java/jetty" src="/images/jetty-logo.png">}}
 {{<card-vendor href="/java/grpc" src="/images/grpc-logo.png">}}
 {{<card-vendor href="/java/tomcat" src="/images/tomcat-logo.png">}} -->
+
+### Requirements
+
+- Java 8+
+- Successfully installed [sqlcommenter-java](/java/#install)
 
 ### Using the integration
 
