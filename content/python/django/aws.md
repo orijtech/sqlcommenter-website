@@ -38,6 +38,11 @@ MIDDLEWARE = [
 ]
 ```
 
+{{% notice tip %}}
+If any middleware execute database queries (that you'd like commented by SqlCommenter), those middleware MUST appear after
+'sqlcommenter.django.middleware.SqlCommenter'
+{{%/ notice %}}
+
 ### References
 
 Resource|URL

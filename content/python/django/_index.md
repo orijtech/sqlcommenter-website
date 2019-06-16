@@ -52,14 +52,19 @@ cd python-sql-commenter/django && python3 setup.py install
 
 Please edit your `settings.py` file to include `sqlcommenter.django.middleware.SqlCommenter` in your `MIDDLEWARE` section like this:
 ```diff
---- before.txt
-+++ after.txt
+--- settings.py
++++ settings.py
 @@ -1,3 +1,4 @@
  MIDDLEWARE = [
 +  'sqlcommenter.django.middleware.SqlCommenter',
    ...
  ]
 ```
+
+{{% notice tip %}}
+If any middleware execute database queries (that you'd like commented by SqlCommenter), those middleware MUST appear after
+'sqlcommenter.django.middleware.SqlCommenter'
+{{%/ notice %}}
 
 
 ### Fields
