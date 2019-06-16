@@ -9,6 +9,7 @@ tags: ["python", "flask"]
 ![](/images/flask-logo.png)
 
 - [Introduction](#introduction)
+- [Using it](#using-it)
 - [End to examples](#end-to-end-examples)
     - [With psycopg2](#with-psycopg2)
     - [With sqlalchemy](#with-sqlalchemy)
@@ -23,6 +24,17 @@ We provide Flask middleware which when coupled with:
 
 allow us to retrieve the `controller` and `route` correlated with your source code in your web app.
 
+### Using it
+
+Having successfully installed [sqlcommenter-python's sqlcommenter](/python#install)
+
+```python
+from sqlcommenter import FlaskMiddleware
+
+# Then in your flask programs just pass in the app
+FlaskMiddleware(app)
+```
+
 ### End to end examples
 #### With psycopg2
 {{<highlight python>}}
@@ -33,7 +45,8 @@ import json
 import flask
 app = flask.Flask(__name__)
 
-from sqlcommenter.psycopg2.extension import FlaskMiddleware, CommenterCursor
+from sqlcommenter import FlaskMiddleware
+from sqlcommenter.psycopg2.extension import CommenterCursorFactory
 
 conn = None
 
@@ -52,7 +65,7 @@ def main():
     try:
         conn = psycopg2.connect(user='', password='$postgres$',
                 host='127.0.0.1', port='5432', database='quickstart_py',
-                cursor_factory=CommenterCursor)
+                cursor_factory=CommenterCursorFactory())
 
         # Now enable the middleware.
         FlaskMiddleware(app)
@@ -91,7 +104,8 @@ import flask
 app = flask.Flask(__name__)
 
 from sqlalchemy import create_engine, event
-from sqlcommenter.sqlalchemy.executor import FlaskMiddleware, before_cursor_execute
+from sqlcommenter import FlaskMiddleware
+from sqlcommenter.sqlalchemy.executor import BeforeExecuteFactory
 
 engine = None
 
@@ -106,7 +120,7 @@ def get_polls():
 def main():
     global engine
     engine = create_engine("postgresql://:$postgres$@127.0.0.1:5432/quickstart_py")
-    event.listen(engine, 'before_cursor_execute', before_cursor_execute, retval=True)
+    event.listen(engine, 'before_cursor_execute', BeforeExecuteFactory(), retval=True)
 
     FlaskMiddleware(app)
     app.run(host='localhost', port=8089, threaded=True)
