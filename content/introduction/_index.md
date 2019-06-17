@@ -102,6 +102,7 @@ containing the various ORM instrumentation that you can then install.
 │       ├── build.gradle
 │       ├── gradle
 │       │   └── wrapper
+│       │       ├── gradle-wrapper.jar
 │       │       └── gradle-wrapper.properties
 │       ├── gradlew
 │       ├── gradlew.bat
@@ -125,9 +126,11 @@ containing the various ORM instrumentation that you can then install.
 │       │               └── orijtech
 │       │                   └── integrations
 │       │                       └── sqlcommenter
+│       │                           ├── interceptors
+│       │                           │   └── SpringSQLCommenterInterceptorTest.java
 │       │                           ├── schibernate
 │       │                           │   └── SCHibernateTest.java
-│       │                           └── threadlocal
+│       │                           └── threadlocalstorage
 │       │                               ├── StateTest.java
 │       │                               └── ThreadLocalStorageTest.java
 │       └── travis_script
@@ -200,6 +203,8 @@ containing the various ORM instrumentation that you can then install.
 │       │   └── tests.py
 │       └── tox.ini
 └── ruby
+    ├── marginalia
+    ├── marginalia-opencensus
     ├── sqlcommenter_rails
     │   ├── Gemfile
     │   ├── README.md
@@ -243,7 +248,6 @@ containing the various ORM instrumentation that you can then install.
     │   │       └── marginalia_comment_components_spec.rb
     │   └── sqlcommenter_rails.gemspec
     └── sqlcommenter_rails_demo
-        ├── Dockerfile
         ├── Gemfile
         ├── Gemfile.lock
         ├── README.md
@@ -294,7 +298,6 @@ containing the various ORM instrumentation that you can then install.
         │   │   └── 20190608153219_create_posts.rb
         │   ├── schema.rb
         │   └── seeds.rb
-        ├── docker-compose.yml
         ├── lib
         │   └── tasks
         ├── log

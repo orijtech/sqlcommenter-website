@@ -37,6 +37,7 @@ java/
     ├── build.gradle
     ├── gradle
     │   └── wrapper
+    │       ├── gradle-wrapper.jar
     │       └── gradle-wrapper.properties
     ├── gradlew
     ├── gradlew.bat
@@ -60,9 +61,11 @@ java/
     │               └── orijtech
     │                   └── integrations
     │                       └── sqlcommenter
+    │                           ├── interceptors
+    │                           │   └── SpringSQLCommenterInterceptorTest.java
     │                           ├── schibernate
     │                           │   └── SCHibernateTest.java
-    │                           └── threadlocal
+    │                           └── threadlocalstorage
     │                               ├── StateTest.java
     │                               └── ThreadLocalStorageTest.java
     └── travis_script
