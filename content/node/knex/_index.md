@@ -150,7 +150,7 @@ Application listening on 3000
 On making a request to that server at `http://localhost:3000/polls/1000`, the PostgreSQL logs show:
 ```shell
 2019-06-03 14:32:10.842 PDT [32004] LOG:  statement: SELECT * from polls_question
-/* db_driver='knex%3A0.16.5',db_version='11.3',route='%5E%2Fpolls%2F%3Aparam' */
+/*db_driver='knex%3A0.16.5',db_version='11.3',route='%5E%2Fpolls%2F%3Aparam'*/
 ```
 
 

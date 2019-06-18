@@ -69,7 +69,7 @@ After following the example below you should be able to see in your PostgreSQL l
 2019-06-12 15:43:23.260 PDT [34305] LOG:  execute <unnamed>:
 select question0_.id as id1_0_, question0_.question_text as question2_0_,
 question0_.pub_date as pub_date3_0_ from polls_question question0_
-/* span_id='bcd07633524964ba',trace_id='e6588efe3fe58814f2afc0c63a2d9c55' */
+/*span_id='bcd07633524964ba',trace_id='e6588efe3fe58814f2afc0c63a2d9c55'*/
 ```
 
 {{% notice tip %}}

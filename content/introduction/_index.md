@@ -33,18 +33,18 @@ This log was extracted from a live web application
 2019-05-28 11:54:50.780 PDT [64128] LOG:  statement: INSERT INTO "polls_question"
 ("question_text", "pub_date") VALUES
 ('What is this?', '2019-05-28T18:54:50.767481+00:00'::timestamptz) RETURNING
-"polls_question"."id" /* controller='index',db_driver='django.db.backends.postgresql',
+"polls_question"."id" /*controller='index',db_driver='django.db.backends.postgresql',
 framework='django%3A2.2.1',route='%5Epolls/%24',
-span_id='cfb60c868a47adf9',trace_id='23d4bad1efad0bff3ebdc7b717d739e7' */
+span_id='cfb60c868a47adf9',trace_id='23d4bad1efad0bff3ebdc7b717d739e7'*/
 ```
 
 ### Interpretation
 
-On examining the SQL statement from above in [Sample](#sample) and examining the comment in `/* ... */`
+On examining the SQL statement from above in [Sample](#sample) and examining the comment in `/*...*/`
 ```sql
-/* controller='index',db_driver='django.db.backends.postgresql',
+/*controller='index',db_driver='django.db.backends.postgresql',
 framework='django%3A2.2.1',route='%5Epolls/%24',
-span_id='cfb60c868a47adf9',trace_id='23d4bad1efad0bff3ebdc7b717d739e7' */
+span_id='cfb60c868a47adf9',trace_id='23d4bad1efad0bff3ebdc7b717d739e7'*/
 ```
 
 we can now correlate and pinpoint the fields in the above slow SQL query to our source code in our web application:

@@ -145,7 +145,7 @@ Application listening on 3000
 On making a request to that server at `http://localhost:3000/polls/1000`, the PostgreSQL logs show:
 ```shell
 2019-06-03 15:09:35.575 PDT [32665] LOG:  statement: SELECT * from polls_question
-/* client_timezone='%2B00%3A00',db_driver='sequelize',db_version='11.3.0',route='%5E%2Fpolls%2F%3Aparam' */
+/*client_timezone='%2B00%3A00',db_driver='sequelize',db_version='11.3.0',route='%5E%2Fpolls%2F%3Aparam'*/
 ```
 
 

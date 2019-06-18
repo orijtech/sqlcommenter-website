@@ -83,8 +83,8 @@ After making a request into the middleware-enabled polls web-app.
 2019-05-28 11:54:50.780 PDT [64128] LOG:  statement: INSERT INTO "polls_question"
 ("question_text", "pub_date") VALUES
 ('Wassup?', '2019-05-28T18:54:50.767481+00:00'::timestamptz) RETURNING "polls_question"."id"
-/* controller='index',db_driver='django.db.backends.postgresql',
-framework='django%3A2.2.1',route='%5Epolls/%24' */
+/*controller='index',db_driver='django.db.backends.postgresql',
+framework='django%3A2.2.1',route='%5Epolls/%24'*/
 ```
 
 #### Expected fields
