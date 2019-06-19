@@ -37,7 +37,7 @@ setup. It is best used when coupled with other frameworks such as:
 
 ### Using the integration
 
-You can include this integration in your Java programs in 2 ways
+You can include this integration in your Java programs in 2 ways.
 
 #### Persistance XML file
 
@@ -62,293 +62,1080 @@ import io.orijtech.integrations.sqlcommenter.schhibernate.SCHibernate;
         sessionFactoryBuilder.applyStatementInspector(new SCHibernate());
 {{</highlight>}}
 
-### End to end example
+### Spring and JPA end-to-end example
 
-After following the example below you should be able to see in your PostgreSQL logs something that looks like the following
-```shell
-2019-06-12 15:43:23.260 PDT [34305] LOG:  execute <unnamed>:
-select question0_.id as id1_0_, question0_.question_text as question2_0_,
-question0_.pub_date as pub_date3_0_ from polls_question question0_
-/*span_id='bcd07633524964ba',trace_id='e6588efe3fe58814f2afc0c63a2d9c55'*/
-```
-
-{{% notice tip %}}
-Obviously, when augmented with other frameworks you'll see more information e.g. with Spring.
-{{%/ notice %}}
-
-#### Directory structure
-Please ensure that at the end, your directory mirrors the structure below:
-
-```shell
-.
-├── pom.xml
-├── settings.gradle
-├── src
-│   └── main
-│       ├── java
-│       │   └── io
-│       │       └── orijtech
-│       │           └── quickstarts
-│       │               └── sqlcommenter
-│       │                   └── hibernate
-│       │                       ├── ListQuestions.java
-│       │                       └── Question.java
-│       └── resources
-│           ├── Question.hbm.xml
-│           └── hibernate.cfg.xml
-```
+First thing you need to do is to download the [sqlcommenter-java-guides-spring-jpa](https://github.com/orijtech/sqlcommenter-java-guides/tree/master/sqlcommenter-java-guides-spring-jpa)
+Java project.
 
 #### Source code
-{{<tabs ListQuestions_Java Question_Java>}}
-{{<highlight java>}}
-// In file ListQuestions.Java
-package io.orijtech.quickstarts.sqlcommenter.hibernate;
 
+This project uses the following JPA entities:
+
+{{<tabs Post.java Tag.java>}}
+{{<highlight java>}}
+// In file Post.java
+package io.orijtech.integrations.sqlcommenter.spring.jpa.domain;
+
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
 
-public class ListQuestions {
-  private static SessionFactory sessionFactory;
+@Entity
+@Table(name = "post")
+public class Post {
 
-  public static void main(String[] args) throws Exception {
-    sessionFactory = new Configuration().configure().buildSessionFactory();
+    @Id
+    @GeneratedValue
+    private Long id;
 
-    ListQuestions lister = new ListQuestions();
-    List<Question> allQuestions = lister.listAll();
+    private String title;
 
-    for (int i = 1; i < 1000; i++) {
-      for (Question qn : allQuestions) {
-        System.out.println(
-            String.format(
-                "Question(%d) Text: %s PublishDate: %s",
-                qn.getId(), qn.getText(), qn.getPublishDate()));
-      }
-      Thread.sleep(1000);
-      System.out.println("Sleeping " + i);
+    @ManyToMany
+    @JoinTable(
+            name = "post_tag",
+            joinColumns = @JoinColumn(name = "post_id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id"))
+    private List<Tag> tags = new ArrayList<>();
+
+    public Long getId() {
+        return id;
     }
 
-    System.exit(0);
-  }
-
-  public List<Question> listAll() throws Exception {
-    List<Question> questions = new ArrayList<Question>();
-
-    try (Session session = sessionFactory.openSession()) {
-      questions = session.createQuery("FROM Question").list();
-    } catch (Exception e) {
-      throw e;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    return questions;
-  }
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public List<Tag> getTags() {
+        return tags;
+    }
 }
 {{</highlight>}}
 
 {{<highlight java>}}
-// In file Question.Java
-package io.orijtech.quickstarts.sqlcommenter.hibernate;
+// In file Tag.java
+package io.orijtech.integrations.sqlcommenter.spring.jpa.domain;
 
-import java.sql.Date;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
-public class Question {
-  private int id;
-  private String text;
-  private Date publishDate;
+@Entity
+@Table(name = "tag")
+public class Tag {
 
-  public Question() {}
+    @Id
+    @GeneratedValue
+    private Long id;
 
-  public Question(String text, Date publishDate) {
-    this.text = text;
-    this.publishDate = publishDate;
-  }
+    private String name;
 
-  public int getId() {
-    return this.id;
-  }
+    public Long getId() {
+        return id;
+    }
 
-  public void setId(int id) {
-    this.id = id;
-  }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-  public String getText() {
-    return this.text;
-  }
+    public String getName() {
+        return name;
+    }
 
-  public void setText(String text) {
-    this.text = text;
-  }
-
-  public Date getPublishDate() {
-    return this.publishDate;
-  }
-
-  public void setPublishDate(Date publishDate) {
-    this.publishDate = publishDate;
-  }
+    public void setName(String name) {
+        this.name = name;
+    }
 }
 {{</highlight>}}
 {{</tabs>}}
 
-#### XML files
-{{<tabs hibernate_cfg_xml Question_hbm_xml pom_xml>}}
-{{<highlight xml>}}
-<!-- Please place this file under: src/main/resources/hibernate.cfg.xml -->
-<?xml version = "1.0" encoding = "utf-8"?>
-<!DOCTYPE hibernate-configuration SYSTEM
-"http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
-<hibernate-configuration>
-    <session-factory>
-        <property name = "hibernate.dialect">
-            org.hibernate.dialect.PostgreSQLDialect
-        </property>
+The Repository layer looks as follows:
 
-        <property name = "hibernate.connection.driver_class">
-            org.postgresql.Driver
-        </property>
+{{<tabs PostRepository.java TagRepository.java>}}
+{{<highlight java>}}
+// In file PostRepository.java
 
+package io.orijtech.integrations.sqlcommenter.spring.jpa.dao;
 
-        <property name = "hibernate.connection.url">
-            jdbc:postgresql://localhost:5432/quickstart_py
-        </property>
+import io.orijtech.integrations.sqlcommenter.spring.jpa.domain.Post;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
 
-        <property name = "hibernate.connection.password">
-            $postgres$
-        </property>
+import java.util.List;
 
-        <property name = "hibernate.connection.pool_size">1</property>
+@Repository
+public interface PostRepository extends CrudRepository<Post, Long> {
 
-        <property name="hibernate.session_factory.statement_inspector">
-            io.orijtech.integrations.sqlcommenter.schibernate.SCHibernate
-        </property>
-
-        <mapping resource = "Question.hbm.xml" />
-    </session-factory>
-</hibernate-configuration>
+    List<Post> findByTitle(String title);
+}
 {{</highlight>}}
 
-{{<highlight xml>}}
-<!-- Please place this file under: src/main/resources/Question.cfg.xml -->
-<?xml version = "1.0" encoding = "utf-8"?>
-<!DOCTYPE hibernate-mapping PUBLIC
-"-//Hibernate/Hibernate Mapping DTD//EN"
-"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+{{<highlight java>}}
+// In file TagRepository.java
 
-<hibernate-mapping>
-    <class name = "io.orijtech.quickstarts.sqlcommenter.hibernate.Question" table = "polls_question">
-        <meta attribute = "class-description">
-            Details about questions made in the poll.
-        </meta>
+package io.orijtech.integrations.sqlcommenter.spring.jpa.dao;
 
-        <id name = "id" type="int" column = "id">
-            <generator class="native" />
-        </id>
+import io.orijtech.integrations.sqlcommenter.spring.jpa.domain.Tag;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
 
-        <property name = "text" type="string" column = "question_text" />
-        <property name = "publishDate" type="date" column = "pub_date" />
-    </class>
-</hibernate-mapping>
-{{</highlight>}}
+import java.util.List;
 
-{{<highlight xml>}}
-<!-- Please place this file under: pom.xml -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    <groupId>io.orijtech</groupId>
-    <artifactId>sqlcommenter-hibernate</artifactId>
-    <packaging>jar</packaging>
-    <version>0.0.1</version>
-    <name>sqlcommenter-hibernate-app</name>
-    <url>http://maven.apache.org</url>
+@Repository
+public interface TagRepository extends CrudRepository<Tag, Long> {
 
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <opencensus.version>0.21.0</opencensus.version>
-        <hibernate.version>5.4.3.Final</hibernate.version>
-    </properties>
-
-    <dependencies>
-        <dependency>
-            <groupId>io.opencensus</groupId>
-            <artifactId>opencensus-api</artifactId>
-            <version>${opencensus.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>io.opencensus</groupId>
-            <artifactId>opencensus-impl</artifactId>
-            <version>${opencensus.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-core</artifactId>
-            <version>${hibernate.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.postgresql</groupId>
-            <artifactId>postgresql</artifactId>
-            <version>42.2.5</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-core</artifactId>
-            <version>${hibernate.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>io.orijtech.integrations</groupId>
-            <artifactId>sqlcommenter-java</artifactId>
-            <version>0.0.1</version>
-        </dependency>
-    </dependencies>
-
-    <build>
-        <extensions>
-            <extension>
-                <groupId>kr.motd.maven</groupId>
-                <artifactId>os-maven-plugin</artifactId>
-                <version>1.5.0.Final</version>
-            </extension>
-        </extensions>
-
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.7.0</version>
-                    <configuration>
-                        <source>1.8</source>
-                        <target>1.8</target>
-                    </configuration>
-                </plugin>
-            </plugins>
-        </pluginManagement>
-
-        <plugins>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>appassembler-maven-plugin</artifactId>
-                <version>1.10</version>
-                <configuration>
-                    <programs>
-                        <program>
-                            <id>ListQuestions</id>
-                            <mainClass>io.opencensus.quickstarts.sqlcommenter.hibernate.ListQuestions</mainClass>
-                        </program>
-                    </programs>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
-</project>
+    List<Tag> findByNameIn(List<String> names);
+}
 {{</highlight>}}
 {{</tabs>}}
+
+The Service layer looks as follows:
+
+{{<tabs ForumService.java ForumServiceImpl.java>}}
+{{<highlight java>}}
+// In file ForumService.java
+
+package io.orijtech.integrations.sqlcommenter.spring.jpa.service;
+
+import io.orijtech.integrations.sqlcommenter.spring.jpa.domain.Post;
+
+import java.util.List;
+
+public interface ForumService {
+
+    Post createPost(String title, String... tags);
+
+    List<Post> findPostsByTitle(String title);
+
+    Post findPostById(Long id);
+}
+{{</highlight>}}
+
+{{<highlight java>}}
+// In file ForumServiceImpl.java
+
+package io.orijtech.integrations.sqlcommenter.spring.jpa.service;
+
+import io.orijtech.integrations.sqlcommenter.spring.jpa.dao.PostRepository;
+import io.orijtech.integrations.sqlcommenter.spring.jpa.dao.TagRepository;
+import io.orijtech.integrations.sqlcommenter.spring.jpa.domain.Post;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Arrays;
+import java.util.List;
+
+@Service
+public class ForumServiceImpl implements ForumService {
+
+    @Autowired
+    private PostRepository postRepository;
+
+    @Autowired
+    private TagRepository tagRepository;
+
+    @Override
+    @Transactional
+    public Post createPost(String title, String... tags) {
+        Post post = new Post();
+        post.setTitle(title);
+        post.getTags().addAll(tagRepository.findByNameIn(Arrays.asList(tags)));
+        return postRepository.save(post);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Post> findPostsByTitle(String title) {
+        return postRepository.findByTitle(title);
+    }
+
+    @Override
+    @Transactional
+    public Post findPostById(Long id) {
+        return postRepository.findById(id).orElse(null);
+    }
+}
+{{</highlight>}}
+{{</tabs>}}
+
+The Spring JPA configuration looks as follows:
+
+````java
+// In file JpaTransactionManagerConfiguration.java
+
+package io.orijtech.integrations.sqlcommenter.spring.jpa;
+
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
+import io.orijtech.integrations.sqlcommenter.spring.util.SCHibernateWrapper;
+import org.hibernate.jpa.HibernatePersistenceProvider;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.*;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.orm.jpa.JpaTransactionManager;
+import org.springframework.orm.jpa.JpaVendorAdapter;
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.transaction.support.TransactionTemplate;
+
+import javax.persistence.EntityManagerFactory;
+import javax.sql.DataSource;
+import java.util.Properties;
+
+@Configuration
+@PropertySource({"/META-INF/jdbc-hsqldb.properties"})
+@ComponentScan(basePackages = "io.orijtech.integrations.sqlcommenter.spring.jpa")
+@EnableTransactionManagement
+@EnableAspectJAutoProxy
+@EnableJpaRepositories
+public class JpaTransactionManagerConfiguration {
+
+    @Value("${jdbc.dataSourceClassName}")
+    private String dataSourceClassName;
+
+    @Value("${jdbc.url}")
+    private String jdbcUrl;
+
+    @Value("${jdbc.username}")
+    private String jdbcUser;
+
+    @Value("${jdbc.password}")
+    private String jdbcPassword;
+
+    @Value("${hibernate.dialect}")
+    private String hibernateDialect;
+
+    @Bean(destroyMethod = "close")
+    public DataSource actualDataSource() {
+        Properties driverProperties = new Properties();
+        driverProperties.setProperty("url", jdbcUrl);
+        driverProperties.setProperty("user", jdbcUser);
+        driverProperties.setProperty("password", jdbcPassword);
+
+        Properties properties = new Properties();
+        properties.put("dataSourceClassName", dataSourceClassName);
+        properties.put("dataSourceProperties", driverProperties);
+        properties.setProperty("maximumPoolSize", String.valueOf(3));
+        return new HikariDataSource(new HikariConfig(properties));
+    }
+
+    @Bean
+    public static PropertySourcesPlaceholderConfigurer properties() {
+        return new PropertySourcesPlaceholderConfigurer();
+    }
+
+    @Bean
+    public DataSource dataSource() {
+        return actualDataSource();
+    }
+
+    @Bean
+    public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
+        LocalContainerEntityManagerFactoryBean localContainerEntityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
+        localContainerEntityManagerFactoryBean.setPersistenceUnitName(getClass().getSimpleName());
+        localContainerEntityManagerFactoryBean.setPersistenceProvider(new HibernatePersistenceProvider());
+        localContainerEntityManagerFactoryBean.setDataSource(dataSource());
+        localContainerEntityManagerFactoryBean.setPackagesToScan(packagesToScan());
+
+        JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
+        localContainerEntityManagerFactoryBean.setJpaVendorAdapter(vendorAdapter);
+        localContainerEntityManagerFactoryBean.setJpaProperties(additionalProperties());
+        return localContainerEntityManagerFactoryBean;
+    }
+
+    @Bean
+    public JpaTransactionManager transactionManager(EntityManagerFactory entityManagerFactory){
+        JpaTransactionManager transactionManager = new JpaTransactionManager();
+        transactionManager.setEntityManagerFactory(entityManagerFactory);
+        return transactionManager;
+    }
+
+    @Bean
+    public TransactionTemplate transactionTemplate(EntityManagerFactory entityManagerFactory) {
+        return new TransactionTemplate(transactionManager(entityManagerFactory));
+    }
+
+    protected Properties additionalProperties() {
+        Properties properties = new Properties();
+        properties.setProperty("hibernate.dialect", hibernateDialect);
+        properties.setProperty("hibernate.hbm2ddl.auto", "create-drop");
+        properties.put(
+            "hibernate.session_factory.statement_inspector", SCHibernateWrapper.class.getName()
+        );
+        return properties;
+    }
+
+    protected String[] packagesToScan() {
+        return new String[]{
+            "io.orijtech.integrations.sqlcommenter.spring.jpa.domain"
+        };
+    }
+}
+````
+
+Now, the test looks as follows:
+
+````java
+// In file JpaTransactionManagerTest.java
+
+package io.orijtech.integrations.sqlcommenter.spring.jpa;
+
+import io.orijtech.integrations.sqlcommenter.spring.jpa.dao.TagRepository;
+import io.orijtech.integrations.sqlcommenter.spring.jpa.domain.Post;
+import io.orijtech.integrations.sqlcommenter.spring.jpa.domain.Tag;
+import io.orijtech.integrations.sqlcommenter.spring.jpa.service.ForumService;
+import io.orijtech.integrations.sqlcommenter.spring.util.SCHibernateWrapper;
+import io.orijtech.integrations.sqlcommenter.threadlocalstorage.State;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes = JpaTransactionManagerConfiguration.class)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
+public class JpaTransactionManagerTest {
+
+    @Autowired
+    private TagRepository tagRepository;
+
+    @Autowired
+    private ForumService forumService;
+
+    @Before
+    public void init() {
+        Tag hibernate = new Tag();
+        hibernate.setName("hibernate");
+        tagRepository.save(hibernate);
+
+        Tag jpa = new Tag();
+        jpa.setName("jpa");
+        tagRepository.save(jpa);
+    }
+
+    @Test
+    public void test() {
+        State.Holder.set(
+            State.newBuilder()
+                .withControllerName("ForumController")
+                .withActionName("CreatePost")
+                .withWebFramework("spring")
+                .build()
+        );
+
+        SCHibernateWrapper.reset();
+
+        Post newPost = forumService.createPost("High-Performance Java Persistence", "hibernate", "jpa");
+        assertNotNull(newPost.getId());
+
+        List<String> sqlStatements = SCHibernateWrapper.getAfterSqlStatements();
+        assertEquals(5, sqlStatements.size());
+        assertEquals(
+                5,
+                sqlStatements
+                    .stream()
+                    .filter(
+                        sql -> sql.contains(
+                            "/*action='CreatePost',controller='ForumController',web_framework='spring'*/"
+                        )
+                    )
+                    .count()
+        );
+
+        SCHibernateWrapper.reset();
+
+        State.Holder.set(
+                State.newBuilder()
+                        .withControllerName("ForumController")
+                        .withActionName("FindPostsByTitle")
+                        .withWebFramework("spring")
+                        .build()
+        );
+
+        List<Post> posts = forumService.findPostsByTitle("High-Performance Java Persistence");
+        assertEquals(1, posts.size());
+
+        sqlStatements = SCHibernateWrapper.getAfterSqlStatements();
+        assertEquals(1, sqlStatements.size());
+        assertEquals(
+                1,
+                sqlStatements
+                    .stream()
+                    .filter(
+                        sql -> sql.contains(
+                            "/*action='FindPostsByTitle',controller='ForumController',web_framework='spring'*/"
+                        )
+                    )
+                    .count()
+        );
+
+        State.Holder.set(
+                State.newBuilder()
+                        .withControllerName("ForumController")
+                        .withActionName("FindPostById")
+                        .withWebFramework("spring")
+                        .build()
+        );
+
+        SCHibernateWrapper.reset();
+
+        Post post = forumService.findPostById(newPost.getId());
+        assertEquals("High-Performance Java Persistence", post.getTitle());
+
+        sqlStatements = SCHibernateWrapper.getAfterSqlStatements();
+        assertEquals(1, sqlStatements.size());
+        assertEquals(
+                1,
+                sqlStatements
+                    .stream()
+                    .filter(
+                        sql -> sql.contains(
+                            "/*action='FindPostById',controller='ForumController',web_framework='spring'*/"
+                        )
+                    )
+                    .count()
+        );
+    }
+}
+````
+
+When running the unit test above, we can see that the SQL statements include the comments as well:
+
+````sql
+select tag0_.id as id1_2_, tag0_.name as name2_2_ from tag tag0_ where tag0_.name in (? , ?) /*action='CreatePost',controller='ForumController',web_framework='spring'*/
+
+call next value for hibernate_sequence /*action='CreatePost',controller='ForumController',web_framework='spring'*/
+
+insert into post (title, id) values (?, ?) /*action='CreatePost',controller='ForumController',web_framework='spring'*/
+
+insert into post_tag (post_id, tag_id) values (?, ?) /*action='CreatePost',controller='ForumController',web_framework='spring'*/
+
+insert into post_tag (post_id, tag_id) values (?, ?) /*action='CreatePost',controller='ForumController',web_framework='spring'*/
+
+select post0_.id as id1_0_, post0_.title as title2_0_ from post post0_ where post0_.title=? /*action='FindPostsByTitle',controller='ForumController',web_framework='spring'*/
+
+select post0_.id as id1_0_0_, post0_.title as title2_0_0_ from post post0_ where post0_.id=? /*action='FindPostById',controller='ForumController',web_framework='spring'*/
+````
+
+### Spring and Hibernate end-to-end example
+
+First thing you need to do is to download the [sqlcommenter-java-guides-spring-hibernate](https://github.com/orijtech/sqlcommenter-java-guides/tree/master/sqlcommenter-java-guides-spring-hibernate)
+Java project.
+
+#### Source code
+
+This project uses the following JPA entities:
+
+{{<tabs Post.java Tag.java>}}
+{{<highlight java>}}
+// In file Post.java
+package io.orijtech.integrations.sqlcommenter.spring.hibernate.domain;
+
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
+
+@Entity
+@Table(name = "post")
+public class Post {
+
+    @Id
+    @GeneratedValue
+    private Long id;
+
+    private String title;
+
+    @ManyToMany
+    @JoinTable(
+            name = "post_tag",
+            joinColumns = @JoinColumn(name = "post_id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id"))
+    private List<Tag> tags = new ArrayList<>();
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public List<Tag> getTags() {
+        return tags;
+    }
+}
+{{</highlight>}}
+
+{{<highlight java>}}
+// In file Tag.java
+package io.orijtech.integrations.sqlcommenter.spring.hibernate.domain;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "tag")
+public class Tag {
+
+    @Id
+    @GeneratedValue
+    private Long id;
+
+    private String name;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+}
+{{</highlight>}}
+{{</tabs>}}
+
+The DAO (Data Access Object) layer looks as follows:
+
+{{<tabs GenericDAO.java GenericDAOImpl.java PostDAO.java PostDAOImpl.java TagDAO.java TagDAOImpl.java>}}
+{{<highlight java>}}
+// In file GenericDAO.java
+
+package io.orijtech.integrations.sqlcommenter.spring.hibernate.dao;
+
+import java.io.Serializable;
+
+public interface GenericDAO<T, ID extends Serializable> {
+
+    T findById(ID id);
+
+    T save(T entity);
+}
+{{</highlight>}}
+
+{{<highlight java>}}
+// In file GenericDAOImpl.java
+
+package io.orijtech.integrations.sqlcommenter.spring.hibernate.dao;
+
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.io.Serializable;
+
+@Repository
+@Transactional
+public abstract class GenericDAOImpl<T, ID extends Serializable> implements GenericDAO<T, ID> {
+
+    @Autowired
+    private SessionFactory sessionFactory;
+
+    private final Class<T> entityClass;
+
+    protected SessionFactory getSessionFactory() {
+        return sessionFactory;
+    }
+
+    protected Session getSession() {
+        return sessionFactory.getCurrentSession();
+    }
+
+    protected GenericDAOImpl(Class<T> entityClass) {
+        this.entityClass = entityClass;
+    }
+
+    public Class<T> getEntityClass() {
+        return entityClass;
+    }
+
+    @Override
+    public T findById(ID id) {
+        return getSession().get(entityClass, id);
+    }
+
+    @Override
+    public T save(T entity) {
+        getSession().persist(entity);
+        return entity;
+    }
+}
+{{</highlight>}}
+
+{{<highlight java>}}
+// In file PostDAO.java
+
+package io.orijtech.integrations.sqlcommenter.spring.hibernate.dao;
+
+import io.orijtech.integrations.sqlcommenter.spring.hibernate.domain.Post;
+
+import java.util.List;
+
+public interface PostDAO extends GenericDAO<Post, Long> {
+
+    List<Post> findByTitle(String title);
+}
+{{</highlight>}}
+
+{{<highlight java>}}
+// In file PostDAOImpl.java
+
+package io.orijtech.integrations.sqlcommenter.spring.hibernate.dao;
+
+import io.orijtech.integrations.sqlcommenter.spring.hibernate.domain.Post;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+
+@Repository
+public class PostDAOImpl extends GenericDAOImpl<Post, Long> implements PostDAO {
+
+    protected PostDAOImpl() {
+        super(Post.class);
+    }
+
+    @Override
+    public List<Post> findByTitle(String title) {
+        return getSession().createQuery(
+                "select p from Post p where p.title = :title", Post.class)
+                .setParameter("title", title)
+                .getResultList();
+    }
+}
+{{</highlight>}}
+
+{{<highlight java>}}
+// In file TagDAO.java
+
+package io.orijtech.integrations.sqlcommenter.spring.hibernate.dao;
+
+import io.orijtech.integrations.sqlcommenter.spring.hibernate.domain.Tag;
+
+import java.util.List;
+
+public interface TagDAO extends GenericDAO<Tag, Long> {
+
+    List<Tag> findByName(String... tags);
+}
+{{</highlight>}}
+{{</tabs>}}
+
+{{<highlight java>}}
+// In file TagDAOImpl.java
+
+package io.orijtech.integrations.sqlcommenter.spring.hibernate.dao;
+
+import io.orijtech.integrations.sqlcommenter.spring.hibernate.domain.Tag;
+import org.springframework.stereotype.Repository;
+
+import java.util.Arrays;
+import java.util.List;
+
+@Repository
+public class TagDAOImpl extends GenericDAOImpl<Tag, Long> implements TagDAO {
+
+    protected TagDAOImpl() {
+        super(Tag.class);
+    }
+
+    @Override
+    public List<Tag> findByName(String... tags) {
+        if (tags.length == 0) {
+            throw new IllegalArgumentException("There's no tag name to search for!");
+        }
+        return getSession()
+            .createQuery(
+                "select t " +
+                "from Tag t " +
+                "where t.name in :tags")
+            .setParameterList("tags", Arrays.asList(tags))
+            .list();
+    }
+}
+{{</highlight>}}
+{{</tabs>}}
+
+The Service layer looks as follows:
+
+{{<tabs ForumService.java ForumServiceImpl.java>}}
+{{<highlight java>}}
+// In file ForumService.java
+
+package io.orijtech.integrations.sqlcommenter.spring.hibernate.service;
+
+import io.orijtech.integrations.sqlcommenter.spring.hibernate.domain.Post;
+
+import java.util.List;
+
+public interface ForumService {
+
+    Post createPost(String title, String... tags);
+
+    List<Post> findPostsByTitle(String title);
+
+    Post findPostById(Long id);
+}
+{{</highlight>}}
+
+{{<highlight java>}}
+// In file ForumServiceImpl.java
+
+package io.orijtech.integrations.sqlcommenter.spring.hibernate.service;
+
+import io.orijtech.integrations.sqlcommenter.spring.hibernate.dao.PostDAO;
+import io.orijtech.integrations.sqlcommenter.spring.hibernate.dao.TagDAO;
+import io.orijtech.integrations.sqlcommenter.spring.hibernate.domain.Post;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+
+@Service
+public class ForumServiceImpl implements ForumService {
+
+    @Autowired
+    private PostDAO postDAO;
+
+    @Autowired
+    private TagDAO tagDAO;
+
+    @Override
+    @Transactional
+    public Post createPost(String title, String... tags) {
+        Post post = new Post();
+        post.setTitle(title);
+        post.getTags().addAll(tagDAO.findByName(tags));
+        return postDAO.save(post);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Post> findPostsByTitle(String title) {
+        return postDAO.findByTitle(title);
+    }
+
+    @Override
+    @Transactional
+    public Post findPostById(Long id) {
+        return postDAO.findById(id);
+    }
+}
+{{</highlight>}}
+{{</tabs>}}
+
+The Spring Hibernate configuration looks as follows:
+
+````java
+// In file HibernateTransactionManagerConfiguration.java
+
+package io.orijtech.integrations.sqlcommenter.spring.hibernate;
+
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
+import io.orijtech.integrations.sqlcommenter.spring.util.SCHibernateWrapper;
+import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.*;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
+import org.springframework.orm.hibernate5.HibernateTransactionManager;
+import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.transaction.support.TransactionTemplate;
+
+import javax.sql.DataSource;
+import java.util.Properties;
+
+@Configuration
+@PropertySource({"/META-INF/jdbc-hsqldb.properties"})
+@ComponentScan(basePackages = "io.orijtech.integrations.sqlcommenter.spring.hibernate")
+@EnableTransactionManagement
+@EnableAspectJAutoProxy
+public class HibernateTransactionManagerConfiguration {
+
+    @Value("${jdbc.dataSourceClassName}")
+    private String dataSourceClassName;
+
+    @Value("${jdbc.url}")
+    private String jdbcUrl;
+
+    @Value("${jdbc.username}")
+    private String jdbcUser;
+
+    @Value("${jdbc.password}")
+    private String jdbcPassword;
+
+    @Value("${hibernate.dialect}")
+    private String hibernateDialect;
+
+    @Bean(destroyMethod = "close")
+    public DataSource actualDataSource() {
+        Properties driverProperties = new Properties();
+        driverProperties.setProperty("url", jdbcUrl);
+        driverProperties.setProperty("user", jdbcUser);
+        driverProperties.setProperty("password", jdbcPassword);
+
+        Properties properties = new Properties();
+        properties.put("dataSourceClassName", dataSourceClassName);
+        properties.put("dataSourceProperties", driverProperties);
+        properties.setProperty("maximumPoolSize", String.valueOf(3));
+        return new HikariDataSource(new HikariConfig(properties));
+    }
+
+    @Bean
+    public static PropertySourcesPlaceholderConfigurer properties() {
+        return new PropertySourcesPlaceholderConfigurer();
+    }
+
+    @Bean
+    public DataSource dataSource() {
+        return actualDataSource();
+    }
+
+    @Bean
+    public LocalSessionFactoryBean sessionFactory() {
+        LocalSessionFactoryBean localSessionFactoryBean = new LocalSessionFactoryBean();
+        localSessionFactoryBean.setDataSource(dataSource());
+        localSessionFactoryBean.setPackagesToScan(packagesToScan());
+        localSessionFactoryBean.setHibernateProperties(additionalProperties());
+        return localSessionFactoryBean;
+    }
+
+    @Bean
+    public HibernateTransactionManager transactionManager(SessionFactory sessionFactory) {
+        HibernateTransactionManager transactionManager = new HibernateTransactionManager();
+        transactionManager.setSessionFactory(sessionFactory);
+        return transactionManager;
+    }
+
+    @Bean
+    public TransactionTemplate transactionTemplate(SessionFactory sessionFactory) {
+        return new TransactionTemplate(transactionManager(sessionFactory));
+    }
+
+    protected Properties additionalProperties() {
+        Properties properties = new Properties();
+        properties.setProperty("hibernate.dialect", hibernateDialect);
+        properties.setProperty("hibernate.hbm2ddl.auto", "create-drop");
+        properties.put(
+            "hibernate.session_factory.statement_inspector", SCHibernateWrapper.class.getName()
+        );
+        return properties;
+    }
+
+    protected String[] packagesToScan() {
+        return new String[]{
+                "io.orijtech.integrations.sqlcommenter.spring.hibernate.domain"
+        };
+    }
+}
+````
+
+Now, the test looks as follows:
+
+````java
+// In file HibernateTransactionManagerTest.java
+
+package io.orijtech.integrations.sqlcommenter.spring.hibernate;
+
+import io.orijtech.integrations.sqlcommenter.spring.hibernate.domain.Post;
+import io.orijtech.integrations.sqlcommenter.spring.hibernate.domain.Tag;
+import io.orijtech.integrations.sqlcommenter.spring.hibernate.service.ForumService;
+import io.orijtech.integrations.sqlcommenter.spring.util.SCHibernateWrapper;
+import io.orijtech.integrations.sqlcommenter.threadlocalstorage.State;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.TransactionException;
+import org.springframework.transaction.support.TransactionCallback;
+import org.springframework.transaction.support.TransactionTemplate;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
+
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes = HibernateTransactionManagerConfiguration.class)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
+public class HibernateTransactionManagerTest {
+
+    @Autowired
+    private TransactionTemplate transactionTemplate;
+
+    @PersistenceContext
+    private EntityManager entityManager;
+
+    @Autowired
+    private ForumService forumService;
+
+    @Before
+    public void init() {
+        try {
+            transactionTemplate.execute((TransactionCallback<Void>) transactionStatus -> {
+                Tag hibernate = new Tag();
+                hibernate.setName("hibernate");
+                entityManager.persist(hibernate);
+
+                Tag jpa = new Tag();
+                jpa.setName("jpa");
+                entityManager.persist(jpa);
+
+                return null;
+            });
+        } catch (TransactionException e) {
+            fail(e.getMessage());
+        }
+    }
+
+    @Test
+    public void test() {
+        State.Holder.set(
+            State.newBuilder()
+                .withControllerName("ForumController")
+                .withActionName("CreatePost")
+                .withWebFramework("spring")
+                .build()
+        );
+
+        SCHibernateWrapper.reset();
+
+        Post newPost = forumService.createPost("High-Performance Java Persistence", "hibernate", "jpa");
+        assertNotNull(newPost.getId());
+
+        List<String> sqlStatements = SCHibernateWrapper.getAfterSqlStatements();
+        assertEquals(5, sqlStatements.size());
+        assertEquals(
+                5,
+                sqlStatements
+                .stream()
+                .filter(
+                    sql -> sql.contains(
+                        "/*action='CreatePost',controller='ForumController',web_framework='spring'*/"
+                    )
+                )
+                .count()
+        );
+
+        SCHibernateWrapper.reset();
+
+        State.Holder.set(
+            State.newBuilder()
+                .withControllerName("ForumController")
+                .withActionName("FindPostsByTitle")
+                .withWebFramework("spring")
+                .build()
+        );
+
+        List<Post> posts = forumService.findPostsByTitle("High-Performance Java Persistence");
+        assertEquals(1, posts.size());
+
+        sqlStatements = SCHibernateWrapper.getAfterSqlStatements();
+        assertEquals(1, sqlStatements.size());
+        assertEquals(
+                1,
+                sqlStatements
+                    .stream()
+                    .filter(
+                        sql -> sql.contains(
+                            "/*action='FindPostsByTitle',controller='ForumController',web_framework='spring'*/"
+                        )
+                    )
+                    .count()
+        );
+
+        State.Holder.set(
+            State.newBuilder()
+                    .withControllerName("ForumController")
+                    .withActionName("FindPostById")
+                    .withWebFramework("spring")
+                    .build()
+        );
+
+        SCHibernateWrapper.reset();
+
+        Post post = forumService.findPostById(newPost.getId());
+        assertEquals("High-Performance Java Persistence", post.getTitle());
+
+        sqlStatements = SCHibernateWrapper.getAfterSqlStatements();
+        assertEquals(1, sqlStatements.size());
+        assertEquals(
+                1,
+                sqlStatements
+                    .stream()
+                    .filter(
+                        sql -> sql.contains(
+                            "/*action='FindPostById',controller='ForumController',web_framework='spring'*/"
+                        )
+                    )
+                    .count()
+        );
+    }
+}
+````
+
+When running the unit test above, we can see that the SQL statements include the comments as well:
+
+````sql
+select tag0_.id as id1_2_, tag0_.name as name2_2_ from tag tag0_ where tag0_.name in (? , ?) /*action='CreatePost',controller='ForumController',web_framework='spring'*/
+
+call next value for hibernate_sequence /*action='CreatePost',controller='ForumController',web_framework='spring'*/
+
+insert into post (title, id) values (?, ?) /*action='CreatePost',controller='ForumController',web_framework='spring'*/
+
+insert into post_tag (post_id, tag_id) values (?, ?) /*action='CreatePost',controller='ForumController',web_framework='spring'*/
+
+insert into post_tag (post_id, tag_id) values (?, ?) /*action='CreatePost',controller='ForumController',web_framework='spring'*/
+
+select post0_.id as id1_0_, post0_.title as title2_0_ from post post0_ where post0_.title=? /*action='FindPostsByTitle',controller='ForumController',web_framework='spring'*/
+
+select post0_.id as id1_0_0_, post0_.title as title2_0_0_ from post post0_ where post0_.id=? /*action='FindPostById',controller='ForumController',web_framework='spring'*/
+````
 
 ### References
 
