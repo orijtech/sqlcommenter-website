@@ -71,7 +71,7 @@ Java project.
 
 This project uses the following JPA entities:
 
-{{<tabs Post.java Tag.java>}}
+{{<tabs Post_java Tag_java>}}
 {{<highlight java>}}
 // In file Post.java
 package io.orijtech.integrations.sqlcommenter.spring.jpa.domain;
@@ -159,7 +159,7 @@ public class Tag {
 
 The Repository layer looks as follows:
 
-{{<tabs PostRepository.java TagRepository.java>}}
+{{<tabs PostRepository_java TagRepository_java>}}
 {{<highlight java>}}
 // In file PostRepository.java
 
@@ -199,7 +199,7 @@ public interface TagRepository extends CrudRepository<Tag, Long> {
 
 The Service layer looks as follows:
 
-{{<tabs ForumService.java ForumServiceImpl.java>}}
+{{<tabs ForumService_java ForumServiceImpl_java>}}
 {{<highlight java>}}
 // In file ForumService.java
 
@@ -545,7 +545,7 @@ Java project.
 
 This project uses the following JPA entities:
 
-{{<tabs Post.java Tag.java>}}
+{{<tabs Post_java Tag_java>}}
 {{<highlight java>}}
 // In file Post.java
 package io.orijtech.integrations.sqlcommenter.spring.hibernate.domain;
@@ -633,7 +633,7 @@ public class Tag {
 
 The DAO (Data Access Object) layer looks as follows:
 
-{{<tabs GenericDAO.java GenericDAOImpl.java PostDAO.java PostDAOImpl.java TagDAO.java TagDAOImpl.java>}}
+{{<tabs GenericDAO_java GenericDAOImpl_java PostDAO_java PostDAOImpl_java TagDAO_java TagDAOImpl_java>}}
 {{<highlight java>}}
 // In file GenericDAO.java
 
@@ -756,7 +756,6 @@ public interface TagDAO extends GenericDAO<Tag, Long> {
     List<Tag> findByName(String... tags);
 }
 {{</highlight>}}
-{{</tabs>}}
 
 {{<highlight java>}}
 // In file TagDAOImpl.java
@@ -795,7 +794,7 @@ public class TagDAOImpl extends GenericDAOImpl<Tag, Long> implements TagDAO {
 
 The Service layer looks as follows:
 
-{{<tabs ForumService.java ForumServiceImpl.java>}}
+{{<tabs ForumService_java ForumServiceImpl_java>}}
 {{<highlight java>}}
 // In file ForumService.java
 
