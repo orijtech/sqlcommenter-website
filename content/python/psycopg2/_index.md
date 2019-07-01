@@ -86,8 +86,8 @@ Field|Description
 `dbapi_threadsafety`|The threadsafety API assignment e.g. 2
 `driver_paramstyle`|The Python DB API style of parameters e.g. `pyformat`
 `libpq_version`|The underlying version of [libpq]() that was used by psycopg2
-`span_id`|The SpanID of the OpenCensus trace -- optionally defined with [`with_opencensus=True`](#with-opencensus)
-`trace_id`|The TraceID of the OpenCensus trace -- optionally defined with [`with_opencensus=True`](#with-opencensus)
+`traceparent`|The [W3C TraceContext.Traceparent field](https://www.w3.org/TR/trace-context/#traceparent-field) of the OpenCensus trace -- optionally defined with [`with_opencensus=True`](#with-opencensus)
+`tracestate`|The [W3C TraceContext.Tracestate field](https://www.w3.org/TR/trace-context/#tracestate-field) of the OpenCensus trace -- optionally defined with [`with_opencensus=True`](#with-opencensus)
 
 ### End to end examples
 
@@ -183,7 +183,7 @@ python3 main.py
 
 #### Results
 
-Examining our Postgresql server logs
+Examining our Postgresql server logs, with the various options
 
 {{<tabs "Without OpenCensus" "With OpenCensus">}}
 {{<highlight shell>}}
@@ -193,10 +193,9 @@ dbapi_level='2.0',dbapi_threadsafety=2,driver_paramstyle='pyformat',libpq_versio
 {{</highlight>}}
 
 {{<highlight shell>}}
-2019-06-04 10:38:39.170 PDT [35555] LOG:  statement: SELECT * FROM polls_question
-/*db_driver='psycopg2%%3A2.8.2%%20%%28dt%%20dec%%20pq3%%20ext%%20lo64%%29',
-dbapi_level='2.0',dbapi_threadsafety=2,driver_paramstyle='pyformat',libpq_version=100001,
-span_id='a247e1cdad219d6b',trace_id='de134af00138e4aadc6b386018cace5d'*/
+2019-06-30 17:57:22.758 PDT [96892] LOG:  statement: SELECT * FROM polls_question
+/*traceparent='00-5c2d1bd9cdb4f5fccd7cde6ff4e9b920-e52b708456650bfc-01',
+tracestate='congo%%3Dt61rcWkgMzE%%2Crojo%%3D00f067aa0ba902b7'*/
 {{</highlight>}}
 {{</tabs>}}
 

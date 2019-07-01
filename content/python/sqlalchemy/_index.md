@@ -66,9 +66,8 @@ Please ensure that you set `retval=True` when listening for events
 
 and this will produce such output on for example a Postgresql database logs:
 ```shell
-2019-06-04 10:27:14.919 PDT [35412] LOG:  statement: SELECT * FROM polls_question
-/*db_driver='psycopg2',framework='sqlalchemy%3A1.3.4',
-span_id='07ac7d9f6ed8d66e',trace_id='e6e5a8d1a855d7e68aa9b1ab5bf1f027'*/
+2019-06-30 18:01:16.315 PDT [96973] LOG:  statement: SELECT * FROM polls_question
+/*traceparent='00-ade4c36dc5e43b503a5bba237ea11746-578a74a562044332-01'*/
 ```
 
 #### <a name="with-opencensus"></a> with_openCensus=True
@@ -92,8 +91,8 @@ Field|Description
 ---|---
 `db_driver`|The underlying database driver e.g. `'psycopg2'`
 `framework`|The version of SQLAlchemy in the form `'sqlalchemy:<sqlalchemy_version>'`
-`span_id`|The SpanID of the OpenCensus trace -- optionally defined with [`with_opencensus=True`](#with-opencensus)
-`trace_id`|The TraceID of the OpenCensus trace -- optionally defined with [`with_opencensus=True`](#with-opencensus)
+`traceparent`|The [W3C TraceContext.Traceparent field](https://www.w3.org/TR/trace-context/#traceparent-field) of the OpenCensus trace -- optionally defined with [`with_opencensus=True`](#with-opencensus)
+`tracestate`|The [W3C TraceContext.Tracestate field](https://www.w3.org/TR/trace-context/#tracestate-field) of the OpenCensus trace -- optionally defined with [`with_opencensus=True`](#with-opencensus)
 
 ### End to end examples
 

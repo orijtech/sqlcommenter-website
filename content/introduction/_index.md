@@ -35,7 +35,8 @@ This log was extracted from a live web application
 ('What is this?', '2019-05-28T18:54:50.767481+00:00'::timestamptz) RETURNING
 "polls_question"."id" /*controller='index',db_driver='django.db.backends.postgresql',
 framework='django%3A2.2.1',route='%5Epolls/%24',
-span_id='cfb60c868a47adf9',trace_id='23d4bad1efad0bff3ebdc7b717d739e7'*/
+traceparent='00-5bd66ef5095369c7b0d1f8f4bd33716a-c532cb4098ac3dd2-01',
+tracestate='congo%%3Dt61rcWkgMzE%%2Crojo%%3D00f067aa0ba902b7'*/
 ```
 
 ### Interpretation
@@ -44,7 +45,8 @@ On examining the SQL statement from above in [Sample](#sample) and examining the
 ```sql
 /*controller='index',db_driver='django.db.backends.postgresql',
 framework='django%3A2.2.1',route='%5Epolls/%24',
-span_id='cfb60c868a47adf9',trace_id='23d4bad1efad0bff3ebdc7b717d739e7'*/
+traceparent='00-5bd66ef5095369c7b0d1f8f4bd33716a-c532cb4098ac3dd2-01',
+tracestate='congo%%3Dt61rcWkgMzE%%2Crojo%%3D00f067aa0ba902b7'*/
 ```
 
 we can now correlate and pinpoint the fields in the above slow SQL query to our source code in our web application:
@@ -55,8 +57,8 @@ Original field|Interpretation
 `db_driver='django.db.backends.postgresql'`|Database driver `django.db.backends.postgresql`
 `framework='django%3A2.2.1'`|Framework version of `django 2.2.1`
 `route='%5Epolls/%24'`|Route of `^/polls/$` 
-`span_id='cfb60c868a47adf9'`|[OpenCensus SpanID](https://opencensus.io/tracing/span/spanid/) of `cfb60c868a47adf9`
-`trace_id='23d4bad1efad0bff3ebdc7b717d739e7'`|[OpenCensus TraceID](https://opencensus.io/tracing/span/traceid/) of `23d4bad1efad0bff3ebdc7b717d739e7`
+`traceparent='00-5bd66ef5095369c7b0d1f8f4bd33716a-c532cb4098ac3dd2-01'`|[W3C TraceContext.Traceparent](https://www.w3.org/TR/trace-context/#traceparent-field) of '00-5bd66ef5095369c7b0d1f8f4bd33716a-c532cb4098ac3dd2-01'
+`tracestate='congo%%3Dt61rcWkgMzE%%2Crojo%%3D00f067aa0ba902b7'`|[W3C TraceContext.Tracestate](https://www.w3.org/TR/trace-context/#tracestate-field) with entries congo=t61rcWkgMzE,rojo=00f067aa0ba902b7
 
 ### Support
 We support a variety of languages and frameworks such as:
