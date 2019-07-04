@@ -11,6 +11,8 @@ tags: ["sequelize", "sequelize.js", "query-builder", "node", "node.js", "express
 - [Introduction](#introduction)
 - [Requirements](#requirements)
 - [Installation](#installation)
+    - [Manually](#manually)
+    - [Package manager](#package-manager)
 - [Usage](#usage)
     - [Plain sequelize wrapper](#plain-sequelize-wrapper)
     - [Express middleware](#express-middleware)
@@ -34,7 +36,15 @@ Besides plain sequelize.js wrapping, we also provide a wrapper for the following
 * [Sequelize.js](http://docs.sequelizejs.com/)
 * [Node.js](https://nodejs.org/)
 
-#### Installation
+### Installation
+
+We can add integration into our applications in the following ways:
+
+#### Manually
+
+Please read [installing sqlcommenter-nodejs from source](/node/#install-from-source)
+
+#### Package manager
 Add to your package.json the dependency
 {{<highlight json>}}
 {
@@ -42,10 +52,10 @@ Add to your package.json the dependency
 }
 {{</highlight>}}
 
-or by `npm install` as per:
+and then run `npm install` to get the latest version or
 
 {{<highlight shell>}}
-npm install @sqlcommenter/sequelize
+npm install @sqlcommenter/sequelize --save
 {{</highlight>}}
 
 ### Usage

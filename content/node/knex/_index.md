@@ -11,6 +11,8 @@ tags: ["knex", "knex.js", "query-builder", "node", "node.js", "express", "expres
 - [Introduction](#introduction)
 - [Requirements](#requirements)
 - [Installation](#installation)
+    - [Manually](#manually)
+    - [Package manager](#package-manager)
 - [Usage](#usage)
     - [Plain knex wrapper](#plain-knex-wrapper)
     - [Express middleware](#express-middleware)
@@ -36,18 +38,24 @@ Name|Resource
 Knex.js|https://knexjs.org/
 Node.js|https://nodejs.org/
 
-#### Installation
+### Installation
+
+We can add integration into our applications in the following ways:
+
+#### Manually
+
+Please read [installing sqlcommenter-nodejs from source](/node/#install-from-source)
+
+#### Package manager
 Add to your package.json the dependency
 {{<highlight json>}}
 {
     "@sqlcommenter/knex": "*"
 }
 {{</highlight>}}
-
-or by `npm install` as per:
-
+and then run `npm install` to get the latest version or 
 {{<highlight shell>}}
-npm install @sqlcommenter/knex
+npm install @sqlcommenter/knex --save
 {{</highlight>}}
 
 ### Usage
