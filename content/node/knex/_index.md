@@ -17,7 +17,8 @@ tags: ["knex", "knex.js", "query-builder", "node", "node.js", "express", "expres
     - [Plain knex wrapper](#plain-knex-wrapper)
     - [Express middleware](#express-middleware)
 - [Fields](#fields)
-    - [Options](#options-example)
+    - [Options](#options)
+        - [Options examples](#options-examples)
 - [End to end example](#end-to-example)
     - [Source code](#source-code)
     - [Results](#results)
@@ -114,7 +115,7 @@ tracestate|Yes
 traceparent|Yes
 db_driver|No
 
-##### Options example
+##### Options examples
 
 {{<tabs "trace attributes" route db_driver "all set">}}
 
@@ -133,10 +134,10 @@ wrapMainKnexAsMiddleware(Knex, include={db_driver: true});
 {{<highlight javascript>}}
 // Manually set all the variables.
 wrapMainKnexAsMiddleware(Knex, include={
+    db_driver: true,
+    route: true,
     traceparent: true,
     tracestate: true,
-    route: true,
-    db_driver: true
 });
 {{</highlight>}}
 

@@ -17,6 +17,8 @@ tags: ["sequelize", "sequelize.js", "query-builder", "node", "node.js", "express
     - [Plain sequelize wrapper](#plain-sequelize-wrapper)
     - [Express middleware](#express-middleware)
 - [Fields](#fields)
+    - [Options](#options)
+        - [Options](#options-example)
 - [End to end example](#end-to-example)
     - [Source code](#source-code)
     - [Results](#results)
@@ -97,6 +99,54 @@ Field|Format|Description|Example
 `db_driver`|`<sequelize>`|URL quoted name and version of the database driver|`db_driver='sequelize'`
 `route`|`<the route used>`|The URL-quoted route used to match the express.js controller|`route='%5E%2Fpolls%2F`
 
+#### Options
+When creating the middleware, one can optionally toggle attributes to be set in the comments by passing in the option `include` which is a map
+
+```javascript
+wrapMainSequelizeAsMiddleware(Sequelize, include={...});
+```
+
+Field|On by default
+---|---
+client_timezone|No
+db_driver|No
+route|Yes
+tracestate|Yes
+traceparent|Yes
+
+##### Options examples
+
+{{<tabs "trace attributes" "client_timezone" route db_driver "all set">}}
+
+{{<highlight javascript>}}
+wrapMainSequelizeAsMiddleware(Sequelize, include={traceparent: true, tracestate: true});
+{{</highlight>}}
+
+{{<highlight javascript>}}
+wrapMainSequelizeAsMiddleware(Sequelize, include={route: true});
+{{</highlight>}}
+
+{{<highlight javascript>}}
+wrapMainSequelizeAsMiddleware(Sequelize, include={client_timezone: true});
+{{</highlight>}}
+
+{{<highlight javascript>}}
+wrapMainSequelizeAsMiddleware(Sequelize, include={db_driver: true});
+{{</highlight>}}
+
+{{<highlight javascript>}}
+// Manually set all the variables.
+wrapMainSequelizeAsMiddleware(Sequelize, include={
+    client_timezone: true,
+    db_driver: true,
+    route: true,
+    traceparent: true,
+    tracestate: true,
+});
+{{</highlight>}}
+
+{{</tabs>}}
+
 ### End to end example
 
 #### Source code
@@ -106,7 +156,7 @@ Field|Format|Description|Example
 const express = require('express');
 const app = express();
 const port = process.env.APP_PORT || 3000;
-const {wrapSequelizeAsMiddleware} = require('/Users/emmanuelodeke/Desktop/nodejs-sqlcommenter/packages/sequelize');
+const {wrapSequelizeAsMiddleware} = require('@sqlcommenter/sequelize');
 
 const Sequelize = require('sequelize');
 const sequelize = new Sequelize({
@@ -155,7 +205,7 @@ Application listening on 3000
 On making a request to that server at `http://localhost:3000/polls/1000`, the PostgreSQL logs show:
 ```shell
 2019-06-03 15:09:35.575 PDT [32665] LOG:  statement: SELECT * from polls_question
-/*client_timezone='%2B00%3A00',db_driver='sequelize',db_version='11.3.0',route='%5E%2Fpolls%2F%3Aparam'*/
+/*route='%5E%2Fpolls%2F%3Aparam'*/
 ```
 
 
