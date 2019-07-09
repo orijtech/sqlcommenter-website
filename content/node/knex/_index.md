@@ -17,6 +17,7 @@ tags: ["knex", "knex.js", "query-builder", "node", "node.js", "express", "expres
     - [Plain knex wrapper](#plain-knex-wrapper)
     - [Express middleware](#express-middleware)
 - [Fields](#fields)
+    - [Options](#options-example)
 - [End to end example](#end-to-example)
     - [Source code](#source-code)
     - [Results](#results)
@@ -95,6 +96,51 @@ Field|Format|Description|Example
 ---|---|---|---
 `db_driver`|`<database_driver>:<version>`|URL quoted name and version of the database driver|`db_driver='knex%3A0.16.5'`
 `route`|`<the route used>`|The URL-quoted route used to match the express.js controller|`route='%5Epolls/%24'`
+`traceparent`|`<XX-TRACE_ID-SPAN_ID-TRACE_OPTIONS>`|The serialized [W3C TraceContext.Traceparent](https://www.w3.org/TR/trace-context/#traceparent-field)|`traceparent='00-f5e3fa7fb15a461dbf3b03690e4bd5e1-e6de66630cd19b9a-01'`
+`tracestate`|`<KEY1=VALUE1,KEY2=VALUE2,...>`|The serialized [W3C TraceContext.Tracestate](https://www.w3.org/TR/trace-context/#tracestate-field)|`tracestate='congo%3Dt61rcWkgMzE%2Crojo%3D00f067aa0ba902b7'`
+
+#### Options
+
+When creating the middleware, one can optionally toggle attributes to be set in the comments by passing in the option `include` which is a map
+
+```javascript
+wrapMainKnexAsMiddleware(Knex, include={...});
+```
+
+Field|On by default
+---|---
+route|Yes
+tracestate|Yes
+traceparent|Yes
+db_driver|No
+
+##### Options example
+
+{{<tabs "trace attributes" route db_driver "all set">}}
+
+{{<highlight javascript>}}
+wrapMainKnexAsMiddleware(Knex, include={traceparent: true, tracestate: true});
+{{</highlight>}}
+
+{{<highlight javascript>}}
+wrapMainKnexAsMiddleware(Knex, include={route: true});
+{{</highlight>}}
+
+{{<highlight javascript>}}
+wrapMainKnexAsMiddleware(Knex, include={db_driver: true});
+{{</highlight>}}
+
+{{<highlight javascript>}}
+// Manually set all the variables.
+wrapMainKnexAsMiddleware(Knex, include={
+    traceparent: true,
+    tracestate: true,
+    route: true,
+    db_driver: true
+});
+{{</highlight>}}
+
+{{</tabs>}}
 
 ### End to end example
 
@@ -158,7 +204,7 @@ Application listening on 3000
 On making a request to that server at `http://localhost:3000/polls/1000`, the PostgreSQL logs show:
 ```shell
 2019-06-03 14:32:10.842 PDT [32004] LOG:  statement: SELECT * from polls_question
-/*db_driver='knex%3A0.16.5',db_version='11.3',route='%5E%2Fpolls%2F%3Aparam'*/
+/*route='%5E%2Fpolls%2F%3Aparam'*/
 ```
 
 
