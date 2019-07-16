@@ -65,9 +65,7 @@ If the [opencensus gem] is enabled, the following fields will also be added:
 
 Field | Description | Example
 ---|---|---
-`span_id` | OpenCensus Span ID | `3f02d1ace98213ef`
-`span_names` | OpenCensus Span names from the current span to root, joined by `~` | `my-span~/posts`
-`trace_id` | OpenCensus Trace ID | `d46ccf74712420ce4e62d33eb8260c53`
+`traceparent`|The [W3C TraceContext.Traceparent field](https://www.w3.org/TR/trace-context/#traceparent-field) of the OpenCensus trace|`00-ade4c36dc5e43b503a5bba237ea11746-578a74a562044332-01`
 
 Note that `controller`, `action`, and `route` fields are only present if the
 query was triggered by a web request. For background jobs, a `job` field is
@@ -170,8 +168,8 @@ curl localhost:3000/posts
 Post Load (0.1ms)  SELECT "posts".* FROM "posts" /*
 action='index',application='SqlcommenterRailsDemo',controller='posts',
 db_driver='ActiveRecord::ConnectionAdapters::SQLite3Adapter',
-framework='rails_v6.0.0.rc1',route='/posts',span_id='a52cad0a8d1425ab',
-span_names='/posts',trace_id='828f28f7fb3df3dd07ee6478b2016b2a'*/
+framework='rails_v6.0.0.rc1',route='/posts',
+traceparent='00-ff19308b1f17fedc5864e929bed1f44e-6ddace73a9debf63-01'*/
 ```
 
 ##### POST /posts
@@ -184,8 +182,8 @@ curl -X POST localhost:3000/posts -d 'title=my-post'
 Post Create (0.2ms)  INSERT INTO "posts" ("title", "created_at", "updated_at")
 VALUES (?, ?, ?) /*action='create',application='SqlcommenterRailsDemo',
 controller='posts',db_driver='ActiveRecord::ConnectionAdapters::SQLite3Adapter',
-framework='rails_v6.0.0.rc1',route='/posts',span_id='6ddace73a9debf63',
-span_names='/posts',trace_id='ff19308b1f17fedc5864e929bed1f44e'*/
+framework='rails_v6.0.0.rc1',route='/posts',
+traceparent='00-ff19308b1f17fedc5864e929bed1f44e-6ddace73a9debf63-01'*/
 ```
 
 ### References

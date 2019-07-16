@@ -174,7 +174,7 @@ Examining our Postgresql server logs
 {{<highlight shell>}}
 2019-06-04 10:27:14.919 PDT [35412] LOG:  statement: SELECT * FROM polls_question
 /*db_driver='psycopg2',framework='sqlalchemy%3A1.3.4',
-span_id='07ac7d9f6ed8d66e',trace_id='e6e5a8d1a855d7e68aa9b1ab5bf1f027'*/
+traceparent='00-e6e5a8d1a855d7e68aa9b1ab5bf1f027-07ac7d9f6ed8d66e-01'*/
 {{</highlight>}}
 {{</tabs>}}
 

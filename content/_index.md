@@ -103,112 +103,6 @@ containing the various ORM instrumentation that you can then install.
 ├── java
 │   └── sqlcommenter-java
 │       ├── README.md
-│       ├── build
-│       │   ├── classes
-│       │   │   └── java
-│       │   │       ├── main
-│       │   │       │   └── io
-│       │   │       │       └── orijtech
-│       │   │       │           └── integrations
-│       │   │       │               └── sqlcommenter
-│       │   │       │                   ├── interceptors
-│       │   │       │                   │   └── SpringSQLCommenterInterceptor.class
-│       │   │       │                   ├── schibernate
-│       │   │       │                   │   └── SCHibernate.class
-│       │   │       │                   └── threadlocalstorage
-│       │   │       │                       ├── State$1.class
-│       │   │       │                       ├── State$Builder.class
-│       │   │       │                       ├── State$Holder.class
-│       │   │       │                       └── State.class
-│       │   │       └── test
-│       │   │           └── io
-│       │   │               └── orijtech
-│       │   │                   └── integrations
-│       │   │                       └── sqlcommenter
-│       │   │                           ├── interceptors
-│       │   │                           │   ├── SpringSQLCommenterInterceptorTest$1.class
-│       │   │                           │   ├── SpringSQLCommenterInterceptorTest$fakeBean.class
-│       │   │                           │   └── SpringSQLCommenterInterceptorTest.class
-│       │   │                           ├── schibernate
-│       │   │                           │   └── SCHibernateTest.class
-│       │   │                           ├── spring
-│       │   │                           │   └── backend
-│       │   │                           │       ├── JpaTransactionManagerConfiguration.class
-│       │   │                           │       ├── JpaTransactionManagerTest.class
-│       │   │                           │       ├── dao
-│       │   │                           │       │   ├── PostRepository.class
-│       │   │                           │       │   └── TagRepository.class
-│       │   │                           │       ├── domain
-│       │   │                           │       │   ├── Post.class
-│       │   │                           │       │   └── Tag.class
-│       │   │                           │       └── service
-│       │   │                           │           ├── ForumService.class
-│       │   │                           │           └── ForumServiceImpl.class
-│       │   │                           ├── threadlocal
-│       │   │                           │   ├── StateTest.class
-│       │   │                           │   └── ThreadLocalStorageTest.class
-│       │   │                           └── util
-│       │   │                               └── SCHibernateWrapper.class
-│       │   ├── google-java-format
-│       │   │   └── 0.7.1
-│       │   │       ├── fileStates.txt
-│       │   │       └── settings.txt
-│       │   ├── jacoco
-│       │   │   └── test.exec
-│       │   ├── reports
-│       │   │   └── tests
-│       │   │       └── test
-│       │   │           ├── classes
-│       │   │           │   ├── io.orijtech.integrations.sqlcommenter.interceptors.SpringSQLCommenterInterceptorTest.html
-│       │   │           │   ├── io.orijtech.integrations.sqlcommenter.schibernate.SCHibernateTest.html
-│       │   │           │   ├── io.orijtech.integrations.sqlcommenter.spring.backend.JpaTransactionManagerTest.html
-│       │   │           │   ├── io.orijtech.integrations.sqlcommenter.threadlocal.StateTest.html
-│       │   │           │   └── io.orijtech.integrations.sqlcommenter.threadlocal.ThreadLocalStorageTest.html
-│       │   │           ├── css
-│       │   │           │   ├── base-style.css
-│       │   │           │   └── style.css
-│       │   │           ├── index.html
-│       │   │           ├── js
-│       │   │           │   └── report.js
-│       │   │           └── packages
-│       │   │               ├── io.orijtech.integrations.sqlcommenter.interceptors.html
-│       │   │               ├── io.orijtech.integrations.sqlcommenter.schibernate.html
-│       │   │               ├── io.orijtech.integrations.sqlcommenter.spring.backend.html
-│       │   │               └── io.orijtech.integrations.sqlcommenter.threadlocal.html
-│       │   ├── resources
-│       │   │   └── test
-│       │   │       ├── META-INF
-│       │   │       │   └── jdbc-hsqldb.properties
-│       │   │       └── logback-test.xml
-│       │   ├── test-results
-│       │   │   └── test
-│       │   │       ├── TEST-io.orijtech.integrations.sqlcommenter.interceptors.SpringSQLCommenterInterceptorTest.xml
-│       │   │       ├── TEST-io.orijtech.integrations.sqlcommenter.schibernate.SCHibernateTest.xml
-│       │   │       ├── TEST-io.orijtech.integrations.sqlcommenter.spring.backend.JpaTransactionManagerTest.xml
-│       │   │       ├── TEST-io.orijtech.integrations.sqlcommenter.threadlocal.StateTest.xml
-│       │   │       ├── TEST-io.orijtech.integrations.sqlcommenter.threadlocal.ThreadLocalStorageTest.xml
-│       │   │       └── binary
-│       │   │           ├── output.bin
-│       │   │           ├── output.bin.idx
-│       │   │           └── results.bin
-│       │   └── tmp
-│       │       ├── compileJava
-│       │       ├── compileTestJava
-│       │       └── expandedArchives
-│       │           └── org.jacoco.agent-0.8.1.jar_8059ed6e1ab8b88aac5d9097fad847bb
-│       │               ├── META-INF
-│       │               │   ├── MANIFEST.MF
-│       │               │   └── maven
-│       │               │       └── org.jacoco
-│       │               │           └── org.jacoco.agent
-│       │               │               ├── pom.properties
-│       │               │               └── pom.xml
-│       │               ├── about.html
-│       │               ├── jacocoagent.jar
-│       │               └── org
-│       │                   └── jacoco
-│       │                       └── agent
-│       │                           └── AgentJar.class
 │       ├── build.gradle
 │       ├── gradle
 │       │   └── wrapper
@@ -487,5 +381,5 @@ containing the various ORM instrumentation that you can then install.
         ├── tmp
         └── vendor
 
-162 directories, 225 files
+109 directories, 172 files
 {{</highlight>}}
