@@ -93,39 +93,8 @@ Field|Description
 
 #### Source code
 
-{{<tabs "Without OpenCensus" "With OpenCensus">}}
-{{<highlight python>}}
-#!/usr/bin/env python3
+{{<tabs "With OpenCensus" "With DB Driver" "With DB API Level" "With DB API Thread Safety" "With Driver Parameter Style" "With libpq Version">}}
 
-import psycopg2
-from sqlcommenter.psycopg2.extension import CommenterCursorFactory
-
-def main():
-    conn = None
-    cursor = None
-
-    try:
-        conn = psycopg2.connect(user='', password='$postgres$',
-                host='127.0.0.1', port='5432', database='quickstart_py',
-                cursor_factory=CommenterCursorFactory())
-
-        cursor = conn.cursor()
-        cursor.execute("SELECT * FROM polls_question")
-        for row in cursor:
-            print(row)
-
-    except Exception as e:
-        print('Encountered exception %s'%(e))
-
-    finally:
-        if cursor:
-            cursor.close()
-        if conn:
-            conn.close()
-
-if __name__ == '__main__':
-    main()
-{{</highlight>}}
 {{<highlight python>}}
 #!/usr/bin/env python3
 
@@ -135,7 +104,9 @@ from sqlcommenter.psycopg2.extension import CommenterCursorFactory
 from opencensus.trace.samplers import AlwaysOnSampler
 from opencensus.trace.tracer import Tracer
 
-class noopOpenCensusTraceExporter(object):
+DSN = '...'  # DB connection info
+
+class NoopExporter():
     def emit(self, *args, **kwargs):
         pass
 
@@ -143,33 +114,125 @@ class noopOpenCensusTraceExporter(object):
         pass
 
 def main():
-    conn = None
-    cursor = None
+    tracer = Tracer(exporter=NoopExporter, sampler=AlwaysOnSampler())
+    cursor_factory = CommenterCursorFactory(with_opencensus=True)
 
-    try:
-        conn = psycopg2.connect(user='', password='$postgres$',
-                host='127.0.0.1', port='5432', database='quickstart_py',
-                cursor_factory=CommenterCursorFactory(with_opencensus=True))
-
-        tracer = Tracer(exporter=noopOpenCensusTraceExporter, sampler=AlwaysOnSampler())
-        with tracer.span(name='Psycopg2.Integration') as span:
-            cursor = conn.cursor()
-            cursor.execute("SELECT * FROM polls_question")
-            for row in cursor:
-                print(row)
-
-    except Exception as e:
-        print('Encountered exception %s'%(e))
-
-    finally:
-        if cursor:
-            cursor.close()
-        if conn:
-            conn.close()
+    with tracer.span():
+        with psycopg2.connect(DSN, cursor_factory=cursor_factory) as conn:
+            with conn.cursor() as cursor:
+                cursor.execute("SELECT * FROM polls_question")
+                for row in cursor:
+                    print(row)
 
 if __name__ == '__main__':
     main()
 {{</highlight>}}
+
+{{<highlight python>}}
+#!/usr/bin/env python3
+
+import psycopg2
+from sqlcommenter.psycopg2.extension import CommenterCursorFactory
+
+DSN = '...'  # DB connection info
+
+def main():
+    cursor_factory = CommenterCursorFactory(with_db_driver=True)
+
+    with psycopg2.connect(DSN, cursor_factory=cursor_factory) as conn:
+        with conn.cursor() as cursor:
+            cursor.execute("SELECT * FROM polls_question")
+            for row in cursor:
+                print(row)
+
+if __name__ == '__main__':
+    main()
+{{</highlight>}}
+
+{{<highlight python>}}
+#!/usr/bin/env python3
+
+import psycopg2
+from sqlcommenter.psycopg2.extension import CommenterCursorFactory
+
+DSN = '...'  # DB connection info
+
+def main():
+    cursor_factory = CommenterCursorFactory(with_dbapi_level=True)
+
+    with psycopg2.connect(DSN, cursor_factory=cursor_factory) as conn:
+        with conn.cursor() as cursor:
+            cursor.execute("SELECT * FROM polls_question")
+            for row in cursor:
+                print(row)
+
+if __name__ == '__main__':
+    main()
+{{</highlight>}}
+
+{{<highlight python>}}
+#!/usr/bin/env python3
+
+import psycopg2
+from sqlcommenter.psycopg2.extension import CommenterCursorFactory
+
+DSN = '...'  # DB connection info
+
+def main():
+    cursor_factory = CommenterCursorFactory(with_dbapi_threadsafety=True)
+
+    with psycopg2.connect(DSN, cursor_factory=cursor_factory) as conn:
+        with conn.cursor() as cursor:
+            cursor.execute("SELECT * FROM polls_question")
+            for row in cursor:
+                print(row)
+
+if __name__ == '__main__':
+    main()
+{{</highlight>}}
+
+{{<highlight python>}}
+#!/usr/bin/env python3
+
+import psycopg2
+from sqlcommenter.psycopg2.extension import CommenterCursorFactory
+
+DSN = '...'  # DB connection info
+
+def main():
+    cursor_factory = CommenterCursorFactory(with_driver_paramstyle=True)
+
+    with psycopg2.connect(DSN, cursor_factory=cursor_factory) as conn:
+        with conn.cursor() as cursor:
+            cursor.execute("SELECT * FROM polls_question")
+            for row in cursor:
+                print(row)
+
+if __name__ == '__main__':
+    main()
+{{</highlight>}}
+
+{{<highlight python>}}
+#!/usr/bin/env python3
+
+import psycopg2
+from sqlcommenter.psycopg2.extension import CommenterCursorFactory
+
+DSN = '...'  # DB connection info
+
+def main():
+    cursor_factory = CommenterCursorFactory(with_libpq_version=True)
+
+    with psycopg2.connect(DSN, cursor_factory=cursor_factory) as conn:
+        with conn.cursor() as cursor:
+            cursor.execute("SELECT * FROM polls_question")
+            for row in cursor:
+                print(row)
+
+if __name__ == '__main__':
+    main()
+{{</highlight>}}
+
 {{</tabs>}}
 
 ```shell
@@ -185,18 +248,38 @@ python3 main.py
 
 Examining our Postgresql server logs, with the various options
 
-{{<tabs "Without OpenCensus" "With OpenCensus">}}
+{{<tabs "With OpenCensus" "With DB Driver" "With DB API Level" "With DB API Thread Safety" "With Driver Parameter Style" "With libpq Version">}}
+
 {{<highlight shell>}}
-2019-06-01 19:06:49.616 PDT [25573] LOG:  statement: SELECT * FROM polls_question
-/*db_driver='psycopg2%%3A2.8.2%%20%%28dt%%20dec%%20pq3%%20ext%%20lo64%%29',
-dbapi_level='2.0',dbapi_threadsafety=2,driver_paramstyle='pyformat',libpq_version=100001*/
+2019-07-17 15:45:12.254 -03 [16353] LOG:  statement: SELECT * FROM polls_question
+/*traceparent='00-fdda4e35e3083efdd6ee9ca4df5f3402-b3139d365faa0f43-01'*/
 {{</highlight>}}
 
 {{<highlight shell>}}
-2019-06-30 17:57:22.758 PDT [96892] LOG:  statement: SELECT * FROM polls_question
-/*traceparent='00-5c2d1bd9cdb4f5fccd7cde6ff4e9b920-e52b708456650bfc-01',
-tracestate='congo%%3Dt61rcWkgMzE%%2Crojo%%3D00f067aa0ba902b7'*/
+2019-07-17 15:56:05.192 -03 [16491] LOG:  statement: SELECT * FROM polls_question
+/*db_driver='psycopg2%%3A2.8.3%%20%%28dt%%20dec%%20pq3%%20ext%%20lo64%%29'*/
 {{</highlight>}}
+
+{{<highlight shell>}}
+2019-07-17 15:59:45.935 -03 [16566] LOG:  statement: SELECT * FROM polls_question
+/*dbapi_level='2.0'*/
+{{</highlight>}}
+
+{{<highlight shell>}}
+2019-07-17 16:01:15.533 -03 [16600] LOG:  statement: SELECT * FROM polls_question
+/*dbapi_threadsafety=2*/
+{{</highlight>}}
+
+{{<highlight shell>}}
+2019-07-17 16:03:54.687 -03 [16652] LOG:  statement: SELECT * FROM polls_question
+/*driver_paramstyle='pyformat'*/
+{{</highlight>}}
+
+{{<highlight shell>}}
+2019-07-17 16:05:37.618 -03 [16708] LOG:  statement: SELECT * FROM polls_question
+/*libpq_version=110002*/
+{{</highlight>}}
+
 {{</tabs>}}
 
 ### With flask
