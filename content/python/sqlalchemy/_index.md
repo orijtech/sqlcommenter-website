@@ -90,7 +90,7 @@ Please ensure that you set `retval=True` when listening for events
 Field|Description
 ---|---
 `db_driver`|The underlying database driver e.g. `'psycopg2'`
-`framework`|The version of SQLAlchemy in the form `'sqlalchemy:<sqlalchemy_version>'`
+`db_framework`|The version of SQLAlchemy in the form `'sqlalchemy:<sqlalchemy_version>'`
 `traceparent`|The [W3C TraceContext.Traceparent field](https://www.w3.org/TR/trace-context/#traceparent-field) of the OpenCensus trace -- optionally defined with [`with_opencensus=True`](#with-opencensus)
 `tracestate`|The [W3C TraceContext.Tracestate field](https://www.w3.org/TR/trace-context/#tracestate-field) of the OpenCensus trace -- optionally defined with [`with_opencensus=True`](#with-opencensus)
 
