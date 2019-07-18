@@ -119,7 +119,10 @@ traceparent|Yes
 {{<tabs "trace attributes" "client_timezone" route db_driver "all set">}}
 
 {{<highlight javascript>}}
-wrapMainSequelizeAsMiddleware(Sequelize, include={traceparent: true, tracestate: true});
+wrapMainSequelizeAsMiddleware(Sequelize, include={
+    traceparent: true,
+    tracestate: true
+});
 {{</highlight>}}
 
 {{<highlight javascript>}}
@@ -147,31 +150,52 @@ wrapMainSequelizeAsMiddleware(Sequelize, include={
 
 {{</tabs>}}
 
-### End to end example
+### End to end examples
 
-#### Source code
-{{<tabs app package_json>}}
+#### Source code 
+
+{{<tabs "With OpenCensus" "With Route" "With DB Driver and CLIENT TIMEZONE" "With All Options Set">}}
+
 {{<highlight javascript>}}
 // In file app.js.
-const express = require('express');
-const app = express();
-const port = process.env.APP_PORT || 3000;
+const tracing = require('@opencensus/nodejs');
+const {B3Format} = require('@opencensus/propagation-b3');
+const {ZipkinTraceExporter} = require('@opencensus/exporter-zipkin');
 const {wrapSequelizeAsMiddleware} = require('@sqlcommenter/sequelize');
-
 const Sequelize = require('sequelize');
-const sequelize = new Sequelize({
-    dialect: 'postgresql',
-    password: '$postgres$',
-    database: 'quickstart_nodejs'
+const express = require('express');
+
+const exporter = new ZipkinTraceExporter({
+    url: process.env.ZIPKIN_TRACE_URL || 'localhost://9411/api/v2/spans',
+    serviceName: 'trace-542'
 });
 
-// Use the sequelize+express middleware.
-app.use(wrapSequelizeAsMiddleware(sequelize));
+const b3 = new B3Format();
+const traceOptions = {
+    samplingRate: 1, // Always sample
+    propagation: b3,
+    exporter: exporter
+};
+
+// start tracing
+tracing.start(traceOptions);
+
+// Using a connection URI
+const sequelize = new Sequelize('postgres://user:pass@example.com:5432/dbname');
+
+const app = express();
+const port = process.env.APP_PORT || 3000;
+
+// Use the sequelize+express middleware with trace attributes 
+app.use(wrapSequelizeAsMiddleware(sequelize, {
+    traceparent: true, 
+    tracestate: true,
+    route: false
+}));
 
 app.get('/', (req, res) => res.send('Hello, sqlcommenter-nodejs!!'));
 app.get('^/polls/:param', function(req, res) {
-    console.log(req.route);
-    sequelize.query('SELECT * from polls_question').then(function(polls, metadata) {
+    sequelize.query('SELECT * from polls_question').then(function(polls) {
         const blob = JSON.stringify(polls);
         res.send(blob);
     }).catch(function(err) {
@@ -182,16 +206,118 @@ app.get('^/polls/:param', function(req, res) {
 app.listen(port, () => console.log(`Application listening on ${port}`));
 {{</highlight>}}
 
-{{<highlight json>}}
-{
-    "name": "sequelize_app",
-    "dependencies": {
-        "express": "*",
-        "sequelize": "*",
-        "pg": "*"
-    }
-}
+{{<highlight javascript>}}
+// In file app.js.
+const Sequelize = require('sequelize');
+const {wrapSequelizeAsMiddleware} = require('@sqlcommenter/sequelize');
+const express = require('express');
+
+// Using a connection URI
+const sequelize = new Sequelize('postgres://user:pass@example.com:5432/dbname');
+
+const app = express();
+const port = process.env.APP_PORT || 3000;
+
+// Use the sequelize+express middleware with route
+app.use(wrapSequelizeAsMiddleware(sequelize, {route: true}));
+
+app.get('/', (req, res) => res.send('Hello, sqlcommenter-nodejs!!'));
+app.get('^/polls/:param', function(req, res) {
+    sequelize.query('SELECT * from polls_question').then(function(polls) {
+        const blob = JSON.stringify(polls);
+        res.send(blob);
+    }).catch(function(err) {
+        console.log(err);
+        res.send(500);
+    });
+});
+app.listen(port, () => console.log(`Application listening on ${port}`));
 {{</highlight>}}
+
+
+{{<highlight javascript>}}
+// In file app.js
+const Sequelize = require('sequelize');
+const {wrapSequelizeAsMiddleware} = require('@sqlcommenter/sequelize');
+const express = require('express');
+
+// Using a connection URI
+const sequelize = new Sequelize('postgres://user:pass@example.com:5432/dbname');
+
+const app = express();
+const port = process.env.APP_PORT || 3000;
+
+// Use the sequelize+express middleware with db driver and timezone
+app.use(wrapSequelizeAsMiddleware(sequelize, {
+    db_driver: true, 
+    client_timezone: true
+}));
+
+app.get('/', (req, res) => res.send('Hello, sqlcommenter-nodejs!!'));
+app.get('^/polls/:param', function(req, res) {
+    sequelize.query('SELECT * from polls_question').then(function(polls) {
+        const blob = JSON.stringify(polls);
+        res.send(blob);
+    }).catch(function(err) {
+        console.log(err);
+        res.send(500);
+    });
+});
+app.listen(port, () => console.log(`Application listening on ${port}`));
+{{</highlight>}}
+
+{{<highlight javascript>}}
+// In file app.js.
+const tracing = require('@opencensus/nodejs');
+const {B3Format} = require('@opencensus/propagation-b3');
+const {ZipkinTraceExporter} = require('@opencensus/exporter-zipkin');
+const Sequelize = require('sequelize');
+const {wrapSequelizeAsMiddleware} = require('@sqlcommenter/sequelize');
+const express = require('express');
+
+const exporter = new ZipkinTraceExporter({
+    url: process.env.ZIPKIN_TRACE_URL || 'localhost:9411/api/v2/spans',
+    serviceName: 'trace-542'
+});
+
+const b3 = new B3Format();
+const traceOptions = {
+    samplingRate: 1, // Always sample
+    propagation: b3,
+    exporter: exporter
+};
+
+// start tracing
+tracing.start(traceOptions);
+
+// Using a connection URI
+const sequelize = new Sequelize('postgres://user:pass@example.com:5432/dbname');
+
+const app = express();
+const port = process.env.APP_PORT || 3000;
+
+// Use the sequelize+express middleware with all attributes set
+app.use(wrapSequelizeAsMiddleware(sequelize, {
+    traceparent: true,
+    tracestate: true,
+    route: true,
+    db_driver: true,
+    client_timezone: true
+}));
+
+app.get('/', (req, res) => res.send('Hello, sqlcommenter-nodejs!!'));
+app.get('^/polls/:param', function(req, res) {
+    sequelize.query('SELECT * from polls_question').then(function(polls) {
+        const blob = JSON.stringify(polls);
+        res.send(blob);
+    }).catch(function(err) {
+        console.log(err);
+        res.send(500);
+    });
+});
+app.listen(port, () => console.log(`Application listening on ${port}`));
+{{</highlight>}}
+
 {{</tabs>}}
 
 which after running by
@@ -203,10 +329,30 @@ Application listening on 3000
 #### Results
 
 On making a request to that server at `http://localhost:3000/polls/1000`, the PostgreSQL logs show:
-```shell
-2019-06-03 15:09:35.575 PDT [32665] LOG:  statement: SELECT * from polls_question
-/*route='%5E%2Fpolls%2F%3Aparam'*/
-```
+
+{{<tabs "With OpenCensus" "With Route" "With DB Driver and CLIENT TIMEZONE" "With All Set">}}
+
+{{<highlight shell>}}
+2019-06-03 14:32:10.842 PDT [32004] LOG:  statement: SELECT * from polls_question 
+/*traceparent='00-11000000000000ff-020000ee-01',tracestate='brazzaville=t61rcWkgMzE,rondo=00f067aa0ba902b7'*/
+{{</highlight>}}
+
+{{<highlight shell>}}
+2019-06-03 14:32:10.842 PDT [32004] LOG:  statement: SELECT * from polls_question 
+/*route='%5E%2Fpolls%2F%1000'*/
+{{</highlight>}}
+
+{{<highlight shell>}}
+2019-06-03 14:32:10.842 PDT [32004] LOG:  statement: SELECT * from polls_question 
+/*client_timezone:'%2B00%3A00',db_driver:'sequelize%3A0.0.1'*/
+{{</highlight>}}
+
+{{<highlight shell>}}
+2019-06-03 14:32:10.842 PDT [32004] LOG:  statement: SELECT * from polls_question 
+/*client_timezone:'%2B00%3A00',db_driver:'sequelize%3A0.0.1',route='%5E%2Fpolls%2F%1000',traceparent='00-11000000000000ff-020000ee-01',tracestate='brazzaville=t61rcWkgMzE,rondo=00f067aa0ba902b7'*/
+{{</highlight>}}
+
+{{</tabs>}}
 
 
 #### References

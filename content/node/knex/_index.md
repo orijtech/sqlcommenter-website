@@ -19,7 +19,7 @@ tags: ["knex", "knex.js", "query-builder", "node", "node.js", "express", "expres
 - [Fields](#fields)
     - [Options](#options)
         - [Options examples](#options-examples)
-- [End to end example](#end-to-example)
+- [End to end examples](#end-to-examples)
     - [Source code](#source-code)
     - [Results](#results)
 - [References](#references)
@@ -120,7 +120,10 @@ db_driver|No
 {{<tabs "trace attributes" route db_driver "all set">}}
 
 {{<highlight javascript>}}
-wrapMainKnexAsMiddleware(Knex, include={traceparent: true, tracestate: true});
+wrapMainKnexAsMiddleware(Knex, include={
+    traceparent: true,
+    tracestate: true
+});
 {{</highlight>}}
 
 {{<highlight javascript>}}
@@ -143,18 +146,37 @@ wrapMainKnexAsMiddleware(Knex, include={
 
 {{</tabs>}}
 
-### End to end example
+### End to end examples
 
-#### Source code
-{{<tabs app package_json>}}
+#### Source code 
+
+{{<tabs "With OpenCensus" "With Route" "With DB Driver" "With All Options Set">}}
+
 {{<highlight javascript>}}
 // In file app.js.
-const express = require('express');
-const app = express();
-const port = process.env.APP_PORT || 3000;
+const tracing = require('@opencensus/nodejs');
+const {B3Format} = require('@opencensus/propagation-b3');
+const {ZipkinTraceExporter} = require('@opencensus/exporter-zipkin');
+const Knex = require('knex'); // Knex to be wrapped say v0.0.1
 const {wrapMainKnexAsMiddleware} = require('@sqlcommenter/knex');
+const express = require('express');
 
-const options = {
+const exporter = new ZipkinTraceExporter({
+    url: process.env.ZIPKIN_TRACE_URL || 'localhost://9411/api/v2/spans',
+    serviceName: 'trace-542'
+});
+
+const b3 = new B3Format();
+const traceOptions = {
+    samplingRate: 1, // Always sample
+    propagation: b3,
+    exporter: exporter
+};
+
+// start tracing
+tracing.start(traceOptions);
+
+const knexOptions = {
     client: 'postgresql',
     connection: {
         host: '127.0.0.1',
@@ -162,16 +184,20 @@ const options = {
         database: 'quickstart_nodejs'
     }
 };
+const knex = Knex(knexOptions); // knex instance
 
-const Knex = require('knex');
-const knex = Knex(options);
+const app = express();
+const port = process.env.APP_PORT || 3000;
 
-// Use the knex+express middleware.
-app.use(wrapMainKnexAsMiddleware(Knex));
+// Use the knex+express middleware with trace attributes 
+app.use(wrapMainKnexAsMiddleware(Knex, {
+    traceparent: true, 
+    tracestate: true,
+    route: false
+}));
 
 app.get('/', (req, res) => res.send('Hello, sqlcommenter-nodejs!!'));
 app.get('^/polls/:param', function(req, res) {
-    console.log(req.route);
     knex.raw('SELECT * from polls_question').then(function(polls) {
         const blob = JSON.stringify(polls);
         res.send(blob);
@@ -182,16 +208,136 @@ app.get('^/polls/:param', function(req, res) {
 });
 app.listen(port, () => console.log(`Application listening on ${port}`));
 {{</highlight>}}
-{{<highlight json>}}
-{
-    "name": "knex_app",
-    "dependencies": {
-        "express": "*",
-        "knex": "*",
-        "pg": "*"
+
+{{<highlight javascript>}}
+// In file app.js.
+const Knex = require('knex'); // Knex to be wrapped say v0.0.1
+const {wrapMainKnexAsMiddleware} = require('@sqlcommenter/knex');
+const express = require('express');
+
+const options = {
+    client: 'postgresql',
+    connection: {
+        host: '127.0.0.1',
+        password: '$postgres$',
+        database: 'quickstart_nodejs'
     }
-}
+};
+const knex = Knex(options); // knex instance
+
+const app = express();
+const port = process.env.APP_PORT || 3000;
+
+// Use the knex+express middleware with route
+app.use(wrapMainKnexAsMiddleware(Knex, {route: true}));
+
+app.get('/', (req, res) => res.send('Hello, sqlcommenter-nodejs!!'));
+app.get('^/polls/:param', function(req, res) {
+    knex.raw('SELECT * from polls_question').then(function(polls) {
+        const blob = JSON.stringify(polls);
+        res.send(blob);
+    }).catch(function(err) {
+        console.log(err);
+        res.send(500);
+    });
+});
+app.listen(port, () => console.log(`Application listening on ${port}`));
 {{</highlight>}}
+
+
+{{<highlight javascript>}}
+// In file app.js
+const Knex = require('knex'); // Knex to be wrapped say v0.0.1
+const {wrapMainKnexAsMiddleware} = require('@sqlcommenter/knex');
+const express = require('express');
+
+const options = {
+    client: 'postgresql',
+    connection: {
+        host: '127.0.0.1',
+        password: '$postgres$',
+        database: 'quickstart_nodejs'
+    }
+};
+const knex = Knex(options); // knex instance
+
+const app = express();
+const port = process.env.APP_PORT || 3000;
+
+// Use the knex+express middleware with db driver
+app.use(wrapMainKnexAsMiddleware(Knex, {db_driver: true}));
+
+app.get('/', (req, res) => res.send('Hello, sqlcommenter-nodejs!!'));
+app.get('^/polls/:param', function(req, res) {
+    knex.raw('SELECT * from polls_question').then(function(polls) {
+        const blob = JSON.stringify(polls);
+        res.send(blob);
+    }).catch(function(err) {
+        console.log(err);
+        res.send(500);
+    });
+});
+app.listen(port, () => console.log(`Application listening on ${port}`));
+{{</highlight>}}
+
+{{<highlight javascript>}}
+// In file app.js.
+const tracing = require('@opencensus/nodejs');
+const {B3Format} = require('@opencensus/propagation-b3');
+const {ZipkinTraceExporter} = require('@opencensus/exporter-zipkin');
+const Knex = require('knex'); // Knex to be wrapped say v0.0.1
+const {wrapMainKnexAsMiddleware} = require('@sqlcommenter/knex');
+const express = require('express');
+
+const exporter = new ZipkinTraceExporter({
+    url: process.env.ZIPKIN_TRACE_URL || 'localhost:9411/api/v2/spans',
+    serviceName: 'trace-542'
+});
+
+const b3 = new B3Format();
+const traceOptions = {
+    samplingRate: 1, // Always sample
+    propagation: b3,
+    exporter: exporter
+};
+
+// start tracing
+tracing.start(traceOptions);
+
+const knexOptions = {
+    client: 'postgresql',
+    connection: {
+        host: '127.0.0.1',
+        password: '$postgres$',
+        database: 'quickstart_nodejs'
+    }
+};
+const knex = Knex(knexOptions); // knex instance
+
+const app = express();
+const port = process.env.APP_PORT || 3000;
+
+// Use the knex+express middleware with all attributes set
+app.use(wrapMainKnexAsMiddleware(Knex, {
+    traceparent: true,
+    tracestate: true,
+    route: true,
+    db_driver: true
+}));
+
+app.get('/', (req, res) => res.send('Hello, sqlcommenter-nodejs!!'));
+app.get('^/polls/:param', function(req, res) {
+    knex.raw('SELECT * from polls_question').then(function(polls) {
+        const blob = JSON.stringify(polls);
+        res.send(blob);
+    }).catch(function(err) {
+        console.log(err);
+        res.send(500);
+    });
+});
+app.listen(port, () => console.log(`Application listening on ${port}`));
+{{</highlight>}}
+
 {{</tabs>}}
 
 which after running by
@@ -203,11 +349,30 @@ Application listening on 3000
 #### Results
 
 On making a request to that server at `http://localhost:3000/polls/1000`, the PostgreSQL logs show:
-```shell
-2019-06-03 14:32:10.842 PDT [32004] LOG:  statement: SELECT * from polls_question
-/*route='%5E%2Fpolls%2F%3Aparam'*/
-```
 
+{{<tabs "With OpenCensus" "With Route" "With DB Driver" "With All Options Set">}}
+
+{{<highlight shell>}}
+2019-06-03 14:32:10.842 PDT [32004] LOG:  statement: SELECT * from polls_question 
+/*traceparent='00-11000000000000ff-020000ee-01',tracestate='brazzaville=t61rcWkgMzE,rondo=00f067aa0ba902b7'*/
+{{</highlight>}}
+
+{{<highlight shell>}}
+2019-06-03 14:32:10.842 PDT [32004] LOG:  statement: SELECT * from polls_question 
+/*route='%5E%2Fpolls%2F%1000'*/
+{{</highlight>}}
+
+{{<highlight shell>}}
+2019-06-03 14:32:10.842 PDT [32004] LOG:  statement: SELECT * from polls_question 
+/*db_driver:'knex%3A0.0.1'*/
+{{</highlight>}}
+
+{{<highlight shell>}}
+2019-06-03 14:32:10.842 PDT [32004] LOG:  statement: SELECT * from polls_question 
+/*db_driver:'knex%3A0.0.1',route='%5E%2Fpolls%2F%1000',traceparent='00-11000000000000ff-020000ee-01',tracestate='brazzaville=t61rcWkgMzE,rondo=00f067aa0ba902b7'*/
+{{</highlight>}}
+
+{{</tabs>}}
 
 #### References
 
