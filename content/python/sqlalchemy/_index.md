@@ -98,36 +98,20 @@ Field|Description
 
 #### Source code
 
-{{<tabs "Without OpenCensus" "With OpenCensus">}}
+{{<tabs "With OpenCensus" "With DB Framework" "With DB Driver">}}
+
 {{<highlight python>}}
 #!/usr/bin/env python3
 
 from sqlalchemy import create_engine, event
 from sqlcommenter.sqlalchemy.executor import BeforeExecuteFactory
-
-def main():
-    engine = create_engine("postgresql://:$postgres$@127.0.0.1:5432/quickstart_py")
-
-    event.listen(engine, 'before_cursor_execute', BeforeExecuteFactory(), retval=True)
-    result_proxy = engine.execute("SELECT * FROM polls_question")
-
-    for row in result_proxy:
-        print(row)
-
-    result_proxy.close()
-
-if __name__ == '__main__':
-    main()
-{{</highlight>}}
-{{<highlight python>}}
-#!/usr/bin/env python3
 
 from opencensus.trace.samplers import AlwaysOnSampler
 from opencensus.trace.tracer import Tracer
-from sqlalchemy import create_engine, event
-from sqlcommenter.sqlalchemy.executor import BeforeExecuteFactory
 
-class noopOpenCensusTraceExporter(object):
+DB_URL = '...'  # DB connection info
+
+class NoopExporter(object):
     def emit(self, *args, **kwargs):
         pass
 
@@ -135,21 +119,65 @@ class noopOpenCensusTraceExporter(object):
         pass
 
 def main():
-    engine = create_engine("postgresql://:$postgres$@127.0.0.1:5432/quickstart_py")
-    event.listen(engine, 'before_cursor_execute', BeforeExecuteFactory(with_opencensus=True), retval=True)
+    tracer = Tracer(exporter=NoopExporter, sampler=AlwaysOnSampler())
+    engine = create_engine(DB_URL)
 
-    tracer = Tracer(exporter=noopOpenCensusTraceExporter, sampler=AlwaysOnSampler())
-    with tracer.span(name='Psycopg2.Integration') as span:
-        result_proxy = engine.execute("SELECT * FROM polls_question")
+    listener = BeforeExecuteFactory(with_opencensus=True)
+    event.listen(engine, 'before_cursor_execute', listener, retval=True)
 
-        for row in result_proxy:
+    with tracer.span():
+        result = engine.execute('SELECT * FROM polls_question')
+        for row in result:
             print(row)
-
-    result_proxy.close()
 
 if __name__ == '__main__':
     main()
 {{</highlight>}}
+
+{{<highlight python>}}
+#!/usr/bin/env python3
+
+from sqlalchemy import create_engine, event
+from sqlcommenter.sqlalchemy.executor import BeforeExecuteFactory
+
+DB_URL = '...'  # DB connection info
+
+def main():
+    engine = create_engine(DB_URL)
+
+    listener = BeforeExecuteFactory(with_db_framework=True)
+    event.listen(engine, 'before_cursor_execute', listener, retval=True)
+
+    result = engine.execute('SELECT * FROM polls_question')
+    for row in result:
+        print(row)
+
+if __name__ == '__main__':
+    main()
+{{</highlight>}}
+
+{{<highlight python>}}
+#!/usr/bin/env python3
+
+from sqlalchemy import create_engine, event
+from sqlcommenter.sqlalchemy.executor import BeforeExecuteFactory
+
+DB_URL = '...'  # DB connection info
+
+def main():
+    engine = create_engine(DB_URL)
+
+    listener = BeforeExecuteFactory(with_db_driver=True)
+    event.listen(engine, 'before_cursor_execute', listener, retval=True)
+
+    result = engine.execute('SELECT * FROM polls_question')
+    for row in result:
+        print(row)
+
+if __name__ == '__main__':
+    main()
+{{</highlight>}}
+
 {{</tabs>}}
 
 ```shell
@@ -165,17 +193,23 @@ python3 main.py
 
 Examining our Postgresql server logs
 
-{{<tabs "Without OpenCensus" "With OpenCensus">}}
+{{<tabs "With OpenCensus" "With DB Framework" "With DB Driver">}}
+
 {{<highlight shell>}}
-2019-06-04 10:28:30.730 PDT [35416] LOG:  statement: SELECT * FROM polls_question
-/*db_driver='psycopg2',framework='sqlalchemy%3A1.3.4'*/
+2019-07-18 14:10:15.228 -03 [30071] LOG:  statement: SELECT * FROM polls_question
+/*traceparent='00-bf66750ad4c76f614c0a99d843758cbb-e6b27c3caf35de73-01'*/
 {{</highlight>}}
 
 {{<highlight shell>}}
-2019-06-04 10:27:14.919 PDT [35412] LOG:  statement: SELECT * FROM polls_question
-/*db_driver='psycopg2',framework='sqlalchemy%3A1.3.4',
-traceparent='00-e6e5a8d1a855d7e68aa9b1ab5bf1f027-07ac7d9f6ed8d66e-01'*/
+2019-07-18 14:11:19.576 -03 [30108] LOG:  statement: SELECT * FROM polls_question
+/*db_framework='sqlalchemy%3A1.3.5'*/
 {{</highlight>}}
+
+{{<highlight shell>}}
+2019-07-18 14:03:33.426 -03 [29858] LOG:  statement: SELECT * FROM polls_question
+/*db_driver='psycopg2'*/
+{{</highlight>}}
+
 {{</tabs>}}
 
 ### With flask
