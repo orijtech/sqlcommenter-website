@@ -89,12 +89,15 @@ framework='django%3A2.2.1',route='%5Epolls/%24'*/
 
 #### Expected fields
 
-Field|Format|Description|Example
----|---|---|---
-`controller`|`<string>`|The name of the view from `django.conf.urls.url` as described in your urls.py file e.g. as per `url(r'^$', views.index, name='index')`|controller='index'
-`db_driver`|`<database_driver>:<version>`|Name and version of the database driver|`db_driver='django.db.backends.postgresql'`
-`framework`|`'django%3A<django_version>'`|combination of the word "django" as the key and the version of Django being used|framework='django%3A2.2.1'
-`route`|`<the route used>`|route used for the controller|`route='%5Epolls/%24'`
+Field|Included <br /> by default?|Description
+---|---|---
+`app_name`||The [application namespace](https://docs.djangoproject.com/en/2.2/ref/urlresolvers/#django.urls.ResolverMatch.app_name) of the matching URL pattern in your urls.py
+`controller`|<div style="text-align: center">&#10004;</div>|The [name](https://docs.djangoproject.com/en/2.2/ref/urls/#path) of the matching URL pattern as described in your urls.py
+`db_driver`||The name of the Django [database engine](https://docs.djangoproject.com/en/2.2/ref/settings/#engine)
+`framework`|<div style="text-align: center">&#10004;</div>|The word "django" and the version of Django being used
+`route`|<div style="text-align: center">&#10004;</div>|The [route](https://docs.djangoproject.com/en/2.2/ref/urlresolvers/#django.urls.ResolverMatch.route) of the matching URL pattern as described in your urls.py
+`traceparent`||The [W3C TraceContext.Traceparent field](https://www.w3.org/TR/trace-context/#traceparent-field) of the OpenCensus trace
+`tracestate`||The [W3C TraceContext.Tracestate field](https://www.w3.org/TR/trace-context/#tracestate-field) of the OpenCensus trace
 
 #### References
 
