@@ -107,19 +107,18 @@ Examples are based off the [polls app from the Django introduction tutorial](htt
 
 {{<tabs "Defaults" "With App Name" "With DB Driver" "With OpenCensus">}}
 
+<div>
 {{<highlight python>}}
-###############
-# settings.py #
-###############
+# settings.py
 
 MIDDLEWARE = [
     'sqlcommenter.django.middleware.SqlCommenter',
     ...
 ]
+{{</highlight>}}
 
-#################
-# polls/urls.py #
-#################
+{{<highlight python>}}
+# polls/urls.py
 
 from django.urls import path
 from . import views
@@ -127,10 +126,10 @@ from . import views
 urlpatterns = [
     path('', views.index, name='index'),
 ]
+{{</highlight>}}
 
-##################
-# polls/views.py #
-##################
+{{<highlight python>}}
+# polls/views.py
 
 from django.http import HttpResponse
 from .models import Question
@@ -139,11 +138,11 @@ def index(request):
     count = Question.objects.count()
     return HttpResponse(f"There are {count} questions in the DB.\n")
 {{</highlight>}}
+</div>
 
+<div>
 {{<highlight python>}}
-###############
-# settings.py #
-###############
+# settings.py
 
 MIDDLEWARE = [
     'sqlcommenter.django.middleware.SqlCommenter',
@@ -154,10 +153,10 @@ SQLCOMMENTER_WITH_CONTROLLER = False
 SQLCOMMENTER_WITH_FRAMEWORK = False
 SQLCOMMENTER_WITH_ROUTE = False
 SQLCOMMENTER_WITH_APP_NAME = True
+{{</highlight>}}
 
-#################
-# polls/urls.py #
-#################
+{{<highlight python>}}
+# polls/urls.py
 
 from django.urls import path
 from . import apps, views
@@ -167,10 +166,10 @@ app_name = apps.PollsConfig.name
 urlpatterns = [
     path('', views.index, name='index'),
 ]
+{{</highlight>}}
 
-##################
-# polls/views.py #
-##################
+{{<highlight python>}}
+# polls/views.py
 
 from django.http import HttpResponse
 from .models import Question
@@ -179,11 +178,11 @@ def index(request):
     count = Question.objects.count()
     return HttpResponse(f"There are {count} questions in the DB.\n")
 {{</highlight>}}
+</div>
 
+<div>
 {{<highlight python>}}
-###############
-# settings.py #
-###############
+# settings.py
 
 MIDDLEWARE = [
     'sqlcommenter.django.middleware.SqlCommenter',
@@ -194,10 +193,10 @@ SQLCOMMENTER_WITH_CONTROLLER = False
 SQLCOMMENTER_WITH_FRAMEWORK = False
 SQLCOMMENTER_WITH_ROUTE = False
 SQLCOMMENTER_WITH_DB_DRIVER = True
+{{</highlight>}}
 
-#################
-# polls/urls.py #
-#################
+{{<highlight python>}}
+# polls/urls.py
 
 from django.urls import path
 from . import views
@@ -205,10 +204,10 @@ from . import views
 urlpatterns = [
     path('', views.index, name='index'),
 ]
+{{</highlight>}}
 
-##################
-# polls/views.py #
-##################
+{{<highlight python>}}
+# polls/views.py
 
 from django.http import HttpResponse
 from .models import Question
@@ -217,11 +216,11 @@ def index(request):
     count = Question.objects.count()
     return HttpResponse(f"There are {count} questions in the DB.\n")
 {{</highlight>}}
+</div>
 
+<div>
 {{<highlight python>}}
-###############
-# settings.py #
-###############
+# settings.py
 
 MIDDLEWARE = [
     'sqlcommenter.django.middleware.SqlCommenter',
@@ -232,10 +231,10 @@ SQLCOMMENTER_WITH_CONTROLLER = False
 SQLCOMMENTER_WITH_FRAMEWORK = False
 SQLCOMMENTER_WITH_ROUTE = False
 SQLCOMMENTER_WITH_OPENCENSUS = True
+{{</highlight>}}
 
-#################
-# polls/urls.py #
-#################
+{{<highlight python>}}
+# polls/urls.py
 
 from django.urls import path
 from . import views
@@ -243,10 +242,10 @@ from . import views
 urlpatterns = [
     path('', views.index, name='index'),
 ]
+{{</highlight>}}
 
-##################
-# polls/views.py #
-##################
+{{<highlight python>}}
+# polls/views.py
 
 from django.http import HttpResponse
 from .models import Question
@@ -255,6 +254,7 @@ def index(request):
     count = Question.objects.count()
     return HttpResponse(f"There are {count} questions in the DB.\n")
 {{</highlight>}}
+</div>
 
 {{</tabs>}}
 
