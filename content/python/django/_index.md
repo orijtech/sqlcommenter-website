@@ -99,6 +99,203 @@ Field|Included <br /> by default?|Description
 `traceparent`||The [W3C TraceContext.Traceparent field](https://www.w3.org/TR/trace-context/#traceparent-field) of the OpenCensus trace
 `tracestate`||The [W3C TraceContext.Tracestate field](https://www.w3.org/TR/trace-context/#tracestate-field) of the OpenCensus trace
 
+### End to end examples
+
+Examples are based off the [polls app from the Django introduction tutorial](https://docs.djangoproject.com/en/2.2/intro/tutorial01/).
+
+#### Source code
+
+{{<tabs "Defaults" "With App Name" "With DB Driver" "With OpenCensus">}}
+
+{{<highlight python>}}
+###############
+# settings.py #
+###############
+
+MIDDLEWARE = [
+    'sqlcommenter.django.middleware.SqlCommenter',
+    ...
+]
+
+#################
+# polls/urls.py #
+#################
+
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('', views.index, name='index'),
+]
+
+##################
+# polls/views.py #
+##################
+
+from django.http import HttpResponse
+from .models import Question
+
+def index(request):
+    count = Question.objects.count()
+    return HttpResponse(f"There are {count} questions in the DB.\n")
+{{</highlight>}}
+
+{{<highlight python>}}
+###############
+# settings.py #
+###############
+
+MIDDLEWARE = [
+    'sqlcommenter.django.middleware.SqlCommenter',
+    ...
+]
+
+SQLCOMMENTER_WITH_CONTROLLER = False
+SQLCOMMENTER_WITH_FRAMEWORK = False
+SQLCOMMENTER_WITH_ROUTE = False
+SQLCOMMENTER_WITH_APP_NAME = True
+
+#################
+# polls/urls.py #
+#################
+
+from django.urls import path
+from . import apps, views
+
+app_name = apps.PollsConfig.name
+
+urlpatterns = [
+    path('', views.index, name='index'),
+]
+
+##################
+# polls/views.py #
+##################
+
+from django.http import HttpResponse
+from .models import Question
+
+def index(request):
+    count = Question.objects.count()
+    return HttpResponse(f"There are {count} questions in the DB.\n")
+{{</highlight>}}
+
+{{<highlight python>}}
+###############
+# settings.py #
+###############
+
+MIDDLEWARE = [
+    'sqlcommenter.django.middleware.SqlCommenter',
+    ...
+]
+
+SQLCOMMENTER_WITH_CONTROLLER = False
+SQLCOMMENTER_WITH_FRAMEWORK = False
+SQLCOMMENTER_WITH_ROUTE = False
+SQLCOMMENTER_WITH_DB_DRIVER = True
+
+#################
+# polls/urls.py #
+#################
+
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('', views.index, name='index'),
+]
+
+##################
+# polls/views.py #
+##################
+
+from django.http import HttpResponse
+from .models import Question
+
+def index(request):
+    count = Question.objects.count()
+    return HttpResponse(f"There are {count} questions in the DB.\n")
+{{</highlight>}}
+
+{{<highlight python>}}
+###############
+# settings.py #
+###############
+
+MIDDLEWARE = [
+    'sqlcommenter.django.middleware.SqlCommenter',
+    ...
+]
+
+SQLCOMMENTER_WITH_CONTROLLER = False
+SQLCOMMENTER_WITH_FRAMEWORK = False
+SQLCOMMENTER_WITH_ROUTE = False
+SQLCOMMENTER_WITH_OPENCENSUS = True
+
+#################
+# polls/urls.py #
+#################
+
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('', views.index, name='index'),
+]
+
+##################
+# polls/views.py #
+##################
+
+from django.http import HttpResponse
+from .models import Question
+
+def index(request):
+    count = Question.objects.count()
+    return HttpResponse(f"There are {count} questions in the DB.\n")
+{{</highlight>}}
+
+{{</tabs>}}
+
+From the command line, we run the django development server in one terminal:
+
+{{<highlight shell>}}
+# python manage.py runserver
+{{</highlight>}}
+
+And we use [curl](https://curl.haxx.se/) to make an HTTP request in another:
+
+{{<highlight shell>}}
+# curl http://127.0.0.1:8000/polls/
+{{</highlight>}}
+
+#### Results
+
+Examining our Postgresql server logs, with the various options
+
+{{<tabs "Defaults" "With App Name" "With DB Driver" "With OpenCensus">}}
+
+{{<highlight shell>}}
+2019-07-19 14:27:51.370 -03 [41382] LOG:  statement: SELECT COUNT(*) AS "__count" FROM "polls_question"
+/*controller='index',framework='django%3A2.2.3',route='polls/'*/
+{{</highlight>}}
+
+{{<highlight shell>}}
+2019-07-19 15:31:33.681 -03 [42962] LOG:  statement: SELECT COUNT(*) AS "__count" FROM "polls_question"
+/*app_name='polls'*/
+{{</highlight>}}
+
+{{<highlight shell>}}
+2019-07-19 14:47:53.066 -03 [41602] LOG:  statement: SELECT COUNT(*) AS "__count" FROM "polls_question"
+/*db_driver='django.db.backends.postgresql'*/
+{{</highlight>}}
+
+{{<highlight shell>}}
+{{</highlight>}}
+
+{{</tabs>}}
+
 #### References
 
 Resource|URL
