@@ -24,15 +24,15 @@ tags: ["python", "django"]
 
 #### Introduction
 
-This package is in the form of [Django middleware]() whose purpose is to augment a SQL statement right before execution, with
-information about the [controller and user code]() to help with later making database optimization decisions, after those statements
-are examined from the database server's logs.
+This package is in the form of [Django middleware](https://docs.djangoproject.com/en/2.2/topics/http/middleware/) whose purpose is to augment a SQL statement right before execution, with information about the controller and user code to help with later making database optimization decisions, after those statements are examined from the database server's logs.
 
 The middleware uses Django's `connection.execute_wrapper`.
 
 ### Requirements
 
 The middleware uses Django's [`connection.execute_wrapper`](https://docs.djangoproject.com/en/stable/topics/db/instrumentation/#connection-execute-wrapper) and therefore requires [Django 2.0](https://docs.djangoproject.com/en/stable/faq/install) or later (which [support various versions](https://docs.djangoproject.com/en/stable/faq/install/#what-python-version-can-i-use-with-django) of [Python 3](https://www.python.org/downloads/)).
+
+To record [OpenCensus](https://opencensus.io/) information [opencensus-ext-django](https://pypi.org/project/opencensus-ext-django/), version 0.7 or greater, is required.
 
 #### Installation
 This middleware can be installed by any of the following:
@@ -83,11 +83,10 @@ After making a request into the middleware-enabled polls web-app.
 2019-05-28 11:54:50.780 PDT [64128] LOG:  statement: INSERT INTO "polls_question"
 ("question_text", "pub_date") VALUES
 ('Wassup?', '2019-05-28T18:54:50.767481+00:00'::timestamptz) RETURNING "polls_question"."id"
-/*controller='index',db_driver='django.db.backends.postgresql',
-framework='django%3A2.2.1',route='%5Epolls/%24'*/
+/*controller='index',framework='django%3A2.2.1',route='%5Epolls/%24'*/
 ```
 
-#### Expected fields
+#### Fields
 
 Field|Included <br /> by default?|Description
 ---|---|---
@@ -316,3 +315,6 @@ Resource|URL
 ---|---
 sqlcommenter on PyPi|https://pypi.org/sqlcommenter
 sqlcommenter on Github|https://github.com/orijtech/python-sql-commenter
+Django|https://www.djangoproject.com/
+OpenCensus|https://opencensus.io/
+opencensus-ext-django|https://github.com/census-instrumentation/opencensus-python/tree/master/contrib/opencensus-ext-django
