@@ -105,7 +105,7 @@ Examples are based off the [polls app from the Django introduction tutorial](htt
 
 #### Source code
 
-{{<tabs "Defaults" "With App Name" "With DB Driver" "With OpenCensus">}}
+{{<tabs "Defaults" "With OpenCensus" "With App Name" "With DB Driver">}}
 
 <div>
 {{<highlight python>}}
@@ -115,6 +115,56 @@ MIDDLEWARE = [
     'sqlcommenter.django.middleware.SqlCommenter',
     ...
 ]
+{{</highlight>}}
+
+{{<highlight python>}}
+# polls/urls.py
+
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('', views.index, name='index'),
+]
+{{</highlight>}}
+
+{{<highlight python>}}
+# polls/views.py
+
+from django.http import HttpResponse
+from .models import Question
+
+def index(request):
+    count = Question.objects.count()
+    return HttpResponse(f"There are {count} questions in the DB.\n")
+{{</highlight>}}
+</div>
+
+<div>
+{{<highlight python>}}
+# settings.py
+INSTALLED_APPS = [
+    'opencensus.ext.django',
+    ...
+]
+
+
+MIDDLEWARE = [
+    'opencensus.ext.django.middleware.OpencensusMiddleware',
+    'sqlcommenter.django.middleware.SqlCommenter',
+    ...
+]
+
+OPENCENSUS = {
+    'TRACE': {
+        'SAMPLER': 'opencensus.trace.samplers.AlwaysOnSampler()',
+    }
+}
+
+SQLCOMMENTER_WITH_CONTROLLER = False
+SQLCOMMENTER_WITH_FRAMEWORK = False
+SQLCOMMENTER_WITH_ROUTE = False
+SQLCOMMENTER_WITH_OPENCENSUS = True
 {{</highlight>}}
 
 {{<highlight python>}}
@@ -218,56 +268,6 @@ def index(request):
 {{</highlight>}}
 </div>
 
-<div>
-{{<highlight python>}}
-# settings.py
-INSTALLED_APPS = [
-    'opencensus.ext.django',
-    ...
-]
-
-
-MIDDLEWARE = [
-    'opencensus.ext.django.middleware.OpencensusMiddleware',
-    'sqlcommenter.django.middleware.SqlCommenter',
-    ...
-]
-
-OPENCENSUS = {
-    'TRACE': {
-        'SAMPLER': 'opencensus.trace.samplers.AlwaysOnSampler()',
-    }
-}
-
-SQLCOMMENTER_WITH_CONTROLLER = False
-SQLCOMMENTER_WITH_FRAMEWORK = False
-SQLCOMMENTER_WITH_ROUTE = False
-SQLCOMMENTER_WITH_OPENCENSUS = True
-{{</highlight>}}
-
-{{<highlight python>}}
-# polls/urls.py
-
-from django.urls import path
-from . import views
-
-urlpatterns = [
-    path('', views.index, name='index'),
-]
-{{</highlight>}}
-
-{{<highlight python>}}
-# polls/views.py
-
-from django.http import HttpResponse
-from .models import Question
-
-def index(request):
-    count = Question.objects.count()
-    return HttpResponse(f"There are {count} questions in the DB.\n")
-{{</highlight>}}
-</div>
-
 {{</tabs>}}
 
 From the command line, we run the django development server in one terminal:
@@ -286,11 +286,16 @@ And we use [curl](https://curl.haxx.se/) to make an HTTP request in another:
 
 Examining our Postgresql server logs, with the various options
 
-{{<tabs "Defaults" "With App Name" "With DB Driver" "With OpenCensus">}}
+{{<tabs "Defaults" "With OpenCensus" "With App Name" "With DB Driver">}}
 
 {{<highlight shell>}}
 2019-07-19 14:27:51.370 -03 [41382] LOG:  statement: SELECT COUNT(*) AS "__count" FROM "polls_question"
 /*controller='index',framework='django%3A2.2.3',route='polls/'*/
+{{</highlight>}}
+
+{{<highlight shell>}}
+2019-07-19 17:39:27.430 -03 [46170] LOG:  statement: SELECT COUNT(*) AS "__count" FROM "polls_question"
+/*traceparent='00-fd720cffceba94bbf75940ff3caaf3cc-4fd1a2bdacf56388-01'*/
 {{</highlight>}}
 
 {{<highlight shell>}}
@@ -301,11 +306,6 @@ Examining our Postgresql server logs, with the various options
 {{<highlight shell>}}
 2019-07-19 14:47:53.066 -03 [41602] LOG:  statement: SELECT COUNT(*) AS "__count" FROM "polls_question"
 /*db_driver='django.db.backends.postgresql'*/
-{{</highlight>}}
-
-{{<highlight shell>}}
-2019-07-19 17:39:27.430 -03 [46170] LOG:  statement: SELECT COUNT(*) AS "__count" FROM "polls_question"
-/*traceparent='00-fd720cffceba94bbf75940ff3caaf3cc-4fd1a2bdacf56388-01'*/
 {{</highlight>}}
 
 {{</tabs>}}
