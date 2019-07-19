@@ -221,11 +221,23 @@ def index(request):
 <div>
 {{<highlight python>}}
 # settings.py
+INSTALLED_APPS = [
+    'opencensus.ext.django',
+    ...
+]
+
 
 MIDDLEWARE = [
+    'opencensus.ext.django.middleware.OpencensusMiddleware',
     'sqlcommenter.django.middleware.SqlCommenter',
     ...
 ]
+
+OPENCENSUS = {
+    'TRACE': {
+        'SAMPLER': 'opencensus.trace.samplers.AlwaysOnSampler()',
+    }
+}
 
 SQLCOMMENTER_WITH_CONTROLLER = False
 SQLCOMMENTER_WITH_FRAMEWORK = False
@@ -292,6 +304,8 @@ Examining our Postgresql server logs, with the various options
 {{</highlight>}}
 
 {{<highlight shell>}}
+2019-07-19 17:39:27.430 -03 [46170] LOG:  statement: SELECT COUNT(*) AS "__count" FROM "polls_question"
+/*traceparent='00-fd720cffceba94bbf75940ff3caaf3cc-4fd1a2bdacf56388-01'*/
 {{</highlight>}}
 
 {{</tabs>}}
