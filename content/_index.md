@@ -224,162 +224,138 @@ containing the various ORM instrumentation that you can then install.
 │       │   └── tests.py
 │       └── tox.ini
 └── ruby
-    ├── marginalia
-    ├── marginalia-opencensus
-    │   ├── Gemfile
-    │   ├── README.md
-    │   ├── Rakefile
-    │   ├── bin
-    │   │   ├── console
-    │   │   ├── rails
-    │   │   └── setup
-    │   ├── config.ru
-    │   ├── lib
-    │   │   ├── marginalia
-    │   │   │   ├── opencensus
-    │   │   │   │   ├── marginalia_components.rb
-    │   │   │   │   └── version.rb
-    │   │   │   └── opencensus.rb
-    │   │   └── marginalia-opencensus.rb
-    │   ├── marginalia-opencensus.gemspec
-    │   ├── rubocop.gemfile
-    │   └── spec
-    │       ├── gemfiles
-    │       │   ├── rails_5_2.gemfile
-    │       │   ├── rails_6_0.gemfile
-    │       │   └── rubocop.gemfile
-    │       ├── internal
-    │       │   ├── Rakefile
-    │       │   ├── app
-    │       │   │   └── controllers
-    │       │   │       └── internal_app_controller.rb
-    │       │   ├── config
-    │       │   │   ├── application.rb
-    │       │   │   ├── boot.rb
-    │       │   │   ├── database.yml
-    │       │   │   ├── environment.rb
-    │       │   │   └── routes.rb
-    │       │   ├── db
-    │       │   │   └── schema.rb
-    │       │   ├── log
-    │       │   └── public
-    │       │       └── favicon.ico
-    │       ├── marginalia
-    │       │   └── opencensus
-    │       │       ├── integration_spec.rb
-    │       │       └── marginalia_comment_components_spec.rb
-    │       └── spec_helper.rb
-    ├── sqlcommenter_rails
-    │   ├── Gemfile
-    │   ├── README.md
-    │   ├── Rakefile
-    │   ├── bin
-    │   │   ├── console
-    │   │   ├── rails
-    │   │   └── setup
-    │   ├── config.ru
-    │   ├── lib
-    │   │   ├── sqlcommenter_rails
-    │   │   │   ├── marginalia_components.rb
-    │   │   │   └── version.rb
-    │   │   └── sqlcommenter_rails.rb
-    │   ├── rubocop.gemfile
-    │   ├── shared.gemfile
-    │   ├── spec
-    │   │   ├── gemfiles
-    │   │   │   ├── rails_5_2.gemfile
-    │   │   │   ├── rails_6_0.gemfile
-    │   │   │   └── rubocop.gemfile
-    │   │   ├── internal
-    │   │   │   ├── Rakefile
-    │   │   │   ├── app
-    │   │   │   │   └── controllers
-    │   │   │   │       └── internal_app_controller.rb
-    │   │   │   ├── config
-    │   │   │   │   ├── application.rb
-    │   │   │   │   ├── boot.rb
-    │   │   │   │   ├── database.yml
-    │   │   │   │   ├── environment.rb
-    │   │   │   │   └── routes.rb
-    │   │   │   ├── db
-    │   │   │   │   └── schema.rb
-    │   │   │   ├── log
-    │   │   │   └── public
-    │   │   │       └── favicon.ico
-    │   │   ├── spec_helper.rb
-    │   │   └── sqlcommenter_rails
-    │   │       ├── integration_spec.rb
-    │   │       └── marginalia_comment_components_spec.rb
-    │   └── sqlcommenter_rails.gemspec
-    └── sqlcommenter_rails_demo
-        ├── Gemfile
-        ├── Gemfile.lock
+    └── sqlcommenter-ruby
         ├── README.md
-        ├── Rakefile
-        ├── app
-        │   ├── controllers
-        │   │   ├── application_controller.rb
-        │   │   ├── concerns
-        │   │   └── posts_controller.rb
-        │   └── models
-        │       ├── application_record.rb
-        │       ├── concerns
-        │       └── post.rb
-        ├── bin
-        │   ├── bundle
-        │   ├── rails
-        │   ├── rake
-        │   ├── setup
-        │   └── spring
-        ├── config
-        │   ├── application.rb
-        │   ├── boot.rb
-        │   ├── cable.yml
-        │   ├── credentials.yml.enc
-        │   ├── database.yml
-        │   ├── environment.rb
-        │   ├── environments
-        │   │   ├── development.rb
-        │   │   ├── production.rb
-        │   │   └── test.rb
-        │   ├── initializers
-        │   │   ├── application_controller_renderer.rb
-        │   │   ├── backtrace_silencers.rb
-        │   │   ├── cors.rb
-        │   │   ├── filter_parameter_logging.rb
-        │   │   ├── inflections.rb
-        │   │   ├── mime_types.rb
-        │   │   └── wrap_parameters.rb
-        │   ├── locales
-        │   │   └── en.yml
-        │   ├── puma.rb
-        │   ├── routes.rb
-        │   ├── spring.rb
-        │   └── storage.yml
-        ├── config.ru
-        ├── db
-        │   ├── migrate
-        │   │   └── 20190608153219_create_posts.rb
-        │   ├── schema.rb
-        │   └── seeds.rb
-        ├── lib
-        │   └── tasks
-        ├── log
-        ├── public
-        │   └── robots.txt
-        ├── storage
-        ├── test
-        │   ├── controllers
-        │   │   └── posts_controller_test.rb
-        │   ├── fixtures
-        │   │   ├── files
-        │   │   └── posts.yml
-        │   ├── integration
-        │   ├── models
-        │   │   └── post_test.rb
-        │   └── test_helper.rb
-        ├── tmp
-        └── vendor
+        ├── marginalia-opencensus
+        │   ├── Gemfile
+        │   ├── README.md
+        │   ├── Rakefile
+        │   ├── bin
+        │   │   ├── console
+        │   │   ├── rails
+        │   │   └── setup
+        │   ├── lib
+        │   │   ├── marginalia
+        │   │   │   ├── opencensus
+        │   │   │   │   ├── marginalia_components.rb
+        │   │   │   │   └── version.rb
+        │   │   │   └── opencensus.rb
+        │   │   └── marginalia-opencensus.rb
+        │   ├── marginalia-opencensus.gemspec
+        │   ├── rubocop.gemfile
+        │   └── spec
+        │       ├── gemfiles
+        │       │   ├── rails_5_2.gemfile
+        │       │   ├── rails_6_0.gemfile
+        │       │   └── rubocop.gemfile
+        │       ├── internal
+        │       │   ├── Rakefile
+        │       │   ├── app
+        │       │   │   └── controllers
+        │       │   │       └── internal_app_controller.rb
+        │       │   ├── config
+        │       │   │   ├── application.rb
+        │       │   │   ├── boot.rb
+        │       │   │   ├── database.yml
+        │       │   │   ├── environment.rb
+        │       │   │   └── routes.rb
+        │       │   ├── db
+        │       │   │   └── schema.rb
+        │       │   ├── log
+        │       │   └── public
+        │       │       └── favicon.ico
+        │       ├── marginalia
+        │       │   └── opencensus
+        │       │       ├── integration_spec.rb
+        │       │       └── marginalia_comment_components_spec.rb
+        │       └── spec_helper.rb
+        ├── sqlcommenter_rails
+        │   ├── Gemfile
+        │   ├── README.md
+        │   ├── Rakefile
+        │   ├── bin
+        │   │   ├── console
+        │   │   ├── rails
+        │   │   └── setup
+        │   ├── lib
+        │   │   ├── sqlcommenter_rails
+        │   │   │   ├── marginalia_components.rb
+        │   │   │   └── version.rb
+        │   │   └── sqlcommenter_rails.rb
+        │   ├── rubocop.gemfile
+        │   ├── shared.gemfile
+        │   ├── spec
+        │   │   ├── gemfiles
+        │   │   │   ├── rails_5_2.gemfile
+        │   │   │   ├── rails_6_0.gemfile
+        │   │   │   └── rubocop.gemfile
+        │   │   ├── internal
+        │   │   │   ├── Rakefile
+        │   │   │   ├── app
+        │   │   │   │   └── controllers
+        │   │   │   │       └── internal_app_controller.rb
+        │   │   │   ├── config
+        │   │   │   │   ├── application.rb
+        │   │   │   │   ├── boot.rb
+        │   │   │   │   ├── database.yml
+        │   │   │   │   ├── environment.rb
+        │   │   │   │   └── routes.rb
+        │   │   │   ├── db
+        │   │   │   │   └── schema.rb
+        │   │   │   ├── log
+        │   │   │   └── public
+        │   │   │       └── favicon.ico
+        │   │   ├── spec_helper.rb
+        │   │   └── sqlcommenter_rails
+        │   │       ├── integration_spec.rb
+        │   │       └── marginalia_comment_components_spec.rb
+        │   └── sqlcommenter_rails.gemspec
+        └── sqlcommenter_rails_demo
+            ├── Gemfile
+            ├── Gemfile.lock
+            ├── README.md
+            ├── Rakefile
+            ├── app
+            │   ├── controllers
+            │   │   ├── application_controller.rb
+            │   │   └── posts_controller.rb
+            │   └── models
+            │       ├── application_record.rb
+            │       └── post.rb
+            ├── bin
+            │   ├── bundle
+            │   ├── rails
+            │   ├── rake
+            │   ├── setup
+            │   └── spring
+            ├── config
+            │   ├── application.rb
+            │   ├── boot.rb
+            │   ├── cable.yml
+            │   ├── credentials.yml.enc
+            │   ├── database.yml
+            │   ├── environment.rb
+            │   ├── environments
+            │   │   ├── development.rb
+            │   │   ├── production.rb
+            │   │   └── test.rb
+            │   ├── puma.rb
+            │   ├── routes.rb
+            │   ├── spring.rb
+            │   └── storage.yml
+            ├── config.ru
+            ├── db
+            │   ├── migrate
+            │   │   └── 20190608153219_create_posts.rb
+            │   └── schema.rb
+            ├── log
+            ├── test
+            │   ├── controllers
+            │   │   └── posts_controller_test.rb
+            │   ├── fixtures
+            │   │   └── posts.yml
+            │   └── test_helper.rb
+            └── tmp
 
-109 directories, 172 files
+97 directories, 160 files
 {{</highlight>}}
