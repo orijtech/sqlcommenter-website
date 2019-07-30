@@ -57,7 +57,7 @@ The final comment SHOULD be affixed to the final SQL statement in the format
 ```
 
 ### Comment escaping
-[Comments within SQL comments](https://docs.oracle.com/cd/B12037_01/server.101/b10759/sql_elements006.htm) are are of the format
+[Comments within SQL comments](https://docs.oracle.com/cd/B12037_01/server.101/b10759/sql_elements006.htm) are of the format
 
 * Following ` -- ` e.g. `SELECT * from FOO -- this is the comment`
 * Contained within `/*` and `*/` e.g. `SELECT * from FOO /* this is the comment */`
@@ -97,7 +97,7 @@ key_serialization(key):
     encoded := url_encode(key)
     meta_escaped := escape_meta_characters(encoded)
 
-    return encoded
+    return meta_escaped
 ```
 
 ### Value serialization
