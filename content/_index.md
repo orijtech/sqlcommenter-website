@@ -22,7 +22,7 @@ information about the code that caused its execution. This helps in easily corre
     - [Databases](#databases)
 - [Source code](#source-code)
 
-### Value 
+### Value
 sqlcommenter provides instrumentation/wrappers to augment SQL from frameworks and ORMs. The augmented SQL provides key='value' comments
 that help correlate usercode with ORM generated SQL statements and they can be examined in your database server logs. It provides deeper
 observability insights into the state of your applications all the way to your database server.
@@ -38,7 +38,7 @@ This log was extracted from a live web application
 "polls_question"."id" /*controller='index',db_driver='django.db.backends.postgresql',
 framework='django%3A2.2.1',route='%5Epolls/%24',
 traceparent='00-5bd66ef5095369c7b0d1f8f4bd33716a-c532cb4098ac3dd2-01',
-tracestate='congo%%3Dt61rcWkgMzE%%2Crojo%%3D00f067aa0ba902b7'*/
+tracestate='congo%3Dt61rcWkgMzE%2Crojo%3D00f067aa0ba902b7'*/
 ```
 
 ### Interpretation
@@ -48,19 +48,19 @@ On examining the SQL statement from above in [Sample](#sample) and examining the
 /*controller='index',db_driver='django.db.backends.postgresql',
 framework='django%3A2.2.1',route='%5Epolls/%24',
 traceparent='00-5bd66ef5095369c7b0d1f8f4bd33716a-c532cb4098ac3dd2-01',
-tracestate='congo%%3Dt61rcWkgMzE%%2Crojo%%3D00f067aa0ba902b7'*/
+tracestate='congo%3Dt61rcWkgMzE%2Crojo%3D00f067aa0ba902b7'*/
 ```
 
 we can now correlate and pinpoint the fields in the above slow SQL query to our source code in our web application:
 
 Original field|Interpretation
 ---|----
-`controller='index'`|Controller name `^/polls/$` 
+`controller='index'`|Controller name `^/polls/$`
 `db_driver='django.db.backends.postgresql'`|Database driver `django.db.backends.postgresql`
 `framework='django%3A2.2.1'`|Framework version of `django 2.2.1`
-`route='%5Epolls/%24'`|Route of `^/polls/$` 
+`route='%5Epolls/%24'`|Route of `^/polls/$`
 `traceparent='00-5bd66ef5095369c7b0d1f8f4bd33716a-c532cb4098ac3dd2-01'`|[W3C TraceContext.Traceparent](https://www.w3.org/TR/trace-context/#traceparent-field) of '00-5bd66ef5095369c7b0d1f8f4bd33716a-c532cb4098ac3dd2-01'
-`tracestate='congo%%3Dt61rcWkgMzE%%2Crojo%%3D00f067aa0ba902b7'`|[W3C TraceContext.Tracestate](https://www.w3.org/TR/trace-context/#tracestate-field) with entries congo=t61rcWkgMzE,rojo=00f067aa0ba902b7
+`tracestate='congo%3Dt61rcWkgMzE%2Crojo%3D00f067aa0ba902b7'`|[W3C TraceContext.Tracestate](https://www.w3.org/TR/trace-context/#tracestate-field) with entries congo=t61rcWkgMzE,rojo=00f067aa0ba902b7
 
 ### Support
 We support a variety of languages and frameworks such as:

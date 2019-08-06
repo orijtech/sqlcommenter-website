@@ -19,7 +19,7 @@ weight: 1
         - [Algorithm](#value-serialization-algorithm)
 - [Sorting](#sorting)
     - [Algorithm](#sorting-algorithm)
-    - [Exhibit](#sorting-exhibit)     
+    - [Exhibit](#sorting-exhibit)
 - [Concatenation](#contentation)
     - [Separator](#separator)
     - [Algorithm](#concatenation-algorithm)
@@ -43,7 +43,7 @@ A preview of the result can be seen as per [exhibit](#sql-commenter-exhibit)
 ```python
 SELECT * FROM FOO /*action='%2Fparam*d',controller='index,'framework='spring',
 traceparent='00-5bd66ef5095369c7b0d1f8f4bd33716a-c532cb4098ac3dd2-01',
-tracestate='congo%%3Dt61rcWkgMzE%%2Crojo%%3D00f067aa0ba902b7'*/
+tracestate='congo%3Dt61rcWkgMzE%2Crojo%3D00f067aa0ba902b7'*/
 ```
 
 Read along to see how you can conform to the specification and produce similar output.
@@ -171,7 +171,7 @@ Thus
 ```python
     sort([
         traceparent='00-5bd66ef5095369c7b0d1f8f4bd33716a-c532cb4098ac3dd2-01',
-        tracestate='congo%%3Dt61rcWkgMzE%%2Crojo%%3D00f067aa0ba902b7',
+        tracestate='congo%3Dt61rcWkgMzE%2Crojo%3D00f067aa0ba902b7',
         route='%2Fparam*d',
         controller='index',
     ])
@@ -184,7 +184,7 @@ produces
         controller='index',
         route='%2Fparam*d',
         traceparent='00-5bd66ef5095369c7b0d1f8f4bd33716a-c532cb4098ac3dd2-01',
-        tracestate='congo%%3Dt61rcWkgMzE%%2Crojo%%3D00f067aa0ba902b7',
+        tracestate='congo%3Dt61rcWkgMzE%2Crojo%3D00f067aa0ba902b7',
  ]
 ```
 
@@ -197,7 +197,7 @@ If no values are present, `concatenate` MUST return the empty value `''`
 #### <a name="concatenation-algorithm"></a> Algorithm
 ```python
 concatenate(key_value_pairs):
-    
+
     if len(key_value_pairs) == 0:
         return ''
 
@@ -212,14 +212,14 @@ Therefore
         controller='index',
         route='%2Fparam*d',
         traceparent='00-5bd66ef5095369c7b0d1f8f4bd33716a-c532cb4098ac3dd2-01',
-        tracestate='congo%%3Dt61rcWkgMzE%%2Crojo%%3D00f067aa0ba902b7',
+        tracestate='congo%3Dt61rcWkgMzE%2Crojo%3D00f067aa0ba902b7',
     ])
 ```
 
 produces
 
 ```python
-controller='index',route='%2Fparam*d',traceparent='00-5bd66ef5095369c7b0d1f8f4bd33716a-c532cb4098ac3dd2-01',tracestate='congo%%3Dt61rcWkgMzE%%2Crojo%%3D00f067aa0ba902b7'
+controller='index',route='%2Fparam*d',traceparent='00-5bd66ef5095369c7b0d1f8f4bd33716a-c532cb4098ac3dd2-01',tracestate='congo%3Dt61rcWkgMzE%2Crojo%3D00f067aa0ba902b7'
 ```
 
 ### Affix comment
@@ -287,7 +287,7 @@ Running [sql_commenter](#sql-commenter) on an ORM integration that extracts the 
 
 ```python
 sql_commenter('SELECT * FROM FOO', [
-        tracestate='congo%%3Dt61rcWkgMzE%%2Crojo%%3D00f067aa0ba902b7',
+        tracestate='congo%3Dt61rcWkgMzE%2Crojo%3D00f067aa0ba902b7',
         traceparent='00-5bd66ef5095369c7b0d1f8f4bd33716a-c532cb4098ac3dd2-01',
         framework='spring',
         action='%2Fparam*d',
@@ -300,7 +300,7 @@ finally produces
 ```python
 SELECT * FROM FOO /*action='%2Fparam*d',controller='index,'framework='spring',
 traceparent='00-5bd66ef5095369c7b0d1f8f4bd33716a-c532cb4098ac3dd2-01',
-tracestate='congo%%3Dt61rcWkgMzE%%2Crojo%%3D00f067aa0ba902b7'*/
+tracestate='congo%3Dt61rcWkgMzE%2Crojo%3D00f067aa0ba902b7'*/
 ```
 
 ### Parsing
@@ -352,7 +352,7 @@ Given the value from [SQLCommenter exhibit](#sql-commenter-exhibit)
 ```python
 SELECT * FROM FOO /*action='%2Fparam*d',controller='index,'framework='spring',
 traceparent='00-5bd66ef5095369c7b0d1f8f4bd33716a-c532cb4098ac3dd2-01',
-tracestate='congo%%3Dt61rcWkgMzE%%2Crojo%%3D00f067aa0ba902b7'*/
+tracestate='congo%3Dt61rcWkgMzE%2Crojo%3D00f067aa0ba902b7'*/
 ```
 
 Running `parse` on the value
@@ -361,7 +361,7 @@ Running `parse` on the value
 sql, attributes = parse(`SELECT * FROM FOO
 /*action='%2Fparam*d',controller='index,'framework='spring',
 traceparent='00-5bd66ef5095369c7b0d1f8f4bd33716a-c532cb4098ac3dd2-01',
-tracestate='congo%%3Dt61rcWkgMzE%%2Crojo%%3D00f067aa0ba902b7'*/`)
+tracestate='congo%3Dt61rcWkgMzE%2Crojo%3D00f067aa0ba902b7'*/`)
 ```
 
 produces

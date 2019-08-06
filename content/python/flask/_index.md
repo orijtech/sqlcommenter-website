@@ -133,9 +133,9 @@ which when run by `python3 main.py` and on visiting http://localhost:8089/polls 
 
 ```shell
 2019-06-08 12:17:59.518 PDT [73546] LOG:  statement: SELECT * FROM polls_question
-/*controller='get_polls',db_driver='psycopg2%%3A2.8.2%%20%%28dt%%20dec%%20pq3%%20ext%%20lo64%%29',
+/*controller='get_polls',db_driver='psycopg2%3A2.8.2%20%28dt%20dec%20pq3%20ext%20lo64%29',
 dbapi_level='2.0',dbapi_threadsafety=2,driver_paramstyle='pyformat',
-libpq_version=100001,route='/polls',web_framework='flask%%3A1.0.3'*/
+libpq_version=100001,route='/polls',web_framework='flask%3A1.0.3'*/
 ```
 
 ### References
