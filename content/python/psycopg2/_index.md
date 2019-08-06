@@ -257,7 +257,7 @@ Examining our Postgresql server logs, with the various options
 
 {{<highlight shell>}}
 2019-07-17 15:56:05.192 -03 [16491] LOG:  statement: SELECT * FROM polls_question
-/*db_driver='psycopg2%%3A2.8.3%%20%%28dt%%20dec%%20pq3%%20ext%%20lo64%%29'*/
+/*db_driver='psycopg2%3A2.8.3%20%28dt%20dec%20pq3%20ext%20lo64%29'*/
 {{</highlight>}}
 
 {{<highlight shell>}}
