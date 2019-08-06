@@ -220,14 +220,16 @@ containing the various ORM instrumentation that you can then install.
 │       │   │   ├── __init__.py
 │       │   │   ├── app.py
 │       │   │   └── tests.py
+│       │   ├── generic
+│       │   │   ├── __init__.py
+│       │   │   └── test_generate_sql_comment.py
 │       │   ├── opencensus_mock.py
 │       │   ├── psycopg2
 │       │   │   ├── __init__.py
 │       │   │   └── tests.py
-│       │   ├── sqlalchemy
-│       │   │   ├── __init__.py
-│       │   │   └── tests.py
-│       │   └── tests.py
+│       │   └── sqlalchemy
+│       │       ├── __init__.py
+│       │       └── tests.py
 │       └── tox.ini
 ├── ruby
 │   └── sqlcommenter-ruby
@@ -364,5 +366,5 @@ containing the various ORM instrumentation that you can then install.
 │           └── tmp
 └── sqlcommenter-mono.zip
 
-99 directories, 165 files
+100 directories, 166 files
 {{</highlight>}}
