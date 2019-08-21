@@ -455,7 +455,7 @@ public class JpaTransactionManagerTest {
                     .stream()
                     .filter(
                         sql -> sql.contains(
-                            "/*action='CreatePost',controller='ForumController',web_framework='spring'*/"
+                            "/*action='CreatePost',controller='ForumController',framework='spring'*/"
                         )
                     )
                     .count()
@@ -482,7 +482,7 @@ public class JpaTransactionManagerTest {
                     .stream()
                     .filter(
                         sql -> sql.contains(
-                            "/*action='FindPostsByTitle',controller='ForumController',web_framework='spring'*/"
+                            "/*action='FindPostsByTitle',controller='ForumController',framework='spring'*/"
                         )
                     )
                     .count()
@@ -509,7 +509,7 @@ public class JpaTransactionManagerTest {
                     .stream()
                     .filter(
                         sql -> sql.contains(
-                            "/*action='FindPostById',controller='ForumController',web_framework='spring'*/"
+                            "/*action='FindPostById',controller='ForumController',framework='spring'*/"
                         )
                     )
                     .count()
@@ -521,19 +521,19 @@ public class JpaTransactionManagerTest {
 When running the unit test above, we can see that the SQL statements include the comments as well:
 
 ````sql
-select tag0_.id as id1_2_, tag0_.name as name2_2_ from tag tag0_ where tag0_.name in (? , ?) /*action='CreatePost',controller='ForumController',web_framework='spring'*/
+select tag0_.id as id1_2_, tag0_.name as name2_2_ from tag tag0_ where tag0_.name in (? , ?) /*action='CreatePost',controller='ForumController',framework='spring'*/
 
-call next value for hibernate_sequence /*action='CreatePost',controller='ForumController',web_framework='spring'*/
+call next value for hibernate_sequence /*action='CreatePost',controller='ForumController',framework='spring'*/
 
-insert into post (title, id) values (?, ?) /*action='CreatePost',controller='ForumController',web_framework='spring'*/
+insert into post (title, id) values (?, ?) /*action='CreatePost',controller='ForumController',framework='spring'*/
 
-insert into post_tag (post_id, tag_id) values (?, ?) /*action='CreatePost',controller='ForumController',web_framework='spring'*/
+insert into post_tag (post_id, tag_id) values (?, ?) /*action='CreatePost',controller='ForumController',framework='spring'*/
 
-insert into post_tag (post_id, tag_id) values (?, ?) /*action='CreatePost',controller='ForumController',web_framework='spring'*/
+insert into post_tag (post_id, tag_id) values (?, ?) /*action='CreatePost',controller='ForumController',framework='spring'*/
 
-select post0_.id as id1_0_, post0_.title as title2_0_ from post post0_ where post0_.title=? /*action='FindPostsByTitle',controller='ForumController',web_framework='spring'*/
+select post0_.id as id1_0_, post0_.title as title2_0_ from post post0_ where post0_.title=? /*action='FindPostsByTitle',controller='ForumController',framework='spring'*/
 
-select post0_.id as id1_0_0_, post0_.title as title2_0_0_ from post post0_ where post0_.id=? /*action='FindPostById',controller='ForumController',web_framework='spring'*/
+select post0_.id as id1_0_0_, post0_.title as title2_0_0_ from post post0_ where post0_.id=? /*action='FindPostById',controller='ForumController',framework='spring'*/
 ````
 
 ### Spring and Hibernate end-to-end example
@@ -1055,7 +1055,7 @@ public class HibernateTransactionManagerTest {
                 .stream()
                 .filter(
                     sql -> sql.contains(
-                        "/*action='CreatePost',controller='ForumController',web_framework='spring'*/"
+                        "/*action='CreatePost',controller='ForumController',framework='spring'*/"
                     )
                 )
                 .count()
@@ -1082,7 +1082,7 @@ public class HibernateTransactionManagerTest {
                     .stream()
                     .filter(
                         sql -> sql.contains(
-                            "/*action='FindPostsByTitle',controller='ForumController',web_framework='spring'*/"
+                            "/*action='FindPostsByTitle',controller='ForumController',framework='spring'*/"
                         )
                     )
                     .count()
@@ -1109,7 +1109,7 @@ public class HibernateTransactionManagerTest {
                     .stream()
                     .filter(
                         sql -> sql.contains(
-                            "/*action='FindPostById',controller='ForumController',web_framework='spring'*/"
+                            "/*action='FindPostById',controller='ForumController',framework='spring'*/"
                         )
                     )
                     .count()
@@ -1121,19 +1121,19 @@ public class HibernateTransactionManagerTest {
 When running the unit test above, we can see that the SQL statements include the comments as well:
 
 ````sql
-select tag0_.id as id1_2_, tag0_.name as name2_2_ from tag tag0_ where tag0_.name in (? , ?) /*action='CreatePost',controller='ForumController',web_framework='spring'*/
+select tag0_.id as id1_2_, tag0_.name as name2_2_ from tag tag0_ where tag0_.name in (? , ?) /*action='CreatePost',controller='ForumController',framework='spring'*/
 
-call next value for hibernate_sequence /*action='CreatePost',controller='ForumController',web_framework='spring'*/
+call next value for hibernate_sequence /*action='CreatePost',controller='ForumController',framework='spring'*/
 
-insert into post (title, id) values (?, ?) /*action='CreatePost',controller='ForumController',web_framework='spring'*/
+insert into post (title, id) values (?, ?) /*action='CreatePost',controller='ForumController',framework='spring'*/
 
-insert into post_tag (post_id, tag_id) values (?, ?) /*action='CreatePost',controller='ForumController',web_framework='spring'*/
+insert into post_tag (post_id, tag_id) values (?, ?) /*action='CreatePost',controller='ForumController',framework='spring'*/
 
-insert into post_tag (post_id, tag_id) values (?, ?) /*action='CreatePost',controller='ForumController',web_framework='spring'*/
+insert into post_tag (post_id, tag_id) values (?, ?) /*action='CreatePost',controller='ForumController',framework='spring'*/
 
-select post0_.id as id1_0_, post0_.title as title2_0_ from post post0_ where post0_.title=? /*action='FindPostsByTitle',controller='ForumController',web_framework='spring'*/
+select post0_.id as id1_0_, post0_.title as title2_0_ from post post0_ where post0_.title=? /*action='FindPostsByTitle',controller='ForumController',framework='spring'*/
 
-select post0_.id as id1_0_0_, post0_.title as title2_0_0_ from post post0_ where post0_.id=? /*action='FindPostById',controller='ForumController',web_framework='spring'*/
+select post0_.id as id1_0_0_, post0_.title as title2_0_0_ from post post0_ where post0_.id=? /*action='FindPostById',controller='ForumController',framework='spring'*/
 ````
 
 ### References
