@@ -10,6 +10,7 @@ tags: ["python", "flask"]
 
 - [Introduction](#introduction)
 - [Using it](#using-it)
+- [Expected fields](#expected-fields)
 - [End to examples](#end-to-end-examples)
     - [With psycopg2](#with-psycopg2)
     - [With sqlalchemy](#with-sqlalchemy)
@@ -34,6 +35,16 @@ from sqlcommenter import FlaskMiddleware
 # Then in your flask programs just pass in the app
 FlaskMiddleware(app)
 ```
+
+### Expected fields
+
+This Flask integration when coupled with compatible drivers will place the following fields
+
+Field|Included by default|Description|Turn if off by
+---|---|---|---
+controller|<div style="text-align: center">&#10004;</div>|The function being used to service an HTTP request|`with_controller=False`
+framework|<div style="text-align: center">&#10004;</div>|"flask:<FLASK_VERSION>"|`with_framework=False`
+route|<div style="text-align: center">&#10004;</div>|The pattern used to match an HTTP request|`with_route=False`
 
 ### End to end examples
 #### With psycopg2

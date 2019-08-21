@@ -110,10 +110,10 @@ wrapMainKnexAsMiddleware(Knex, include={...});
 
 Field|On by default
 ---|---
-route|Yes
-tracestate|Yes
-traceparent|Yes
-db_driver|No
+route|<div style="text-align: center">&#10004;</div>
+tracestate|<div style="text-align: center">&#10060;</div>
+traceparent|<div style="text-align: center">&#10060;</div>
+db_driver|<div style="text-align: center">&#10060;</div>
 
 ##### Options examples
 

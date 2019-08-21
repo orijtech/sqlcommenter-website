@@ -10,7 +10,7 @@ weight: 3
 - [Requirements](#requirements)
 - [BeforeExecuteFactory](#BeforeExecuteFactory)
 - [Fields](#fields)
-- [End to end example](#end-to-end-example)
+- [End to end examples](#end-to-end-examples)
 - [With flask](#with-flask)
 - [References](#references)
 
@@ -87,12 +87,12 @@ Please ensure that you set `retval=True` when listening for events
 
 ### Fields
 
-Field|Description
----|---
-`db_driver`|The underlying database driver e.g. `'psycopg2'`
-`db_framework`|The version of SQLAlchemy in the form `'sqlalchemy:<sqlalchemy_version>'`
-`traceparent`|The [W3C TraceContext.Traceparent field](https://www.w3.org/TR/trace-context/#traceparent-field) of the OpenCensus trace -- optionally defined with [`with_opencensus=True`](#with-opencensus)
-`tracestate`|The [W3C TraceContext.Tracestate field](https://www.w3.org/TR/trace-context/#tracestate-field) of the OpenCensus trace -- optionally defined with [`with_opencensus=True`](#with-opencensus)
+Field|Description|Included by default
+---|---|---
+`db_driver`|The underlying database driver e.g. `'psycopg2'`|<div style="text-align: center">&#10060;</div>
+`db_framework`|The version of SQLAlchemy in the form `'sqlalchemy:<sqlalchemy_version>'`|<div style="text-align: center">&#10060;</div>
+`traceparent`|The [W3C TraceContext.Traceparent field](https://www.w3.org/TR/trace-context/#traceparent-field) of the OpenCensus trace -- optionally defined with [`with_opencensus=True`](#with-opencensus)|<div style="text-align: center">&#10060;</div>
+`tracestate`|The [W3C TraceContext.Tracestate field](https://www.w3.org/TR/trace-context/#tracestate-field) of the OpenCensus trace -- optionally defined with [`with_opencensus=True`](#with-opencensus)|<div style="text-align: center">&#10060;</div>
 
 ### End to end examples
 

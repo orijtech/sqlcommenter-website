@@ -15,6 +15,7 @@ logo: '/images/psycopg2-logo.png'
 - [CommenterCursor](#commentercursor)
     - [with_opencensus=True](#with-opencensus)
 - [Expected fields](#expected-fields)
+    - [Default options with Flask](#default-options-with-flask)
 - [End to end examples](#end-to-end-examples)
     - [Source code](#source-code)
     - [Results](#results)
@@ -80,14 +81,23 @@ conn = psycopg2.connect(..., cursor_factory=CommenterCursorFactory(with_opencens
 
 ### Expected fields
 
-Field|Description
----|---
-`db_driver`|The underlying database driver e.g. `'psycopg2'`
-`dbapi_threadsafety`|The threadsafety API assignment e.g. 2
-`driver_paramstyle`|The Python DB API style of parameters e.g. `pyformat`
-`libpq_version`|The underlying version of [libpq]() that was used by psycopg2
-`traceparent`|The [W3C TraceContext.Traceparent field](https://www.w3.org/TR/trace-context/#traceparent-field) of the OpenCensus trace -- optionally defined with [`with_opencensus=True`](#with-opencensus)
-`tracestate`|The [W3C TraceContext.Tracestate field](https://www.w3.org/TR/trace-context/#tracestate-field) of the OpenCensus trace -- optionally defined with [`with_opencensus=True`](#with-opencensus)
+Field|Description|Included by default
+---|---|---
+`db_driver`|The underlying database driver e.g. `'psycopg2'`|<div style="text-align: center">&#10060;</div>
+`dbapi_threadsafety`|The threadsafety API assignment e.g. 2|<div style="text-align: center">&#10060;</div>
+`driver_paramstyle`|The Python DB API style of parameters e.g. `pyformat`|<div style="text-align: center">&#10060;</div>
+`libpq_version`|The underlying version of [libpq]() that was used by psycopg2|<div style="text-align: center">&#10060;</div>
+`traceparent`|The [W3C TraceContext.Traceparent field](https://www.w3.org/TR/trace-context/#traceparent-field) of the OpenCensus trace -- optionally defined with [`with_opencensus=True`](#with-opencensus)|<div style="text-align: center">&#10060;</div>
+`tracestate`|The [W3C TraceContext.Tracestate field](https://www.w3.org/TR/trace-context/#tracestate-field) of the OpenCensus trace -- optionally defined with [`with_opencensus=True`](#with-opencensus)|<div style="text-align: center">&#10060;</div>
+
+#### Default options with flask
+If combined with [Flask](/python/flask), the following options will be turned on by default
+
+Field|Description|\*\*kwargs field name
+---|---|---
+`controller`|Grabs the controller being used|`with_controller`
+`framework`|Grabs the framework and its version|`with_framework`
+`route`|Grabs the route being used|`with_route`
 
 ### End to end examples
 
