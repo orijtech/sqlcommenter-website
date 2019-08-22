@@ -8,6 +8,15 @@ class: "resized-logo"
 
 ![](/images/sqlcommenter_logo.png)
 
+- [Why sqlcommenter](#why-sqlcommenter)
+- [How does sqlcommenter benefit me](#how-does-sqlcommenter-benefit-me)
+- [What ORMs does sqlcommenter support](#what-orms-does-sqlcommenter-support)
+- [What databases does sqlcommenter support](#what-databases-does-sqlcommenter-support)
+- [How do I use sqlcommenter in my application](#how-do-i-use-sqlcommenter-in-my-application)
+- [How do I examine the augmented SQL statements](#how-do-i-examine-the-augmented-sql-statements)
+- [Where is the specification](#where-is-the-specification)
+- [What are the default fields](#what-are-the-default-fields)
+
 ### Why sqlcommenter?
 
 Most applications require persistent data yet when database performance goes awry, it is next to impossible to
@@ -49,20 +58,22 @@ If you are using a supported ORM/framework, it shouldn't be a hassle at all to u
 {{<card-vendor href="/node/knex" src="/images/knex-logo.png">}}
 {{<card-vendor href="/node/sequelize" src="/images/sequelize-logo.png">}}
 
-
 ### How do I examine the augmented SQL statements?
 
 If you manage your databases or have access to database server logs, the statements will be logged there. Examine [databases](/databases) for more information how.
 
-### What are the default fields
+### Where is the specification?
 
+The specification is available [here](/spec).
+
+### What are the default fields
 
 Integration|action|controller|framework|route
 ---|---|---|---|---
 <a href="/ruby/activerecord">ActiveRecord<br />/Marginalia</a>|<div style="text-align: center">&#10004;</div>|<div style="text-align: center">&#10004;</div>|<div style="text-align: center">&#10004;</div>|<div style="text-align: center">&#10004;</div>|<div style="text-align: center">&#10060;</div>
 <a href="/java/hibernate">Hibernate<br />+ Spring</a>|<div style="text-align: center">&#10004;</div>|<div style="text-align: center">&#10004;</div>|<div style="text-align: center">&#10004;</div>|<div style="text-align: center">&#10004;</div>|<div style="text-align: center">&#10060;</div>
-<a href="/node/knex">knex.js<br />+ express.js</a>|<div style="text-align: center">&#10060;</div>|<div style="text-align: center">&#10004;</div>|<div style="text-align: center">&#10004;</div>|<div style="text-align: center">&#10004;</div>|<div style="text-align: center">&#10064;</div>
+<a href="/node/knex">knex.js<br />+ express.js</a>|<div style="text-align: center">&#10060;</div>|<div style="text-align: center">&#10004;</div>|<div style="text-align: center">&#10060;</div>|<div style="text-align: center">&#10060;</div>|<div style="text-align: center">&#10060;</div>
 [Django](/python/django)|<div style="text-align: center">&#10060;</div>|<div style="text-align: center">&#10004;</div>|<div style="text-align: center">&#10004;</div>|<div style="text-align: center">&#10004;</div>|<div style="text-align: center">&#10060;</div>
 <a href="/python/psycopg2">psycopg2 <br />+ Flask</a>|<div style="text-align: center">&#10060;</div>|<div style="text-align: center">&#10004;</div>|<div style="text-align: center">&#10004;</div>|<div style="text-align: center">&#10004;</div>|<div style="text-align: center">&#10060;</div>
 <a href="/python/sqlalchemy">sqlalchemy<br />+ Flask</a>|<div style="text-align: center">&#10060;</div>|<div style="text-align: center">&#10004;</div>|<div style="text-align: center">&#10004;</div>|<div style="text-align: center">&#10004;</div>|<div style="text-align: center">&#10060;</div>
-<a href="/node/sequelize">sequelize.js<br />+ express.js</a>|<div style="text-align: center">&#10060;</div>|<div style="text-align: center">&#10004;</div>|<div style="text-align: center">&#10004;</div>|<div style="text-align: center">&#10004;</div>|<div style="text-align: center">&#10060;</div>
+<a href="/node/sequelize">sequelize.js<br />+ express.js</a>|<div style="text-align: center">&#10060;</div>|<div style="text-align: center">&#10004;</div>|<div style="text-align: center">&#10060;</div>|<div style="text-align: center">&#10060;</div>|<div style="text-align: center">&#10060;</div>
