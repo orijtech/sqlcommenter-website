@@ -53,3 +53,16 @@ If you are using a supported ORM/framework, it shouldn't be a hassle at all to u
 ### How do I examine the augmented SQL statements?
 
 If you manage your databases or have access to database server logs, the statements will be logged there. Examine [databases](/databases) for more information how.
+
+### What are the default fields
+
+
+Integration|action|controller|framework|route
+---|---|---|---|---
+<a href="/ruby/activerecord">ActiveRecord<br />/Marginalia</a>|<div style="text-align: center">&#10004;</div>|<div style="text-align: center">&#10004;</div>|<div style="text-align: center">&#10004;</div>|<div style="text-align: center">&#10004;</div>|<div style="text-align: center">&#10060;</div>
+<a href="/java/hibernate">Hibernate<br />+ Spring</a>|<div style="text-align: center">&#10004;</div>|<div style="text-align: center">&#10004;</div>|<div style="text-align: center">&#10004;</div>|<div style="text-align: center">&#10004;</div>|<div style="text-align: center">&#10060;</div>
+<a href="/node/knex">knex.js<br />+ express.js</a>|<div style="text-align: center">&#10060;</div>|<div style="text-align: center">&#10004;</div>|<div style="text-align: center">&#10004;</div>|<div style="text-align: center">&#10004;</div>|<div style="text-align: center">&#10064;</div>
+[Django](/python/django)|<div style="text-align: center">&#10060;</div>|<div style="text-align: center">&#10004;</div>|<div style="text-align: center">&#10004;</div>|<div style="text-align: center">&#10004;</div>|<div style="text-align: center">&#10060;</div>
+<a href="/python/psycopg2">psycopg2 <br />+ Flask</a>|<div style="text-align: center">&#10060;</div>|<div style="text-align: center">&#10004;</div>|<div style="text-align: center">&#10004;</div>|<div style="text-align: center">&#10004;</div>|<div style="text-align: center">&#10060;</div>
+<a href="/python/sqlalchemy">sqlalchemy<br />+ Flask</a>|<div style="text-align: center">&#10060;</div>|<div style="text-align: center">&#10004;</div>|<div style="text-align: center">&#10004;</div>|<div style="text-align: center">&#10004;</div>|<div style="text-align: center">&#10060;</div>
+<a href="/node/sequelize">sequelize.js<br />+ express.js</a>|<div style="text-align: center">&#10060;</div>|<div style="text-align: center">&#10004;</div>|<div style="text-align: center">&#10004;</div>|<div style="text-align: center">&#10004;</div>|<div style="text-align: center">&#10060;</div>
