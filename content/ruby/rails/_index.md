@@ -52,24 +52,27 @@ All of the SQL queries initiated by the application will now come with comments!
 
 The following fields will be added to your SQL statements as comments:
 
-Field | Description | Example
----|---|---
-`action` | Controller action name | `index`
-`application` | Application name | `MyApp`
-`controller` | Controller name | `posts`
-`db_driver` | Database adapter class name | `ActiveRecord::ConnectionAdapters::SQLite3Adapter`
-`framework` | `rails_v` followed by `Rails::VERSION` | `rails_v6.0.0`
-`route` | Request's full path | `/posts`
+Field|Included <br /> by default?|Description|Provided by
+---|---|---|---
+`action` |<div style="text-align: center">&#10004;</div>| Controller action name | [marginalia]
+`application` |<div style="text-align: center">&#10004;</div>|Application name | [marginalia]
+`controller` |<div style="text-align: center">&#10004;</div>| Controller name | [marginalia]
+`controller_with_namespace` |<div style="text-align: center">&#10060;</div>| Full classname (including namespace) of the controller | [marginalia]
+`database` |<div style="text-align: center">&#10060;</div>| Database name | [marginalia]
+`db_driver` |<div style="text-align: center">&#10004;</div>| Database adapter class name | [sqlcommenter_rails]
+`db_host` |<div style="text-align: center">&#10060;</div>| Database hostname | [marginalia]
+`framework` |<div style="text-align: center">&#10004;</div>| `rails_v` followed by `Rails::VERSION` | [sqlcommenter_rails]
+`hostname` |<div style="text-align: center">&#10060;</div>| Socket.gethostname | [marginalia]
+`job` |<div style="text-align: center">&#10060;</div>| Classname of the ActiveJob being performed | [marginalia]
+`line`|<div style="text-align: center">&#10060;</div>| File and line number calling query | [marginalia]
+`pid` |<div style="text-align: center">&#10060;</div>| Current process id | [marginalia]
+`route` |<div style="text-align: center">&#10004;</div>| Request's full path | [sqlcommenter_rails]
+`socket` |<div style="text-align: center">&#10060;</div>| Database socket | [marginalia]
+`traceparent`|<div style="text-align: center">&#10060;</div>|The [W3C TraceContext.Traceparent field](https://www.w3.org/TR/trace-context/#traceparent-field) of the OpenCensus trace | [marginalia-opencensus]
 
-If the [opencensus gem] is enabled, the following fields will also be added:
+To include the `traceparent` field, install the [marginalia-opencensus] gem and it will be automatically included by default.
 
-Field | Description | Example
----|---|---
-`traceparent`|The [W3C TraceContext.Traceparent field](https://www.w3.org/TR/trace-context/#traceparent-field) of the OpenCensus trace|`00-ade4c36dc5e43b503a5bba237ea11746-578a74a562044332-01`
-
-Note that `controller`, `action`, and `route` fields are only present if the
-query was triggered by a web request. For background jobs, a `job` field is
-present instead identifying the job.
+To change which fields are included, set `Marginalia::Comment.components = [ :field1, :field2, ... ]` in `config/initializers/marginalia.rb` as described in the [marginalia documentation](https://github.com/basecamp/marginalia#components).
 
 ### End to end example
 
