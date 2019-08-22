@@ -344,12 +344,12 @@ On making a request to that server at `http://localhost:3000/polls/1000`, the Po
 
 {{<highlight shell>}}
 2019-06-03 14:32:10.842 PDT [32004] LOG:  statement: SELECT * from polls_question 
-/*client_timezone:'%2B00%3A00',db_driver:'sequelize%3A0.0.1'*/
+/*client_timezone:'%2B00%3A00',db_driver='sequelize%3A0.0.1'*/
 {{</highlight>}}
 
 {{<highlight shell>}}
 2019-06-03 14:32:10.842 PDT [32004] LOG:  statement: SELECT * from polls_question 
-/*client_timezone:'%2B00%3A00',db_driver:'sequelize%3A0.0.1',route='%5E%2Fpolls%2F%1000',traceparent='00-11000000000000ff-020000ee-01',tracestate='brazzaville=t61rcWkgMzE,rondo=00f067aa0ba902b7'*/
+/*client_timezone:'%2B00%3A00',db_driver='sequelize%3A0.0.1',route='%5E%2Fpolls%2F%1000',traceparent='00-11000000000000ff-020000ee-01',tracestate='brazzaville=t61rcWkgMzE,rondo=00f067aa0ba902b7'*/
 {{</highlight>}}
 
 {{</tabs>}}
