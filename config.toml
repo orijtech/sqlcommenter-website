@@ -1,4 +1,5 @@
-baseURL = "https://sqlcommenter.orijtech.com/"
+baseURL = "https://google.github.io/sqlcommenter/"
+canonifyURLs = true
 
 languageCode = "en-us"
 DefaultContentLanguage = "en"
