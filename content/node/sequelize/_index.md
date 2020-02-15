@@ -50,20 +50,20 @@ Please read [installing sqlcommenter-nodejs from source](/node/#install-from-sou
 Add to your package.json the dependency
 {{<highlight json>}}
 {
-    "@sqlcommenter/sequelize": "*"
+    "@google-cloud/sqlcommenter-sequelize": "*"
 }
 {{</highlight>}}
 
 and then run `npm install` to get the latest version or
 
 {{<highlight shell>}}
-npm install @sqlcommenter/sequelize --save
+npm install @google-cloud/sqlcommenter-sequelize --save
 {{</highlight>}}
 
 ### Usage
 #### Plain sequelize wrapper
 {{<highlight javascript>}}
-const {wrapSequelize} = require('@sqlcommenter/sequelize');
+const {wrapSequelize} = require('@google-cloud/sqlcommenter-sequelize');
 const Sequelize = require('sequelize');
 
 // Create the sequelize client.
@@ -76,7 +76,7 @@ wrapSequelize(sequelize);
 #### Express middleware
 This wrapper/middleware can be used as is or better with [express.js](https://expressjs.com/)
 {{<highlight javascript>}}
-const {wrapSequelizeAsMiddleware} = require('@sqlcommenter/sequelize');
+const {wrapSequelizeAsMiddleware} = require('@google-cloud/sqlcommenter-sequelize');
 const Sequelize = require('sequelize');
 const sequelize = new Sequelize(options);
 const app = require('express')();
@@ -161,7 +161,7 @@ wrapMainSequelizeAsMiddleware(Sequelize, include={
 const tracing = require('@opencensus/nodejs');
 const {B3Format} = require('@opencensus/propagation-b3');
 const {ZipkinTraceExporter} = require('@opencensus/exporter-zipkin');
-const {wrapSequelizeAsMiddleware} = require('@sqlcommenter/sequelize');
+const {wrapSequelizeAsMiddleware} = require('@google-cloud/sqlcommenter-sequelize');
 const Sequelize = require('sequelize');
 const express = require('express');
 
@@ -209,7 +209,7 @@ app.listen(port, () => console.log(`Application listening on ${port}`));
 {{<highlight javascript>}}
 // In file app.js.
 const Sequelize = require('sequelize');
-const {wrapSequelizeAsMiddleware} = require('@sqlcommenter/sequelize');
+const {wrapSequelizeAsMiddleware} = require('@google-cloud/sqlcommenter-sequelize');
 const express = require('express');
 
 // Using a connection URI
@@ -238,7 +238,7 @@ app.listen(port, () => console.log(`Application listening on ${port}`));
 {{<highlight javascript>}}
 // In file app.js
 const Sequelize = require('sequelize');
-const {wrapSequelizeAsMiddleware} = require('@sqlcommenter/sequelize');
+const {wrapSequelizeAsMiddleware} = require('@google-cloud/sqlcommenter-sequelize');
 const express = require('express');
 
 // Using a connection URI
@@ -272,7 +272,7 @@ const tracing = require('@opencensus/nodejs');
 const {B3Format} = require('@opencensus/propagation-b3');
 const {ZipkinTraceExporter} = require('@opencensus/exporter-zipkin');
 const Sequelize = require('sequelize');
-const {wrapSequelizeAsMiddleware} = require('@sqlcommenter/sequelize');
+const {wrapSequelizeAsMiddleware} = require('@google-cloud/sqlcommenter-sequelize');
 const express = require('express');
 
 const exporter = new ZipkinTraceExporter({
@@ -359,6 +359,6 @@ On making a request to that server at `http://localhost:3000/polls/1000`, the Po
 
 Resource|URL
 ---|---
-@sqlcommenter/sequelize on Yarn|`<FILL_ME_IN>`
-@sqlcommenter/sequelize on npm|`<FILL_ME_IN>`
+@google-cloud/sqlcommenter-sequelize on Yarn|`<FILL_ME_IN>`
+@google-cloud/sqlcommenter-sequelize on npm|`<FILL_ME_IN>`
 express.js|https://expressjs.com/

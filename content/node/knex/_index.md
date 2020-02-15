@@ -52,18 +52,18 @@ Please read [installing sqlcommenter-nodejs from source](/node/#install-from-sou
 Add to your package.json the dependency
 {{<highlight json>}}
 {
-    "@sqlcommenter/knex": "*"
+    "@google-cloud/sqlcommenter-knex": "*"
 }
 {{</highlight>}}
 and then run `npm install` to get the latest version or 
 {{<highlight shell>}}
-npm install @sqlcommenter/knex --save
+npm install @google-cloud/sqlcommenter-knex --save
 {{</highlight>}}
 
 ### Usage
 #### Plain knex wrapper
 {{<highlight javascript>}}
-const {wrapMainKnex} = require('@sqlcommenter/knex');
+const {wrapMainKnex} = require('@google-cloud/sqlcommenter-knex');
 const Knex = require('knex');
 wrapMainKnex(Knex);
 
@@ -74,7 +74,7 @@ const knex = Knex(options);
 #### Express middleware
 This wrapper/middleware can be used as is or better with [express.js](https://expressjs.com/)
 {{<highlight javascript>}}
-const {wrapMainKnexAsMiddleware} = require('@sqlcommenter/knex');
+const {wrapMainKnexAsMiddleware} = require('@google-cloud/sqlcommenter-knex');
 const Knex = require('knex');
 const app = require('express')();
 
@@ -158,7 +158,7 @@ const tracing = require('@opencensus/nodejs');
 const {B3Format} = require('@opencensus/propagation-b3');
 const {ZipkinTraceExporter} = require('@opencensus/exporter-zipkin');
 const Knex = require('knex'); // Knex to be wrapped say v0.0.1
-const {wrapMainKnexAsMiddleware} = require('@sqlcommenter/knex');
+const {wrapMainKnexAsMiddleware} = require('@google-cloud/sqlcommenter-knex');
 const express = require('express');
 
 const exporter = new ZipkinTraceExporter({
@@ -212,7 +212,7 @@ app.listen(port, () => console.log(`Application listening on ${port}`));
 {{<highlight javascript>}}
 // In file app.js.
 const Knex = require('knex'); // Knex to be wrapped say v0.0.1
-const {wrapMainKnexAsMiddleware} = require('@sqlcommenter/knex');
+const {wrapMainKnexAsMiddleware} = require('@google-cloud/sqlcommenter-knex');
 const express = require('express');
 
 const options = {
@@ -248,7 +248,7 @@ app.listen(port, () => console.log(`Application listening on ${port}`));
 {{<highlight javascript>}}
 // In file app.js
 const Knex = require('knex'); // Knex to be wrapped say v0.0.1
-const {wrapMainKnexAsMiddleware} = require('@sqlcommenter/knex');
+const {wrapMainKnexAsMiddleware} = require('@google-cloud/sqlcommenter-knex');
 const express = require('express');
 
 const options = {
@@ -286,7 +286,7 @@ const tracing = require('@opencensus/nodejs');
 const {B3Format} = require('@opencensus/propagation-b3');
 const {ZipkinTraceExporter} = require('@opencensus/exporter-zipkin');
 const Knex = require('knex'); // Knex to be wrapped say v0.0.1
-const {wrapMainKnexAsMiddleware} = require('@sqlcommenter/knex');
+const {wrapMainKnexAsMiddleware} = require('@google-cloud/sqlcommenter-knex');
 const express = require('express');
 
 const exporter = new ZipkinTraceExporter({
