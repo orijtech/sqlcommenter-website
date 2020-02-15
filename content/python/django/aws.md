@@ -23,7 +23,7 @@ This guide will help you add [sqlcommenter](/introduction) to your Django applic
 Steps|Resource
 ---|---
 Python on AWS|https://aws.amazon.com/getting-started/projects/deploy-python-application/
-sqlcommenter-django|https://pypi.org/projects/sqlcommenter-django
+google-cloud-sqlcommenter|https://pypi.org/project/google-cloud-sqlcommenter
 Django 2.X|https://docs.djangoproject.com/en/stable/faq/install
 Python 3.X|https://www.python.org/downloads/
 
@@ -33,14 +33,14 @@ For any Django deployment, we can just edit your settings.py file and update the
 with
 ```python
 MIDDLEWARE = [
-  'sqlcommenter.django.middleware.SqlCommenter',
+  'google.cloud.sqlcommenter.django.middleware.SqlCommenter',
   ...
 ]
 ```
 
 {{% notice tip %}}
 If any middleware execute database queries (that you'd like commented by SqlCommenter), those middleware MUST appear after
-'sqlcommenter.django.middleware.SqlCommenter'
+'google.cloud.sqlcommenter.django.middleware.SqlCommenter'
 {{%/ notice %}}
 
 ### References

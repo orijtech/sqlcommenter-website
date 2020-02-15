@@ -47,13 +47,13 @@ This cursor factory can be installed by any of the following:
 
 #### Pip install
 {{<highlight shell>}}
-pip3 install sqlcommenter-psycopg2
+pip3 install google-cloud-sqlcommenter
 {{</highlight>}}
 
 #### Source install
 {{<highlight shell>}}
-git clone https://github.com/orijtech/python-sql-commenter.git
-cd python-sql-commenter/sqlcommenter-psycopg2 && python3 setup.py install
+git clone https://github.com/google/sqlcommenter.git
+cd python/sqlcommenter-python && python3 setup.py install
 {{</highlight>}}
 
 #### Usage
@@ -65,7 +65,7 @@ We'll perform the following imports in our source code:
 
 ```python
 import psycopg2
-from sqlcommenter.psycopg2.extension import CommenterCursorFactory
+from google.cloud.sqlcommenter.psycopg2.extension import CommenterCursorFactory
 
 conn = psycopg2.connect(..., cursor_factory=CommenterCursorFactory())
 ```
@@ -99,7 +99,7 @@ Field|Description
 #!/usr/bin/env python3
 
 import psycopg2
-from sqlcommenter.psycopg2.extension import CommenterCursorFactory
+from google.cloud.sqlcommenter.psycopg2.extension import CommenterCursorFactory
 
 from opencensus.trace.samplers import AlwaysOnSampler
 from opencensus.trace.tracer import Tracer
@@ -132,7 +132,7 @@ if __name__ == '__main__':
 #!/usr/bin/env python3
 
 import psycopg2
-from sqlcommenter.psycopg2.extension import CommenterCursorFactory
+from google.cloud.sqlcommenter.psycopg2.extension import CommenterCursorFactory
 
 DSN = '...'  # DB connection info
 
@@ -153,7 +153,7 @@ if __name__ == '__main__':
 #!/usr/bin/env python3
 
 import psycopg2
-from sqlcommenter.psycopg2.extension import CommenterCursorFactory
+from google.cloud.sqlcommenter.psycopg2.extension import CommenterCursorFactory
 
 DSN = '...'  # DB connection info
 
@@ -174,7 +174,7 @@ if __name__ == '__main__':
 #!/usr/bin/env python3
 
 import psycopg2
-from sqlcommenter.psycopg2.extension import CommenterCursorFactory
+from google.cloud.sqlcommenter.psycopg2.extension import CommenterCursorFactory
 
 DSN = '...'  # DB connection info
 
@@ -195,7 +195,7 @@ if __name__ == '__main__':
 #!/usr/bin/env python3
 
 import psycopg2
-from sqlcommenter.psycopg2.extension import CommenterCursorFactory
+from google.cloud.sqlcommenter.psycopg2.extension import CommenterCursorFactory
 
 DSN = '...'  # DB connection info
 
@@ -216,7 +216,7 @@ if __name__ == '__main__':
 #!/usr/bin/env python3
 
 import psycopg2
-from sqlcommenter.psycopg2.extension import CommenterCursorFactory
+from google.cloud.sqlommenter.psycopg2.extension import CommenterCursorFactory
 
 DSN = '...'  # DB connection info
 
@@ -292,8 +292,8 @@ your web applications with your SQL statements from psycopg2. Please see this en
 Resource|URL
 ---|---
 psycopg2 project|http://initd.org/psycopg/docs/index.html
-sqlcommenter-psycopg2 on PyPi|https://pypi.org/project/sqlcommenter-psycopg2
-sqlcommenter-psycopg2 on Github|https://github.com/orijtech/sqlcommenter
+sqlcommenter-psycopg2 on PyPi|https://pypi.org/project/google-cloud-sqlcommenter
+sqlcommenter-psycopg2 on Github|https://github.com/google/sqlcommenter
 OpenCensus|https://opencensus.io/
 OpenCensus SpanID|https://opencensus.io/tracing/span/spanid
 OpenCensus TraceID|https://opencensus.io/tracing/span/traceid

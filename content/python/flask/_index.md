@@ -45,8 +45,8 @@ import json
 import flask
 app = flask.Flask(__name__)
 
-from sqlcommenter import FlaskMiddleware
-from sqlcommenter.psycopg2.extension import CommenterCursorFactory
+from google.cloud.sqlcommenter import FlaskMiddleware
+from google.cloud.sqlcommenter.psycopg2.extension import CommenterCursorFactory
 
 conn = None
 
@@ -95,7 +95,7 @@ web_framework='flask%3A1.0.3'*/
 
 #### With sqlalchemy
 
-Having successfully installed [sqlcommenter-sqlalchemy](/python/sqlalchemy) you can now just run
+Having successfully installed [google-cloud-sqlcommenter](/python/sqlalchemy) you can now just run
 {{<highlight python>}}
 #!/usr/bin/env python3
 

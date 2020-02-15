@@ -36,12 +36,12 @@ Since OpenCensus [`trace_id`](https://opencensus.io/tracing/span/traceid) and [`
 
 {{<tabs Pip Source>}}
 {{<highlight shell>}}
-pip3 install sqlcommenter-sqlalchemy
+pip3 install google-cloud-sqlcommenter
 {{</highlight>}}
 
 {{<highlight shell>}}
-git clone https://github.com/orijtech/python-sql-commenter.git
-cd python-sql-commenter/django && python3 setup.py install
+git clone https://github.com/google/sqlcommenter.git
+cd python/sqlcommenter-python && python3 setup.py install
 {{</highlight>}}
 {{</tabs>}}
 
@@ -103,7 +103,7 @@ Field|Description
 #!/usr/bin/env python3
 
 from sqlalchemy import create_engine, event
-from sqlcommenter.sqlalchemy.executor import BeforeExecuteFactory
+from google.cloud.sqlcommenter.sqlalchemy.executor import BeforeExecuteFactory
 
 def main():
     engine = create_engine("postgresql://:$postgres$@127.0.0.1:5432/quickstart_py")
@@ -125,7 +125,7 @@ if __name__ == '__main__':
 from opencensus.trace.samplers import AlwaysOnSampler
 from opencensus.trace.tracer import Tracer
 from sqlalchemy import create_engine, event
-from sqlcommenter.sqlalchemy.executor import BeforeExecuteFactory
+from google.cloud.sqlcommenter.sqlalchemy.executor import BeforeExecuteFactory
 
 class noopOpenCensusTraceExporter(object):
     def emit(self, *args, **kwargs):
@@ -187,8 +187,8 @@ your web applications with your SQL statements from sqlalchemy. Please see this 
 
 Resource|URL
 ---|---
-sqlcommenter-sqlalchemy on PyPi|https://pypi.org/project/sqlcommenter-sqlalchemy
-sqlcommenter-sqlalchemy on Github|https://github.com/sqlcommenter-sqlalchemy
+sqlcommenter-sqlalchemy on PyPi|https://pypi.org/project/google-cloud-sqlcommenter
+sqlcommenter-sqlalchemy on Github|https://github.com/google/sqlcommenter
 OpenCensus|https://opencensus.io/
 OpenCensus SpanID|https://opencensus.io/tracing/span/spanid
 OpenCensus TraceID|https://opencensus.io/tracing/span/traceid
