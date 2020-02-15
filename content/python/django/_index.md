@@ -313,8 +313,8 @@ Examining our Postgresql server logs, with the various options
 
 Resource|URL
 ---|---
-sqlcommenter on PyPi|https://pypi.org/sqlcommenter
-sqlcommenter on Github|https://github.com/orijtech/python-sql-commenter
 Django|https://www.djangoproject.com/
 OpenCensus|https://opencensus.io/
 opencensus-ext-django|https://github.com/census-instrumentation/opencensus-python/tree/master/contrib/opencensus-ext-django
+sqlcommenter on PyPi|https://pypi.org/project/google-cloud-sqlcommenter
+sqlcommenter on Github|https://github.com/google/sqlcommenter

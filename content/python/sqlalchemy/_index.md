@@ -106,18 +106,6 @@ Field|Description|Included by default
 from sqlalchemy import create_engine, event
 from google.cloud.sqlcommenter.sqlalchemy.executor import BeforeExecuteFactory
 
-from opencensus.trace.samplers import AlwaysOnSampler
-from opencensus.trace.tracer import Tracer
-
-DB_URL = '...'  # DB connection info
-
-class NoopExporter(object):
-    def emit(self, *args, **kwargs):
-        pass
-
-    def export(self, *args, **kwargs):
-        pass
-
 def main():
     tracer = Tracer(exporter=NoopExporter, sampler=AlwaysOnSampler())
     engine = create_engine(DB_URL)
@@ -160,7 +148,7 @@ if __name__ == '__main__':
 #!/usr/bin/env python3
 
 from sqlalchemy import create_engine, event
-from sqlcommenter.sqlalchemy.executor import BeforeExecuteFactory
+from google.cloud.sqlcommenter.sqlalchemy.executor import BeforeExecuteFactory
 
 DB_URL = '...'  # DB connection info
 
