@@ -38,32 +38,32 @@ To record [OpenCensus](https://opencensus.io/) information [opencensus-ext-djang
 This middleware can be installed by any of the following:
 {{<tabs pip source>}}
 {{<highlight shell>}}
-pip3 install sqlcommenter-django
+pip3 install google-cloud-sqlcommenter
 {{</highlight>}}
 
 {{<highlight shell>}}
-git clone https://github.com/orijtech/python-sql-commenter.git
-cd python-sql-commenter/django && python3 setup.py install
+git clone https://github.com/google/sqlcommenter.git
+cd python/sqlcommenter-python && python3 setup.py install
 {{</highlight>}}
 
 {{</tabs>}}
 
 ### Enabling it
 
-Please edit your `settings.py` file to include `sqlcommenter.django.middleware.SqlCommenter` in your `MIDDLEWARE` section like this:
+Please edit your `settings.py` file to include `google.cloud.sqlcommenter.django.middleware.SqlCommenter` in your `MIDDLEWARE` section like this:
 ```diff
 --- settings.py
 +++ settings.py
 @@ -1,3 +1,4 @@
  MIDDLEWARE = [
-+  'sqlcommenter.django.middleware.SqlCommenter',
++  'google.cloud.sqlcommenter.django.middleware.SqlCommenter',
    ...
  ]
 ```
 
 {{% notice tip %}}
 If any middleware execute database queries (that you'd like commented by SqlCommenter), those middleware MUST appear after
-'sqlcommenter.django.middleware.SqlCommenter'
+'google.cloud.sqlcommenter.django.middleware.SqlCommenter'
 {{%/ notice %}}
 
 
@@ -313,8 +313,8 @@ Examining our Postgresql server logs, with the various options
 
 Resource|URL
 ---|---
-sqlcommenter on PyPi|https://pypi.org/sqlcommenter
-sqlcommenter on Github|https://github.com/orijtech/python-sql-commenter
 Django|https://www.djangoproject.com/
 OpenCensus|https://opencensus.io/
 opencensus-ext-django|https://github.com/census-instrumentation/opencensus-python/tree/master/contrib/opencensus-ext-django
+sqlcommenter on PyPi|https://pypi.org/project/google-cloud-sqlcommenter
+sqlcommenter on Github|https://github.com/google/sqlcommenter

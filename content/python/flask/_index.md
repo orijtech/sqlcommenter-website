@@ -56,8 +56,8 @@ import json
 import flask
 app = flask.Flask(__name__)
 
-from sqlcommenter import FlaskMiddleware
-from sqlcommenter.psycopg2.extension import CommenterCursorFactory
+from google.cloud.sqlcommenter import FlaskMiddleware
+from google.cloud.sqlcommenter.psycopg2.extension import CommenterCursorFactory
 
 conn = None
 
@@ -105,7 +105,7 @@ route='/polls',traceparent='00-5b3df77064f35f091e89fb40022e2a1d-9bbd4868cf0ba2c3
 
 #### With sqlalchemy
 
-Having successfully installed [sqlcommenter-sqlalchemy](/python/sqlalchemy) you can now just run
+Having successfully installed [google-cloud-sqlcommenter](/python/sqlalchemy) you can now just run
 {{<highlight python>}}
 #!/usr/bin/env python3
 
