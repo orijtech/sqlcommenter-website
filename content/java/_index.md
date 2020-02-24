@@ -11,6 +11,7 @@ weight: 40
     - [From source](#install-from-source)
         - [Building it](#building-it)
     - [Verify installation](#verify-installation)
+    - [Tests](#tests)
 
 ### Introduction
 sqlcommenter-java is the implementation of [sqlcommenter](/) in the Java programming language.
@@ -28,48 +29,7 @@ sqlcommenter-java can installed in a couple of ways:
 
 #### <a name="install-from-source"></a> From source
 
-The first step is to download the source code from sqlcommenter-mono as per [Source code](/introduction/#source-code)
-and after unzipping it, navigating to
-```shell
-java/
-└── sqlcommenter-java
-    ├── README.md
-    ├── build.gradle
-    ├── gradle
-    │   └── wrapper
-    │       ├── gradle-wrapper.jar
-    │       └── gradle-wrapper.properties
-    ├── gradlew
-    ├── gradlew.bat
-    ├── settings.gradle
-    ├── src
-    │   ├── main
-    │   │   └── java
-    │   │       └── io
-    │   │           └── orijtech
-    │   │               └── integrations
-    │   │                   └── sqlcommenter
-    │   │                       ├── interceptors
-    │   │                       │   └── SpringSQLCommenterInterceptor.java
-    │   │                       ├── schibernate
-    │   │                       │   └── SCHibernate.java
-    │   │                       └── threadlocalstorage
-    │   │                           └── State.java
-    │   └── test
-    │       └── java
-    │           └── io
-    │               └── orijtech
-    │                   └── integrations
-    │                       └── sqlcommenter
-    │                           ├── interceptors
-    │                           │   └── SpringSQLCommenterInterceptorTest.java
-    │                           ├── schibernate
-    │                           │   └── SCHibernateTest.java
-    │                           └── threadlocalstorage
-    │                               ├── StateTest.java
-    │                               └── ThreadLocalStorageTest.java
-    └── travis_script
-```
+Please visit [source page on Github](https://github.com/google/sqlcommenter/tree/master/java/sqlcommenter-java)
 
 #### Building it
 
@@ -89,18 +49,19 @@ sqlcommenter-java if properly installed should appear in the directory `$HOME/.m
 The following should be your directory structure:
 ```shell
 ~/.m2/repository/io
-└── orijtech
-    └── integrations
-        └── sqlcommenter-java
-            ├── 0.0.1
-            │   ├── sqlcommenter-java-0.0.1-javadoc.jar
-            │   ├── sqlcommenter-java-0.0.1-javadoc.jar.asc
-            │   ├── sqlcommenter-java-0.0.1-sources.jar
-            │   ├── sqlcommenter-java-0.0.1-sources.jar.asc
-            │   ├── sqlcommenter-java-0.0.1.jar
-            │   ├── sqlcommenter-java-0.0.1.jar.asc
-            │   └── sqlcommenter-java-0.0.1.pom
-            └── maven-metadata-local.xml
+└── com
+    └── google
+        └── cloud
+            └── sqlcommenter
+                ├── 0.0.1
+                │   ├── sqlcommenter-java-0.0.1-javadoc.jar
+                │   ├── sqlcommenter-java-0.0.1-javadoc.jar.asc
+                │   ├── sqlcommenter-java-0.0.1-sources.jar
+                │   ├── sqlcommenter-java-0.0.1-sources.jar.asc
+                │   ├── sqlcommenter-java-0.0.1.jar
+                │   ├── sqlcommenter-java-0.0.1.jar.asc
+                │   └── sqlcommenter-java-0.0.1.pom
+                └── maven-metadata-local.xml
 ```
 
 and then in your programs that use Maven, when building packages, please do
@@ -108,3 +69,10 @@ and then in your programs that use Maven, when building packages, please do
 mvn install -nsu
 ```
 to use look up local packages.
+
+#### Tests
+
+Tests can be run by
+```shell
+$ ./gradlew test
+```

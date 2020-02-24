@@ -46,15 +46,15 @@ Please include this in your dependency management system as follows
 {{<tabs Maven Gradle>}}
 {{<highlight xml>}}
     <dependency>
-        <groupId>io.orijtech.integrations</groupId>
+        <groupId>com.google.cloud</groupId>
         <artifactId>sqlcommenter-java</artifactId>
         <version>0.0.1</version>
     </dependency>
 {{</highlight>}}
 
 {{<highlight gradle>}}
-// https://mvnrepository.com/artifact/io.orijtech.integrations/sqlcommenter-java
-compile group: 'io.orijtech.integrations', name: 'sqlcommenter-java', version: '0.0.1'
+// https://mvnrepository.com/artifact/com.google.cloud/sqlcommenter-java
+compile group: 'com.google.cloud', name: 'sqlcommenter-java', version: '0.0.1'
 {{</highlight>}}
 
 {{</tabs>}}
@@ -76,7 +76,7 @@ how to enable it for the different versions:
 If using Spring 5, please import the `SpringSQLCommenterInterceptor` class by:
 
 {{<highlight java>}}
-import io.orijtech.integrations.sqlcommenter.interceptors.SpringSQLCommenterInterceptor;
+import com.google.cloud.sqlcommenter.interceptors.SpringSQLCommenterInterceptor;
 
 @EnableWebMvc
 @Configuration
@@ -99,7 +99,7 @@ public class WebConfig implements WebMvcConfigurer {
 If using a version before Spring 5, your `WebConfig` class needs to extend the [WebMVCConfigureAdapter](https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/web/servlet/config/annotation/WebMvcConfigurerAdapter.html) class instead like this:
 
 {{<highlight java>}}
-import io.orijtech.integrations.sqlcommenter.interceptors.SpringSQLCommenterInterceptor;
+import com.google.cloud.sqlcommenter.interceptors.SpringSQLCommenterInterceptor;
 
 @EnableWebMvc
 @Configuration
@@ -124,7 +124,7 @@ You can add the interceptor as a bean in your XML configuration
 {{<tabs For_Every_Method Method_Specific>}}
 {{<highlight xml>}}
 <mvc:interceptors>
-    <bean class="io.orijtech.integrations.sqlcommenter.interceptors.SpringSQLCommenterInterceptor"></bean>
+    <bean class="com.google.cloud.sqlcommenter.interceptors.SpringSQLCommenterInterceptor"></bean>
 </mvc:interceptors>
 {{</highlight>}}
 
@@ -132,7 +132,7 @@ You can add the interceptor as a bean in your XML configuration
 <mvc:interceptors>
     <mvc:interceptor>
         <mvc:mapping path="/flights"></mvc:mapping>
-        <bean class="io.orijtech.integrations.sqlcommenter.interceptors.SpringSQLCommenterInterceptor"></bean>
+        <bean class="com.google.cloud.sqlcommenter.interceptors.SpringSQLCommenterInterceptor"></bean>
     </mvc:interceptor>
 </mvc:interceptors>
 {{</highlight>}}
@@ -145,7 +145,7 @@ since you might not be using a `persistence.xml` file, we can setup in Java code
 `hibernate.session_factory.statement_inspector` configuration property in your `additionalProperties` method as per
 
 {{<highlight java>}}
-import io.orijtech.integrations.sqlcommenter.schhibernate.SCHibernate;
+import com.google.cloud.sqlcommenter.schhibernate.SCHibernate;
 
 @Configuration
 @EnableTransactionManagement
@@ -178,6 +178,6 @@ public class JPAConfig {
 Resource|URL
 ---|---
 Spring framework homepage|https://spring.io/
-sqlcommenter-java on Github|https://github.com/orijtech/sqlcommenter-java
+sqlcommenter-java on Github|https://github.com/google/sqlcommenter/tree/master/java/sqlcommenter-java
 Spring Interceptor|https://docs.spring.io/spring/docs/5.0.4.BUILD-SNAPSHOT/javadoc-api/org/aopalliance/intercept/Interceptor.html
 Hibernate SQLCommenter integration|[/java/hibernate](/java/hibernate)

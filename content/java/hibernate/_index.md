@@ -48,7 +48,7 @@ e.g. to your `hibernate.cfg.xml` file
 
 {{<highlight xml>}}
 <property name="hibernate.session_factory.statement_inspector"
-          value="io.orijtech.integrations.sqlcommenter.schibernate.SCHibernate" />
+          value="com.google.cloud.sqlcommenter.schibernate.SCHibernate" />
 {{</highlight>}}
 
 #### In Java source code
@@ -56,7 +56,7 @@ e.g. to your `hibernate.cfg.xml` file
 When creating your Hibernate session factory, add our StatementInspector like this:
 
 {{<highlight java>}}
-import io.orijtech.integrations.sqlcommenter.schhibernate.SCHibernate;
+import com.google.cloud.sqlcommenter.schhibernate.SCHibernate;
 
 ...
         sessionFactoryBuilder.applyStatementInspector(new SCHibernate());
@@ -64,7 +64,7 @@ import io.orijtech.integrations.sqlcommenter.schhibernate.SCHibernate;
 
 ### Spring and JPA end-to-end example
 
-First thing you need to do is to download the [sqlcommenter-java-guides-spring-jpa](https://github.com/orijtech/sqlcommenter-java-guides/tree/master/sqlcommenter-java-guides-spring-jpa)
+First thing you need to do is to download the [sqlcommenter-java-guides-spring-jpa](https://github.com/google/sqlcommenter/tree/master/java/sqlcommenter-java#spring)
 Java project.
 
 #### Source code
@@ -74,7 +74,7 @@ This project uses the following JPA entities:
 {{<tabs Post_java Tag_java>}}
 {{<highlight java>}}
 // In file Post.java
-package io.orijtech.integrations.sqlcommenter.spring.jpa.domain;
+package com.google.cloud.sqlcommenter.spring.jpa.domain;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -121,7 +121,7 @@ public class Post {
 
 {{<highlight java>}}
 // In file Tag.java
-package io.orijtech.integrations.sqlcommenter.spring.jpa.domain;
+package com.google.cloud.sqlcommenter.spring.jpa.domain;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -163,9 +163,9 @@ The Repository layer looks as follows:
 {{<highlight java>}}
 // In file PostRepository.java
 
-package io.orijtech.integrations.sqlcommenter.spring.jpa.dao;
+package com.google.cloud.sqlcommenter.spring.jpa.dao;
 
-import io.orijtech.integrations.sqlcommenter.spring.jpa.domain.Post;
+import com.google.cloud.sqlcommenter.spring.jpa.domain.Post;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
@@ -181,9 +181,9 @@ public interface PostRepository extends CrudRepository<Post, Long> {
 {{<highlight java>}}
 // In file TagRepository.java
 
-package io.orijtech.integrations.sqlcommenter.spring.jpa.dao;
+package com.google.cloud.sqlcommenter.spring.jpa.dao;
 
-import io.orijtech.integrations.sqlcommenter.spring.jpa.domain.Tag;
+import com.google.cloud.sqlcommenter.spring.jpa.domain.Tag;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
@@ -203,9 +203,9 @@ The Service layer looks as follows:
 {{<highlight java>}}
 // In file ForumService.java
 
-package io.orijtech.integrations.sqlcommenter.spring.jpa.service;
+package com.google.cloud.sqlcommenter.spring.jpa.service;
 
-import io.orijtech.integrations.sqlcommenter.spring.jpa.domain.Post;
+import com.google.cloud.sqlcommenter.spring.jpa.domain.Post;
 
 import java.util.List;
 
@@ -222,11 +222,11 @@ public interface ForumService {
 {{<highlight java>}}
 // In file ForumServiceImpl.java
 
-package io.orijtech.integrations.sqlcommenter.spring.jpa.service;
+package com.google.cloud.sqlcommenter.spring.jpa.service;
 
-import io.orijtech.integrations.sqlcommenter.spring.jpa.dao.PostRepository;
-import io.orijtech.integrations.sqlcommenter.spring.jpa.dao.TagRepository;
-import io.orijtech.integrations.sqlcommenter.spring.jpa.domain.Post;
+import com.google.cloud.sqlcommenter.spring.jpa.dao.PostRepository;
+import com.google.cloud.sqlcommenter.spring.jpa.dao.TagRepository;
+import com.google.cloud.sqlcommenter.spring.jpa.domain.Post;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -272,11 +272,11 @@ The Spring JPA configuration looks as follows:
 ````java
 // In file JpaTransactionManagerConfiguration.java
 
-package io.orijtech.integrations.sqlcommenter.spring.jpa;
+package com.google.cloud.sqlcommenter.spring.jpa;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
-import io.orijtech.integrations.sqlcommenter.spring.util.SCHibernateWrapper;
+import com.google.cloud.sqlcommenter.spring.util.SCHibernateWrapper;
 import org.hibernate.jpa.HibernatePersistenceProvider;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.*;
@@ -295,7 +295,7 @@ import java.util.Properties;
 
 @Configuration
 @PropertySource({"/META-INF/jdbc-hsqldb.properties"})
-@ComponentScan(basePackages = "io.orijtech.integrations.sqlcommenter.spring.jpa")
+@ComponentScan(basePackages = "com.google.cloud.sqlcommenter.spring.jpa")
 @EnableTransactionManagement
 @EnableAspectJAutoProxy
 @EnableJpaRepositories
@@ -378,7 +378,7 @@ public class JpaTransactionManagerConfiguration {
 
     protected String[] packagesToScan() {
         return new String[]{
-            "io.orijtech.integrations.sqlcommenter.spring.jpa.domain"
+            "com.google.cloud.sqlcommenter.spring.jpa.domain"
         };
     }
 }
@@ -389,14 +389,14 @@ Now, the test looks as follows:
 ````java
 // In file JpaTransactionManagerTest.java
 
-package io.orijtech.integrations.sqlcommenter.spring.jpa;
+package com.google.cloud.sqlcommenter.spring.jpa;
 
-import io.orijtech.integrations.sqlcommenter.spring.jpa.dao.TagRepository;
-import io.orijtech.integrations.sqlcommenter.spring.jpa.domain.Post;
-import io.orijtech.integrations.sqlcommenter.spring.jpa.domain.Tag;
-import io.orijtech.integrations.sqlcommenter.spring.jpa.service.ForumService;
-import io.orijtech.integrations.sqlcommenter.spring.util.SCHibernateWrapper;
-import io.orijtech.integrations.sqlcommenter.threadlocalstorage.State;
+import com.google.cloud.sqlcommenter.spring.jpa.dao.TagRepository;
+import com.google.cloud.sqlcommenter.spring.jpa.domain.Post;
+import com.google.cloud.sqlcommenter.spring.jpa.domain.Tag;
+import com.google.cloud.sqlcommenter.spring.jpa.service.ForumService;
+import com.google.cloud.sqlcommenter.spring.util.SCHibernateWrapper;
+import com.google.cloud.sqlcommenter.threadlocalstorage.State;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -538,9 +538,6 @@ select post0_.id as id1_0_0_, post0_.title as title2_0_0_ from post post0_ where
 
 ### Spring and Hibernate end-to-end example
 
-First thing you need to do is to download the [sqlcommenter-java-guides-spring-hibernate](https://github.com/orijtech/sqlcommenter-java-guides/tree/master/sqlcommenter-java-guides-spring-hibernate)
-Java project.
-
 #### Source code
 
 This project uses the following JPA entities:
@@ -548,7 +545,7 @@ This project uses the following JPA entities:
 {{<tabs Post_java Tag_java>}}
 {{<highlight java>}}
 // In file Post.java
-package io.orijtech.integrations.sqlcommenter.spring.hibernate.domain;
+package com.google.cloud.sqlcommenter.spring.hibernate.domain;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -595,7 +592,7 @@ public class Post {
 
 {{<highlight java>}}
 // In file Tag.java
-package io.orijtech.integrations.sqlcommenter.spring.hibernate.domain;
+package com.google.cloud.sqlcommenter.spring.hibernate.domain;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -637,7 +634,7 @@ The DAO (Data Access Object) layer looks as follows:
 {{<highlight java>}}
 // In file GenericDAO.java
 
-package io.orijtech.integrations.sqlcommenter.spring.hibernate.dao;
+package com.google.cloud.sqlcommenter.spring.hibernate.dao;
 
 import java.io.Serializable;
 
@@ -652,7 +649,7 @@ public interface GenericDAO<T, ID extends Serializable> {
 {{<highlight java>}}
 // In file GenericDAOImpl.java
 
-package io.orijtech.integrations.sqlcommenter.spring.hibernate.dao;
+package com.google.cloud.sqlcommenter.spring.hibernate.dao;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -703,9 +700,9 @@ public abstract class GenericDAOImpl<T, ID extends Serializable> implements Gene
 {{<highlight java>}}
 // In file PostDAO.java
 
-package io.orijtech.integrations.sqlcommenter.spring.hibernate.dao;
+package com.google.cloud.sqlcommenter.spring.hibernate.dao;
 
-import io.orijtech.integrations.sqlcommenter.spring.hibernate.domain.Post;
+import com.google.cloud.sqlcommenter.spring.hibernate.domain.Post;
 
 import java.util.List;
 
@@ -718,9 +715,9 @@ public interface PostDAO extends GenericDAO<Post, Long> {
 {{<highlight java>}}
 // In file PostDAOImpl.java
 
-package io.orijtech.integrations.sqlcommenter.spring.hibernate.dao;
+package com.google.cloud.sqlcommenter.spring.hibernate.dao;
 
-import io.orijtech.integrations.sqlcommenter.spring.hibernate.domain.Post;
+import com.google.cloud.sqlcommenter.spring.hibernate.domain.Post;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -745,9 +742,9 @@ public class PostDAOImpl extends GenericDAOImpl<Post, Long> implements PostDAO {
 {{<highlight java>}}
 // In file TagDAO.java
 
-package io.orijtech.integrations.sqlcommenter.spring.hibernate.dao;
+package com.google.cloud.sqlcommenter.spring.hibernate.dao;
 
-import io.orijtech.integrations.sqlcommenter.spring.hibernate.domain.Tag;
+import com.google.cloud.sqlcommenter.spring.hibernate.domain.Tag;
 
 import java.util.List;
 
@@ -760,9 +757,9 @@ public interface TagDAO extends GenericDAO<Tag, Long> {
 {{<highlight java>}}
 // In file TagDAOImpl.java
 
-package io.orijtech.integrations.sqlcommenter.spring.hibernate.dao;
+package com.google.cloud.sqlcommenter.spring.hibernate.dao;
 
-import io.orijtech.integrations.sqlcommenter.spring.hibernate.domain.Tag;
+import com.google.cloud.sqlcommenter.spring.hibernate.domain.Tag;
 import org.springframework.stereotype.Repository;
 
 import java.util.Arrays;
@@ -798,9 +795,9 @@ The Service layer looks as follows:
 {{<highlight java>}}
 // In file ForumService.java
 
-package io.orijtech.integrations.sqlcommenter.spring.hibernate.service;
+package com.google.cloud.sqlcommenter.spring.hibernate.service;
 
-import io.orijtech.integrations.sqlcommenter.spring.hibernate.domain.Post;
+import com.google.cloud.sqlcommenter.spring.hibernate.domain.Post;
 
 import java.util.List;
 
@@ -817,11 +814,11 @@ public interface ForumService {
 {{<highlight java>}}
 // In file ForumServiceImpl.java
 
-package io.orijtech.integrations.sqlcommenter.spring.hibernate.service;
+package com.google.cloud.sqlcommenter.spring.hibernate.service;
 
-import io.orijtech.integrations.sqlcommenter.spring.hibernate.dao.PostDAO;
-import io.orijtech.integrations.sqlcommenter.spring.hibernate.dao.TagDAO;
-import io.orijtech.integrations.sqlcommenter.spring.hibernate.domain.Post;
+import com.google.cloud.sqlcommenter.spring.hibernate.dao.PostDAO;
+import com.google.cloud.sqlcommenter.spring.hibernate.dao.TagDAO;
+import com.google.cloud.sqlcommenter.spring.hibernate.domain.Post;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -866,11 +863,11 @@ The Spring Hibernate configuration looks as follows:
 ````java
 // In file HibernateTransactionManagerConfiguration.java
 
-package io.orijtech.integrations.sqlcommenter.spring.hibernate;
+package com.google.cloud.sqlcommenter.spring.hibernate;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
-import io.orijtech.integrations.sqlcommenter.spring.util.SCHibernateWrapper;
+import com.google.cloud.sqlcommenter.spring.util.SCHibernateWrapper;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.*;
@@ -885,7 +882,7 @@ import java.util.Properties;
 
 @Configuration
 @PropertySource({"/META-INF/jdbc-hsqldb.properties"})
-@ComponentScan(basePackages = "io.orijtech.integrations.sqlcommenter.spring.hibernate")
+@ComponentScan(basePackages = "com.google.cloud.sqlcommenter.spring.hibernate")
 @EnableTransactionManagement
 @EnableAspectJAutoProxy
 public class HibernateTransactionManagerConfiguration {
@@ -962,7 +959,7 @@ public class HibernateTransactionManagerConfiguration {
 
     protected String[] packagesToScan() {
         return new String[]{
-                "io.orijtech.integrations.sqlcommenter.spring.hibernate.domain"
+                "com.google.cloud.sqlcommenter.spring.hibernate.domain"
         };
     }
 }
@@ -973,13 +970,13 @@ Now, the test looks as follows:
 ````java
 // In file HibernateTransactionManagerTest.java
 
-package io.orijtech.integrations.sqlcommenter.spring.hibernate;
+package com.google.cloud.sqlcommenter.spring.hibernate;
 
-import io.orijtech.integrations.sqlcommenter.spring.hibernate.domain.Post;
-import io.orijtech.integrations.sqlcommenter.spring.hibernate.domain.Tag;
-import io.orijtech.integrations.sqlcommenter.spring.hibernate.service.ForumService;
-import io.orijtech.integrations.sqlcommenter.spring.util.SCHibernateWrapper;
-import io.orijtech.integrations.sqlcommenter.threadlocalstorage.State;
+import com.google.cloud.sqlcommenter.spring.hibernate.domain.Post;
+import com.google.cloud.sqlcommenter.spring.hibernate.domain.Tag;
+import com.google.cloud.sqlcommenter.spring.hibernate.service.ForumService;
+import com.google.cloud.sqlcommenter.spring.util.SCHibernateWrapper;
+import com.google.cloud.sqlcommenter.threadlocalstorage.State;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -1141,4 +1138,4 @@ select post0_.id as id1_0_0_, post0_.title as title2_0_0_ from post post0_ where
 Resource|URL
 ---|---
 Hibernate ORM project|https://hibernate.org/orm/
-sqlcommenter-java on Github|https://github.com/orijtech/sqlcommenter-java
+sqlcommenter-java on Github|https://github.com/google/sqlcommenter/tree/master/java/sqlcommenter-java
