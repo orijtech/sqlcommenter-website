@@ -114,6 +114,16 @@ route|Yes
 tracestate|Yes
 traceparent|Yes
 
+Additionally, if the tracestate or traceparent fields are included, one can specify which tracing library the wrapper should collect data from. This can be done by providing a third argument, which is an object. Within that options object should be a field named TraceProvider, containing the string name of the tracing library (case-insensitive).
+
+```javascript
+wrapMainSequelizeAsMiddleware(Sequelize, include={...}, {TraceProvider: 'opencensus'});
+```
+Option Name|Associated Library
+---|---
+opencensus|https://opencensus.io/
+opentelemetry|https://opentelemetry.io/
+
 ##### Options examples
 
 {{<tabs "trace attributes" "client_timezone" route db_driver "all set">}}
@@ -330,7 +340,7 @@ Application listening on 3000
 
 On making a request to that server at `http://localhost:3000/polls/1000`, the PostgreSQL logs show:
 
-{{<tabs "With OpenCensus" "With Route" "With DB Driver and CLIENT TIMEZONE" "With All Set">}}
+{{<tabs "With Tracing" "With Route" "With DB Driver and CLIENT TIMEZONE" "With All Set">}}
 
 {{<highlight shell>}}
 2019-06-03 14:32:10.842 PDT [32004] LOG:  statement: SELECT * from polls_question 
