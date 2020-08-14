@@ -115,6 +115,16 @@ tracestate|<div style="text-align: center">&#10060;</div>
 traceparent|<div style="text-align: center">&#10060;</div>
 db_driver|<div style="text-align: center">&#10060;</div>
 
+Additionally, if the tracestate or traceparent fields are included, one can specify which tracing library the wrapper should collect data from. This can be done by providing a third argument, which is an object. Within that options object should be a field named TraceProvider, containing the string name of the tracing library (case-insensitive).
+
+```javascript
+wrapMainSequelizeAsMiddleware(Sequelize, include={...}, {TraceProvider: 'opencensus'});
+```
+Option Name|Associated Library
+---|---
+opencensus|https://opencensus.io/
+opentelemetry|https://opentelemetry.io/
+
 ##### Options examples
 
 {{<tabs "trace attributes" route db_driver "all set">}}
