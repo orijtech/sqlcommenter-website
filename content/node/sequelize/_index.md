@@ -17,6 +17,8 @@ tags: ["sequelize", "sequelize.js", "query-builder", "node", "node.js", "express
   - [Express middleware](#express-middleware)
 - [Fields](#fields)
   - [Options](#options)
+    - [`include` config](#include-config)
+    - [`options` config](#options-config)
     - [Options examples](#options-examples)
 - [End to end examples](#end-to-end-examples)
   - [Source code](#source-code)
@@ -108,7 +110,7 @@ comments by passing in the `include` and `options` objects:
 wrapMainSequelizeAsMiddleware(Sequelize, include={...}, options={...});
 ```
 
-##### `include`
+##### `include` config
 A map of values to be optionally included in the SQL comments.
 
 | Field           | On by default |
@@ -119,7 +121,7 @@ A map of values to be optionally included in the SQL comments.
 | traceparent     | {{<uncheck>}} |
 | tracestate      | {{<uncheck>}} |
 
-##### `options`
+##### `options` config
 A configuration object specifying where to collect trace data from. Accepted
 fields are: TraceProvider: Should be either `OpenCensus` or `OpenTelemetry`,
 indicating which library to collect trace context from.
