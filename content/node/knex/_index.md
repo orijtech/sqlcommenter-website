@@ -112,12 +112,12 @@ wrapMainKnexAsMiddleware(Knex, include={...}, options={...});
 ##### `include`
 A map of values to be optionally included in the SQL comments.
 
-| Field           | On by default |
-| --------------- | ------------- |
-| db_driver       | No            |
-| route           | Yes           |
-| traceparent     | No            |
-| tracestate      | No            |
+| Field       | On by default |
+|-------------|---------------|
+| db_driver   | {{<uncheck>}} |
+| route       | {{<check>}}   |
+| traceparent | {{<uncheck>}} |
+| tracestate  | {{<uncheck>}} |
 
 ##### `options`
 A configuration object specifying where to collect trace data from. Accepted

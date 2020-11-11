@@ -112,12 +112,12 @@ wrapMainSequelizeAsMiddleware(Sequelize, include={...}, options={...});
 A map of values to be optionally included in the SQL comments.
 
 | Field           | On by default |
-| --------------- | ------------- |
-| client_timezone | No            |
-| db_driver       | No            |
-| route           | Yes           |
-| traceparent     | No            |
-| tracestate      | No            |
+|-----------------|---------------|
+| client_timezone | {{<uncheck>}} |
+| db_driver       | {{<uncheck>}} |
+| route           | {{<check>}}   |
+| traceparent     | {{<uncheck>}} |
+| tracestate      | {{<uncheck>}} |
 
 ##### `options`
 A configuration object specifying where to collect trace data from. Accepted
