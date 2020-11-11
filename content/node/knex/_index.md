@@ -93,37 +93,52 @@ In the database server logs, the comment's fields are:
 * values are SQL escaped i.e. `key='value'`
 * URL-quoted except for the equals(`=`) sign e.g `route='%5Epolls/%24'`. so should be URL-unquoted
 
-Field|Format|Description|Example
----|---|---|---
-`db_driver`|`<database_driver>:<version>`|URL quoted name and version of the database driver|`db_driver='knex%3A0.16.5'`
-`route`|`<the route used>`|The URL-quoted route used to match the express.js controller|`route='%5Epolls/%24'`
-`traceparent`|`<XX-TRACE_ID-SPAN_ID-TRACE_OPTIONS>`|The serialized [W3C TraceContext.Traceparent](https://www.w3.org/TR/trace-context/#traceparent-field)|`traceparent='00-f5e3fa7fb15a461dbf3b03690e4bd5e1-e6de66630cd19b9a-01'`
-`tracestate`|`<KEY1=VALUE1,KEY2=VALUE2,...>`|The serialized [W3C TraceContext.Tracestate](https://www.w3.org/TR/trace-context/#tracestate-field)|`tracestate='congo%3Dt61rcWkgMzE%2Crojo%3D00f067aa0ba902b7'`
+| Field             | Format                        | Description                                                                                          | Example                                                                 |
+|-------------------|-------------------------------|------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------|
+| `client_timezone` | `<string>`                    | URL quoted name of the timezone used when converting a date from the database into a JavaScript date | `'+00:00'`                                                              |
+| `db_driver`       | `<database_driver>:<version>` | URL quoted name and version of the database driver                                                   | `db_driver='knex%3A0.16.5'`                                             |
+| `route`           | `<the route used>`            | URL quoted route used to match the express.js controller                                             | `route='%5E%2Fpolls%2F`                                                 |
+| `traceparent`     | `<traceparent header>`        | URL quoted [W3C `traceparent` header](https://www.w3.org/TR/trace-context/#traceparent-header)       | `traceparent='00-3e2914ebce6af09508dd1ff1128493a8-81d09ab4d8cde7cf-01'` |
+| `tracestate`      | `<tracestate header>`         | URL quoted [W3C `tracestate` header](https://www.w3.org/TR/trace-context/#tracestate-header)         | `tracestate='rojo%253D00f067aa0ba902b7%2Ccongo%253Dt61rcWkgMzE'`        |
 
 #### Options
 
-When creating the middleware, one can optionally toggle attributes to be set in the comments by passing in the option `include` which is a map
+When creating the middleware, one can optionally configure the injected
+comments by passing in the `include` and `options` objects:
 
 ```javascript
-wrapMainKnexAsMiddleware(Knex, include={...});
+wrapMainKnexAsMiddleware(Knex, include={...}, options={...});
 ```
 
-Field|On by default
----|---
-route|<div style="text-align: center">&#10004;</div>
-tracestate|<div style="text-align: center">&#10060;</div>
-traceparent|<div style="text-align: center">&#10060;</div>
-db_driver|<div style="text-align: center">&#10060;</div>
+##### `include`
+A map of values to be optionally included in the SQL comments.
+
+| Field           | On by default |
+| --------------- | ------------- |
+| db_driver       | No            |
+| route           | Yes           |
+| traceparent     | No            |
+| tracestate      | No            |
+
+##### `options`
+A configuration object specifying where to collect trace data from. Accepted
+fields are: TraceProvider: Should be either `OpenCensus` or `OpenTelemetry`,
+indicating which library to collect trace context from.
+
+| Field         | Possible values                 |
+|---------------|---------------------------------|
+| TraceProvider | `OpenCensus` or `OpenTelemetry` |
 
 ##### Options examples
 
 {{<tabs "trace attributes" route db_driver "all set">}}
 
 {{<highlight javascript>}}
-wrapMainKnexAsMiddleware(Knex, include={
-    traceparent: true,
-    tracestate: true
-});
+wrapMainKnexAsMiddleware(
+    Knex,
+    include={ traceparent: true, tracestate: true },
+    options={ TraceProvider: 'OpenTelemetry' }
+);
 {{</highlight>}}
 
 {{<highlight javascript>}}
@@ -136,21 +151,28 @@ wrapMainKnexAsMiddleware(Knex, include={db_driver: true});
 
 {{<highlight javascript>}}
 // Manually set all the variables.
-wrapMainKnexAsMiddleware(Knex, include={
-    db_driver: true,
-    route: true,
-    traceparent: true,
-    tracestate: true,
-});
+wrapMainKnexAsMiddleware(
+    Knex,
+    include={
+        db_driver: true,
+        route: true,
+        traceparent: true,
+        tracestate: true,
+    },
+    options={ TraceProvider: 'OpenTelemetry' }
+);
 {{</highlight>}}
 
 {{</tabs>}}
 
 ### End to end examples
 
-#### Source code 
+Check out a full express + opentelemetry example
+[here](https://github.com/google/sqlcommenter/tree/master/nodejs/sqlcommenter-nodejs/samples/express-opentelemetry).
 
-{{<tabs "With OpenCensus" "With Route" "With DB Driver" "With All Options Set">}}
+#### Source code
+
+{{<tabs "With OpenCensus" "With OpenTelemetry" "With Route" "With DB Driver" "With All Options Set">}}
 
 {{<highlight javascript>}}
 // In file app.js.
@@ -195,6 +217,71 @@ app.use(wrapMainKnexAsMiddleware(Knex, {
     tracestate: true,
     route: false
 }));
+
+app.get('/', (req, res) => res.send('Hello, sqlcommenter-nodejs!!'));
+app.get('^/polls/:param', function(req, res) {
+    knex.raw('SELECT * from polls_question').then(function(polls) {
+        const blob = JSON.stringify(polls);
+        res.send(blob);
+    }).catch(function(err) {
+        console.log(err);
+        res.send(500);
+    });
+});
+app.listen(port, () => console.log(`Application listening on ${port}`));
+{{</highlight>}}
+
+{{<highlight javascript>}}
+// In file app.js.
+const { NodeTracerProvider } = require("@opentelemetry/node");
+const { BatchSpanProcessor } = require("@opentelemetry/tracing");
+const {
+  TraceExporter,
+} = require("@google-cloud/opentelemetry-cloud-trace-exporter");
+
+const tracerProvider = new NodeTracerProvider();
+// Export to Google Cloud Trace
+tracerProvider.addSpanProcessor(
+  new BatchSpanProcessor(new TraceExporter({ logger }), {
+    bufferSize: 500,
+    bufferTimeout: 5 * 1000,
+  })
+);
+tracerProvider.register();
+
+// OpenTelemetry initialization should happen before importing any libraries
+// that it instruments
+const express = require("express");
+const Knex = require("knex");
+const { wrapMainKnexAsMiddleware } = require("@google-cloud/sqlcommenter-knex");
+
+const knexOptions = {
+    client: 'postgresql',
+    connection: {
+        host: '127.0.0.1',
+        password: '$postgres$',
+        database: 'quickstart_nodejs'
+    }
+};
+const knex = Knex(knexOptions); // knex instance
+
+const app = express();
+const port = process.env.APP_PORT || 3000;
+
+// SQLCommenter express middleware injects the route into the traces
+app.use(
+  wrapMainKnexAsMiddleware(
+    Knex,
+    {
+      client_timezone: true,
+      db_driver: true,
+      route: true,
+      traceparent: true,
+      tracestate: true,
+    },
+    { TraceProvider: "OpenTelemetry" }
+  )
+);
 
 app.get('/', (req, res) => res.send('Hello, sqlcommenter-nodejs!!'));
 app.get('^/polls/:param', function(req, res) {
@@ -376,9 +463,7 @@ On making a request to that server at `http://localhost:3000/polls/1000`, the Po
 
 #### References
 
-Resource|URL
----|---
-Knex.js project|https://knexjs.org/
-sqlcommenter on Yarn|`<FILL_ME_IN>`
-sqlcommenter on npm|`<FILL_ME_IN>`
-express.js|https://expressjs.com/
+| Resource                               | URL                                                           |
+|----------------------------------------|---------------------------------------------------------------|
+| @google-cloud/sqlcommenter-knex on npm | https://www.npmjs.com/package/@google-cloud/sqlcommenter-knex |
+| express.js                             | https://expressjs.com/                                        |
