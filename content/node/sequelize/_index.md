@@ -386,9 +386,11 @@ app.use(wrapSequelizeAsMiddleware(
     {
         traceparent: true,
         tracestate: true,
-        route: true,
-        db_driver: true,
-        client_timezone: true
+
+        // Optional
+        route: false,
+        db_driver: false,
+        client_timezone: false
     },
     {
         TraceProvider: "OpenCensus",

@@ -95,7 +95,6 @@ In the database server logs, the comment's fields are:
 
 | Field             | Format                        | Description                                                                                          | Example                                                                 |
 |-------------------|-------------------------------|------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------|
-| `client_timezone` | `<string>`                    | URL quoted name of the timezone used when converting a date from the database into a JavaScript date | `'+00:00'`                                                              |
 | `db_driver`       | `<database_driver>:<version>` | URL quoted name and version of the database driver                                                   | `db_driver='knex%3A0.16.5'`                                             |
 | `route`           | `<the route used>`            | URL quoted route used to match the express.js controller                                             | `route='%5E%2Fpolls%2F`                                                 |
 | `traceparent`     | `<traceparent header>`        | URL quoted [W3C `traceparent` header](https://www.w3.org/TR/trace-context/#traceparent-header)       | `traceparent='00-3e2914ebce6af09508dd1ff1128493a8-81d09ab4d8cde7cf-01'` |
@@ -211,9 +210,9 @@ const knex = Knex(knexOptions); // knex instance
 const app = express();
 const port = process.env.APP_PORT || 3000;
 
-// Use the knex+express middleware with trace attributes 
+// Use the knex+express middleware with trace attributes
 app.use(wrapMainKnexAsMiddleware(Knex, {
-    traceparent: true, 
+    traceparent: true,
     tracestate: true,
     route: false
 }));
@@ -273,11 +272,12 @@ app.use(
   wrapMainKnexAsMiddleware(
     Knex,
     {
-      client_timezone: true,
-      db_driver: true,
-      route: true,
       traceparent: true,
       tracestate: true,
+
+      // Optional
+      db_driver: false,
+      route: false,
     },
     { TraceProvider: "OpenTelemetry" }
   )
