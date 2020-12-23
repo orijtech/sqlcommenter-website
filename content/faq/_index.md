@@ -77,3 +77,6 @@ Integration|action|controller|framework|route
 <a href="/python/psycopg2">psycopg2 <br />+ Flask</a>|<div style="text-align: center">&#10060;</div>|<div style="text-align: center">&#10004;</div>|<div style="text-align: center">&#10004;</div>|<div style="text-align: center">&#10004;</div>|<div style="text-align: center">&#10060;</div>
 <a href="/python/sqlalchemy">sqlalchemy<br />+ Flask</a>|<div style="text-align: center">&#10060;</div>|<div style="text-align: center">&#10004;</div>|<div style="text-align: center">&#10004;</div>|<div style="text-align: center">&#10004;</div>|<div style="text-align: center">&#10060;</div>
 <a href="/node/sequelize">sequelize.js<br />+ express.js</a>|<div style="text-align: center">&#10060;</div>|<div style="text-align: center">&#10004;</div>|<div style="text-align: center">&#10060;</div>|<div style="text-align: center">&#10060;</div>|<div style="text-align: center">&#10060;</div>
+
+### What ORMs supports OpenTelemetry ?
+Node.js ORMs(Knex, Sequelize, Express) supports OpenTelemetry.
