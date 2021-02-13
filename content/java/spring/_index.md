@@ -47,14 +47,14 @@ Please include this in your dependency management system as follows
 {{<highlight xml>}}
     <dependency>
         <groupId>com.google.cloud</groupId>
-        <artifactId>sqlcommenter-java</artifactId>
-        <version>0.0.1</version>
+        <artifactId>sqlcommenter</artifactId>
+        <version>1.1.0</version>
     </dependency>
 {{</highlight>}}
 
 {{<highlight gradle>}}
-// https://mvnrepository.com/artifact/com.google.cloud/sqlcommenter-java
-compile group: 'com.google.cloud', name: 'sqlcommenter-java', version: '0.0.1'
+// https://mvnrepository.com/artifact/com.google.cloud/sqlcommenter
+compile group: 'com.google.cloud', name: 'sqlcommenter', version: '1.1.0'
 {{</highlight>}}
 
 {{</tabs>}}
@@ -86,7 +86,7 @@ public class WebConfig implements WebMvcConfigurer {
     public SpringSQLCommenterInterceptor sqlInterceptor() {
          return new SpringSQLCommenterInterceptor();
     }
- 
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(sqlInterceptor());
@@ -109,7 +109,7 @@ public class WebConfig extends WebMvcConfigureAdapter {
     public SpringSQLCommenterInterceptor sqlInterceptor() {
          return new SpringSQLCommenterInterceptor();
     }
- 
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(sqlInterceptor());
@@ -150,10 +150,10 @@ import com.google.cloud.sqlcommenter.schhibernate.SCHibernate;
 @Configuration
 @EnableTransactionManagement
 public class JPAConfig {
- 
+
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
-        LocalContainerEntityManagerFactoryBean em 
+        LocalContainerEntityManagerFactoryBean em
         = new LocalContainerEntityManagerFactoryBean();
         em.setDataSource(dataSource());
         em.setPackagesToScan(new String[] { "you.application.domain.model" });
@@ -163,7 +163,7 @@ public class JPAConfig {
 
         return em;
     }
-    
+
     private Properties additionalProperties() {
         Properties properties = new Properties();
         properties.setProperty("hibernate.session_factory.statement_inspector", SCHibernate.class.getName());
