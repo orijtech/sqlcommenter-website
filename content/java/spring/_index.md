@@ -47,14 +47,14 @@ Please include this in your dependency management system as follows
 {{<highlight xml>}}
     <dependency>
         <groupId>com.google.cloud</groupId>
-        <artifactId>sqlcommenter-java</artifactId>
-        <version>0.0.1</version>
+        <artifactId>sqlcommenter</artifactId>
+        <version>1.1.0</version>
     </dependency>
 {{</highlight>}}
 
 {{<highlight gradle>}}
 // https://mvnrepository.com/artifact/com.google.cloud/sqlcommenter-java
-compile group: 'com.google.cloud', name: 'sqlcommenter-java', version: '0.0.1'
+compile group: 'com.google.cloud', name: 'sqlcommenter', version: '1.1.0'
 {{</highlight>}}
 
 {{</tabs>}}
